@@ -62,14 +62,14 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert self.memory_fs__data.exists_content  (self.test_content_path   ) is True
 
     def test_load(self):                                                                         # Tests loading files
-        assert self.file_system.load(self.test_path                     ) is None
-        assert self.file_system.load_content(self.test_content_path     ) is None
+        assert self.memory_fs__data.load        (self.test_path                     ) is None
+        assert self.memory_fs__data.load_content(self.test_content_path     ) is None
 
         self.memory_fs__edit.save(self.test_path, self.test_file)
         self.memory_fs__edit.save_content(self.test_content_path, self.test_content_bytes)
 
-        loaded_file = self.file_system.load(self.test_path)
-        loaded_content = self.file_system.load_content(self.test_content_path)
+        loaded_file    = self.memory_fs__data.load        (self.test_path)
+        loaded_content = self.memory_fs__data.load_content(self.test_content_path)
 
         assert loaded_file is self.test_file
         assert loaded_file.info.content.size == Safe_UInt__FileSize(len(self.test_content_bytes))
@@ -132,8 +132,8 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert self.memory_fs__edit.move    (source_path, dest_path) is True
         assert self.memory_fs__data.exists  (source_path           ) is False
         assert self.memory_fs__data.exists  (dest_path             ) is True
-        assert self.file_system.load        (dest_path             ) == self.test_file
-        assert self.file_system.load        (dest_path      ).json() == self.test_file.json()
+        assert self.memory_fs__data.load    (dest_path             ) == self.test_file
+        assert self.memory_fs__data.load    (dest_path      ).json() == self.test_file.json()
 
         # Content should not be moved automatically in this test since paths don't match
         assert self.memory_fs__edit.move(source_path, dest_path) is False                          # Move non-existent file
@@ -149,8 +149,8 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert self.memory_fs__edit.copy(source_path, dest_path) is True
         assert self.memory_fs__data.exists  (source_path           ) is True
         assert self.memory_fs__data.exists  (dest_path             ) is True
-        assert self.file_system.load        (source_path           ) is self.test_file
-        assert self.file_system.load        (dest_path             ) is self.test_file
+        assert self.memory_fs__data.load    (source_path           ) is self.test_file
+        assert self.memory_fs__data.load    (dest_path             ) is self.test_file
 
         assert self.memory_fs__edit.copy(Safe_Str__File__Path("missing"), dest_path) is False      # Copy non-existent file
 
@@ -162,7 +162,7 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert len(self.file_system.files       ) > 0
         assert len(self.file_system.content_data) > 0
 
-        self.file_system.clear()
+        self.memory_fs__edit.clear()
 
         assert len(self.file_system.files       ) == 0
         assert len(self.file_system.content_data) == 0
@@ -202,7 +202,7 @@ class test_Memory_FS__Memory__File_System(TestCase):
         self.memory_fs__edit.save_content(Safe_Str__File__Path("dir1/file1.txt"     ), content_1)
         self.memory_fs__edit.save_content(Safe_Str__File__Path("dir2/file2.txt"     ), content_2)
 
-        stats = self.file_system.stats()
+        stats = self.memory_fs__data.stats()
 
         assert stats[Safe_Id("type"         )] == Safe_Id("memory")
         assert stats[Safe_Id("file_count"   )] == 2

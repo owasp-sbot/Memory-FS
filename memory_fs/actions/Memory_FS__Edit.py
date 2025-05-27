@@ -7,6 +7,10 @@ from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 class Memory_FS__Edit(Type_Safe):
     file_system : Memory_FS__File_System
 
+    def clear(self) -> None:                                                                    # Clear all files and directories
+        self.file_system.files.clear()
+        self.file_system.content_data.clear()
+
     def copy(self, source      : Safe_Str__File__Path ,                                        # Copy a file from source to destination
                    destination : Safe_Str__File__Path
               ) -> bool:

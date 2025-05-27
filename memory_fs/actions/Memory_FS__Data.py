@@ -1,5 +1,6 @@
 from typing import List, Optional, Dict, Any
 
+from memory_fs.schemas.Schema__Memory_FS__File import Schema__Memory_FS__File
 from osbot_utils.helpers.Safe_Id import Safe_Id
 
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
@@ -48,3 +49,22 @@ class Memory_FS__Data(Type_Safe):
 
         return [path for path in self.file_system.files.keys()
                 if str(path).startswith(prefix_str)]
+
+    def load(self, path : Safe_Str__File__Path                                                 # Load a file metadata from the given path
+              ) -> Optional[Schema__Memory_FS__File]:
+        return self.file_system.files.get(path)
+
+    def load_content(self, path : Safe_Str__File__Path                                         # Load raw content from the given path
+                      ) -> Optional[bytes]:
+        return self.file_system.content_data.get(path)
+
+    # todo: this should return a python object (and most likely moved into a Memory_FS__Stats class)
+    def stats(self) -> Dict[Safe_Id, Any]:                                                     # Get file system statistics
+        total_size = 0
+        for path, content in self.file_system.content_data.items():
+            total_size += len(content)
+
+        return {Safe_Id("type")            : Safe_Id("memory")       ,
+                Safe_Id("file_count")      : len(self.file_system.files)        ,
+                Safe_Id("content_count")   : len(self.file_system.content_data) ,
+                Safe_Id("total_size")      : total_size             }

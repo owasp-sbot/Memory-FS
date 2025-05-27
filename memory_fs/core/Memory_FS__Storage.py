@@ -126,14 +126,14 @@ class Memory_FS__Storage(Type_Safe):                                            
             # Load from default handler's path only
             path = self._get_handler_path(file_config, file_config.default_handler)
             if path:
-                return self.file_system.load(path)
+                return self.memory_fs__data().load(path)
         else:
             # Try each handler in order until we find the file
             for handler in file_config.path_handlers:
                 if handler.enabled:
                     path = self._get_handler_path(file_config, handler)
                     if path and self.memory_fs__data().exists(path):
-                        file = self.file_system.load(path)
+                        file = self.memory_fs__data().load(path)
                         if file:
                             return file
 
@@ -151,13 +151,13 @@ class Memory_FS__Storage(Type_Safe):                                            
             # If there's a default handler, try its content path first
             if file_config.default_handler and file_config.default_handler.name in file.metadata.content_paths:
                 content_path = file.metadata.content_paths[file_config.default_handler.name]
-                content = self.file_system.load_content(content_path)
+                content = self.memory_fs__data().load_content(content_path)
                 if content:
                     return content
 
             # Otherwise try any available content path
             for content_path in file.metadata.content_paths.values():
-                content = self.file_system.load_content(content_path)
+                content = self.memory_fs__data().load_content(content_path)
                 if content:
                     return content
 
@@ -323,7 +323,7 @@ class Memory_FS__Storage(Type_Safe):                                            
         return None
 
     def clear(self) -> None:                                                                    # Clear all stored files
-        self.file_system.clear()
+        self.memory_fs__edit().clear()
 
     def stats(self) -> Dict[Safe_Id, Any]:                                                      # Get storage statistics
-        return self.file_system.stats()
+        return self.memory_fs__data().stats()

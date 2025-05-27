@@ -63,12 +63,12 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert self.memory_fs__data.exists(saved_paths[Safe_Id("temporal")]) is True
 
         # Verify content was saved and is JSON formatted
-        loaded_file = self.file_system.load(saved_paths[Safe_Id("latest")])
+        loaded_file = self.memory_fs__data.load(saved_paths[Safe_Id("latest")])
         content_path = loaded_file.info.content.content_path
         assert self.memory_fs__data.exists_content(content_path) is True
 
         # JSON serialization should wrap string in quotes
-        content_bytes = self.file_system.load_content(content_path)
+        content_bytes = self.memory_fs__data.load_content(content_path)
         assert content_bytes == b'"test content"'
 
     def test_save_dict_data_as_json(self):                                                      # Tests saving dict data with JSON file type
