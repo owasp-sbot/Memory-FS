@@ -1,6 +1,6 @@
 [tool.poetry]
 name        = "memory_fs"
-version     = "v0.2.0"
+version     = "v0.2.1"
 description = "Memory-FS"
 authors     = ["Dinis Cruz <dinis.cruz@owasp.org>"]
 license     = "Apache 2.0"
