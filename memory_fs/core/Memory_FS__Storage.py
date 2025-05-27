@@ -5,7 +5,7 @@ from osbot_utils.helpers.safe_str.Safe_Str__Hash               import safe_str_h
 from osbot_utils.helpers.safe_str.Safe_Str__File__Name         import Safe_Str__File__Name
 from osbot_utils.helpers.safe_int.Safe_UInt__FileSize          import Safe_UInt__FileSize
 from osbot_utils.type_safe.Type_Safe                           import Type_Safe
-from memory_fs.memory.Memory_FS__File_System                   import Memory_FS__File_System
+from memory_fs.core.Memory_FS__File_System                     import Memory_FS__File_System
 from memory_fs.schemas.Schema__Memory_FS__File                 import Schema__Memory_FS__File
 from memory_fs.schemas.Schema__Memory_FS__File__Config         import Schema__Memory_FS__File__Config
 from memory_fs.schemas.Schema__Memory_FS__File__Content        import Schema__Memory_FS__File__Content

@@ -2,8 +2,8 @@ from datetime                                                import datetime
 from unittest                                                import TestCase
 from osbot_utils.helpers.Safe_Id                             import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path       import Safe_Str__File__Path
-from memory_fs.memory.Memory_FS__File_System                 import Memory_FS__File_System
-from memory_fs.memory.Memory_FS__Storage                     import Memory_FS__Storage
+from memory_fs.core.Memory_FS__File_System                   import Memory_FS__File_System
+from memory_fs.core.Memory_FS__Storage                       import Memory_FS__Storage
 from memory_fs.schemas.Schema__Memory_FS__File__Config       import Schema__Memory_FS__File__Config
 from memory_fs.schemas.Schema__Memory_FS__Path__Handler      import Schema__Memory_FS__Path__Handler
 from memory_fs.file_types.Memory_FS__File__Type__Json        import Memory_FS__File__Type__Json
