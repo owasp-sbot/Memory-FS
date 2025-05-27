@@ -1,10 +1,8 @@
 from datetime                                                import datetime
 from unittest                                                import TestCase
-
-from memory_fs.Memory_FS import Memory_FS
+from memory_fs.Memory_FS                                     import Memory_FS
 from osbot_utils.helpers.Safe_Id                             import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path       import Safe_Str__File__Path
-from memory_fs.core.Memory_FS__File_System                   import Memory_FS__File_System
 from memory_fs.core.Memory_FS__Storage                       import Memory_FS__Storage
 from memory_fs.schemas.Schema__Memory_FS__File__Config       import Schema__Memory_FS__File__Config
 from memory_fs.schemas.Schema__Memory_FS__Path__Handler      import Schema__Memory_FS__Path__Handler
@@ -18,6 +16,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
     def setUp(self):                                                                             # Initialize test data
         self.memory_fs        = Memory_FS()
+        self.memory_fs__data  = self.memory_fs.data()
         self.memory_fs__edit  = self.memory_fs.edit()
         self.file_system      = self.memory_fs.file_system
         self.storage          = Memory_FS__Storage(file_system = self.file_system)
@@ -60,13 +59,13 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert saved_paths[Safe_Id("latest")].endswith("file.json")
 
         # Verify metadata files were actually saved
-        assert self.file_system.exists(saved_paths[Safe_Id("latest")])   is True
-        assert self.file_system.exists(saved_paths[Safe_Id("temporal")]) is True
+        assert self.memory_fs__data.exists(saved_paths[Safe_Id("latest")])   is True
+        assert self.memory_fs__data.exists(saved_paths[Safe_Id("temporal")]) is True
 
         # Verify content was saved and is JSON formatted
         loaded_file = self.file_system.load(saved_paths[Safe_Id("latest")])
         content_path = loaded_file.info.content.content_path
-        assert self.file_system.exists_content(content_path) is True
+        assert self.memory_fs__data.exists_content(content_path) is True
 
         # JSON serialization should wrap string in quotes
         content_bytes = self.file_system.load_content(content_path)
@@ -225,7 +224,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
         # Verify content was also deleted
         for content_path in content_paths:
-            assert self.file_system.exists_content(content_path) is False
+            assert self.memory_fs__data.exists_content(content_path) is False
 
     def test_disabled_handler(self):                                                            # Tests disabled handlers are skipped
         self.temporal_handler.enabled = False

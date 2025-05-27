@@ -9,14 +9,6 @@ class Memory_FS__File_System(Type_Safe):                                        
     files          : Dict[Safe_Str__File__Path, Schema__Memory_FS__File]                                  # Path -> File metadata mapping
     content_data   : Dict[Safe_Str__File__Path, bytes]                                           # Path -> Raw content mapping
 
-    def exists(self, path : Safe_Str__File__Path                                               # Check if a file exists at the given path
-                ) -> bool:
-        return path in self.files
-
-    def exists_content(self, path : Safe_Str__File__Path                                       # Check if content exists at the given path
-                        ) -> bool:
-        return path in self.content_data
-
     def load(self, path : Safe_Str__File__Path                                                 # Load a file metadata from the given path
               ) -> Optional[Schema__Memory_FS__File]:
         return self.files.get(path)
@@ -28,34 +20,6 @@ class Memory_FS__File_System(Type_Safe):                                        
 
 
 
-    def list_files(self, prefix : Safe_Str__File__Path = None                                  # List all files, optionally filtered by prefix
-                    ) -> List[Safe_Str__File__Path]:
-        if prefix is None:
-            return list(self.files.keys())
-
-        prefix_str = str(prefix)
-        if not prefix_str.endswith('/'):
-            prefix_str += '/'
-
-        return [path for path in self.files.keys()
-                if str(path).startswith(prefix_str)]
-
-    def get_file_info(self, path : Safe_Str__File__Path                                        # Get file information (size, hash, etc.)
-                       ) -> Optional[Dict[Safe_Id, Any]]:
-        file = self.files.get(path)
-        if not file:
-            return None
-
-        content_size = 0
-        if file.info and file.info.content:
-            content_size = int(file.info.content.size)                                         # Get size from metadata
-
-        return {Safe_Id("exists")       : True                                               ,
-                Safe_Id("size")         : content_size                                       ,
-                Safe_Id("content_hash") : file.metadata.content_hash                         ,
-                Safe_Id("timestamp")    : file.metadata.timestamp                            ,
-                Safe_Id("content_type") : str(file.info.content_type.value) if file.info else None,
-                Safe_Id("paths")        : file.metadata.paths                                }
 
     def clear(self) -> None:                                                                    # Clear all files and directories
         self.files.clear()

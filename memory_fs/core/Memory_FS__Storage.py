@@ -1,4 +1,6 @@
 from typing                                                    import Dict, List, Optional, Any
+
+from memory_fs.actions.Memory_FS__Data import Memory_FS__Data
 from osbot_utils.decorators.methods.cache_on_self              import cache_on_self
 from memory_fs.actions.Memory_FS__Edit                         import Memory_FS__Edit
 from osbot_utils.helpers.Safe_Id                               import Safe_Id
@@ -22,12 +24,16 @@ class Memory_FS__Storage(Type_Safe):                                            
     file_system : Memory_FS__File_System
 
     @cache_on_self
+    def memory_fs__data(self):
+        return Memory_FS__Data(file_system=self.file_system)
+
+    @cache_on_self
     def memory_fs__edit(self):
         return Memory_FS__Edit(file_system=self.file_system)
 
     def list_files(self, prefix: Safe_Str__File__Path = None                                    # List all files in storage
                     ) -> List[Safe_Str__File__Path]:
-        return self.file_system.list_files(prefix)
+        return self.memory_fs__data().list_files(prefix)
 
     def save(self, file_data   : Any,  # Save file data using all configured path handlers
              file_config : Schema__Memory_FS__File__Config,
@@ -126,7 +132,7 @@ class Memory_FS__Storage(Type_Safe):                                            
             for handler in file_config.path_handlers:
                 if handler.enabled:
                     path = self._get_handler_path(file_config, handler)
-                    if path and self.file_system.exists(path):
+                    if path and self.memory_fs__data().exists(path):
                         file = self.file_system.load(path)
                         if file:
                             return file
@@ -178,13 +184,13 @@ class Memory_FS__Storage(Type_Safe):                                            
         if file_config.default_handler:
             # Check only the default handler's path
             path = self._get_handler_path(file_config, file_config.default_handler)
-            return path is not None and self.file_system.exists(path)
+            return path is not None and self.memory_fs__data().exists(path)
         else:
             # Check ALL paths - file exists only if present in all configured paths
             for handler in file_config.path_handlers:
                 if handler.enabled:
                     path = self._get_handler_path(file_config, handler)
-                    if not path or not self.file_system.exists(path):
+                    if not path or not self.memory_fs__data().exists(path):
                         return False
             return len(file_config.path_handlers) > 0  # At least one handler must be configured
 
