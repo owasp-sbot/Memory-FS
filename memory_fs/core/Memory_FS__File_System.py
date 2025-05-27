@@ -6,8 +6,8 @@ from memory_fs.schemas.Schema__Memory_FS__File           import Schema__Memory_F
 
 
 class Memory_FS__File_System(Type_Safe):                                                # In-memory file system that maintains directory structure and file storage
-    files        : Dict[Safe_Str__File__Path, Schema__Memory_FS__File]                                  # Path -> File metadata mapping
-    content_data : Dict[Safe_Str__File__Path, bytes]                                           # Path -> Raw content mapping
+    files          : Dict[Safe_Str__File__Path, Schema__Memory_FS__File]                                  # Path -> File metadata mapping
+    content_data   : Dict[Safe_Str__File__Path, bytes]                                           # Path -> Raw content mapping
 
     def exists(self, path : Safe_Str__File__Path                                               # Check if a file exists at the given path
                 ) -> bool:
@@ -17,18 +17,6 @@ class Memory_FS__File_System(Type_Safe):                                        
                         ) -> bool:
         return path in self.content_data
 
-    def save(self, path : Safe_Str__File__Path ,                                               # Save a file metadata at the given path
-                   file : Schema__Memory_FS__File
-              ) -> bool:
-        self.files[path] = file                                                                # Store the file metadata
-        return True
-
-    def save_content(self, path    : Safe_Str__File__Path ,                                    # Save raw content at the given path
-                           content : bytes
-                      ) -> bool:
-        self.content_data[path] = content                                                       # Store the raw content
-        return True
-
     def load(self, path : Safe_Str__File__Path                                                 # Load a file metadata from the given path
               ) -> Optional[Schema__Memory_FS__File]:
         return self.files.get(path)
@@ -37,19 +25,8 @@ class Memory_FS__File_System(Type_Safe):                                        
                       ) -> Optional[bytes]:
         return self.content_data.get(path)
 
-    def delete(self, path : Safe_Str__File__Path                                               # Delete a file at the given path
-                ) -> bool:
-        if path in self.files:
-            del self.files[path]
-            return True
-        return False
 
-    def delete_content(self, path : Safe_Str__File__Path                                       # Delete content at the given path
-                        ) -> bool:
-        if path in self.content_data:
-            del self.content_data[path]
-            return True
-        return False
+
 
     def list_files(self, prefix : Safe_Str__File__Path = None                                  # List all files, optionally filtered by prefix
                     ) -> List[Safe_Str__File__Path]:
@@ -79,38 +56,6 @@ class Memory_FS__File_System(Type_Safe):                                        
                 Safe_Id("timestamp")    : file.metadata.timestamp                            ,
                 Safe_Id("content_type") : str(file.info.content_type.value) if file.info else None,
                 Safe_Id("paths")        : file.metadata.paths                                }
-
-    def move(self, source      : Safe_Str__File__Path ,                                        # Move a file from source to destination
-                   destination : Safe_Str__File__Path
-              ) -> bool:
-        if source not in self.files:
-            return False
-
-        file = self.files[source]
-        self.save(destination, file)
-        self.delete(source)
-
-        # Also move content if it exists
-        if source in self.content_data:
-            self.save_content(destination, self.content_data[source])
-            self.delete_content(source)
-
-        return True
-
-    def copy(self, source      : Safe_Str__File__Path ,                                        # Copy a file from source to destination
-                   destination : Safe_Str__File__Path
-              ) -> bool:
-        if source not in self.files:
-            return False
-
-        file = self.files[source]
-        self.save(destination, file)
-
-        # Also copy content if it exists
-        if source in self.content_data:
-            self.save_content(destination, self.content_data[source])
-
-        return True
 
     def clear(self) -> None:                                                                    # Clear all files and directories
         self.files.clear()

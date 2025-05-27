@@ -1,4 +1,5 @@
 from unittest                                              import TestCase
+from memory_fs.Memory_FS                                   import Memory_FS
 from osbot_utils.type_safe.Type_Safe__Dict                 import Type_Safe__Dict
 from osbot_utils.helpers.Safe_Id                           import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path     import Safe_Str__File__Path
@@ -14,11 +15,14 @@ from memory_fs.schemas.Enum__Memory_FS__File__Encoding     import Enum__Memory_F
 from memory_fs.schemas.Schema__Memory_FS__File__Info       import Schema__Memory_FS__File__Info
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata   import Schema__Memory_FS__File__Metadata
 
-
+# todo: all this logic needs to be refactored into the new Memory_FS__* classes
 class test_Memory_FS__Memory__File_System(TestCase):
 
     def setUp(self):                                                                             # Initialize test data
-        self.file_system        = Memory_FS__File_System()
+        self.memory_fs          = Memory_FS()
+        self.memory_fs__data    = self.memory_fs.data()
+        self.memory_fs__edit    = self.memory_fs.edit()
+        self.file_system        = self.memory_fs.file_system
         self.test_path          = Safe_Str__File__Path("test/folder/file.json")
         self.test_content_path  = Safe_Str__File__Path("test/folder/file.html")
         self.test_content_bytes = b"test content"
@@ -51,8 +55,8 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert self.file_system.exists(self.test_path                   ) is False
         assert self.file_system.exists_content(self.test_content_path   ) is False
 
-        assert self.file_system.save(self.test_path, self.test_file                         ) is True
-        assert self.file_system.save_content(self.test_content_path, self.test_content_bytes) is True
+        assert self.memory_fs__edit.save(self.test_path, self.test_file                         ) is True
+        assert self.memory_fs__edit.save_content(self.test_content_path, self.test_content_bytes) is True
 
         assert self.file_system.exists(self.test_path                   ) is True
         assert self.file_system.exists_content(self.test_content_path   ) is True
@@ -61,8 +65,8 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert self.file_system.load(self.test_path                     ) is None
         assert self.file_system.load_content(self.test_content_path     ) is None
 
-        self.file_system.save(self.test_path, self.test_file)
-        self.file_system.save_content(self.test_content_path, self.test_content_bytes)
+        self.memory_fs__edit.save(self.test_path, self.test_file)
+        self.memory_fs__edit.save_content(self.test_content_path, self.test_content_bytes)
 
         loaded_file = self.file_system.load(self.test_path)
         loaded_content = self.file_system.load_content(self.test_content_path)
@@ -73,23 +77,23 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert loaded_content == self.test_content_bytes
 
     def test_delete(self):                                                                       # Tests deleting files
-        self.file_system.save(self.test_path, self.test_file)
-        self.file_system.save_content(self.test_content_path, self.test_content_bytes)
+        self.memory_fs__edit.save        (self.test_path, self.test_file)
+        self.memory_fs__edit.save_content(self.test_content_path, self.test_content_bytes)
 
-        assert self.file_system.delete(self.test_path) is True
-        assert self.file_system.delete_content(self.test_content_path) is True
+        assert self.memory_fs__edit.delete(self.test_path) is True
+        assert self.memory_fs__edit.delete_content(self.test_content_path) is True
         assert self.file_system.exists(self.test_path) is False
         assert self.file_system.exists_content(self.test_content_path) is False
-        assert self.file_system.delete(self.test_path) is False                                # Delete non-existent file
+        assert self.memory_fs__edit.delete(self.test_path) is False                                # Delete non-existent file
 
     def test_list_files(self):                                                                   # Tests listing files
         path_1 = Safe_Str__File__Path("folder1/file1.json")
         path_2 = Safe_Str__File__Path("folder1/file2.json")
         path_3 = Safe_Str__File__Path("folder2/file3.json")
 
-        self.file_system.save(path_1, self.test_file)
-        self.file_system.save(path_2, self.test_file)
-        self.file_system.save(path_3, self.test_file)
+        self.memory_fs__edit.save(path_1, self.test_file)
+        self.memory_fs__edit.save(path_2, self.test_file)
+        self.memory_fs__edit.save(path_3, self.test_file)
 
         all_files = self.file_system.list_files()
         folder1_files = self.file_system.list_files(Safe_Str__File__Path("folder1"))
@@ -106,7 +110,7 @@ class test_Memory_FS__Memory__File_System(TestCase):
     def test_get_file_info(self):                                                                # Tests getting file information
         assert self.file_system.get_file_info(self.test_path) is None
 
-        self.file_system.save(self.test_path, self.test_file)
+        self.memory_fs__edit.save(self.test_path, self.test_file)
         info = self.file_system.get_file_info(self.test_path)
 
         assert info[Safe_Id("exists"      )] is True
@@ -122,38 +126,38 @@ class test_Memory_FS__Memory__File_System(TestCase):
         dest_path           = Safe_Str__File__Path("destination/file.json")
         dest_content_path   = Safe_Str__File__Path("destination/file.html")
 
-        self.file_system.save        (source_path, self.test_file)
-        self.file_system.save_content(source_content_path, self.test_content_bytes)
+        self.memory_fs__edit.save        (source_path, self.test_file)
+        self.memory_fs__edit.save_content(source_content_path, self.test_content_bytes)
 
-        assert self.file_system.move(   source_path, dest_path) is True
-        assert self.file_system.exists  (source_path          ) is False
-        assert self.file_system.exists  (dest_path            ) is True
-        assert self.file_system.load    (dest_path            ) == self.test_file
-        assert self.file_system.load    (dest_path     ).json() == self.test_file.json()
+        assert self.memory_fs__edit.move(source_path, dest_path) is True
+        assert self.file_system.exists  (source_path           ) is False
+        assert self.file_system.exists  (dest_path             ) is True
+        assert self.file_system.load    (dest_path             ) == self.test_file
+        assert self.file_system.load    (dest_path      ).json() == self.test_file.json()
 
         # Content should not be moved automatically in this test since paths don't match
-        assert self.file_system.move(source_path, dest_path) is False                          # Move non-existent file
+        assert self.memory_fs__edit.move(source_path, dest_path) is False                          # Move non-existent file
 
     def test_copy(self):                                                                         # Tests copying files
         source_path         = Safe_Str__File__Path("source/file.json")
         source_content_path = Safe_Str__File__Path("source/file.html")
         dest_path           = Safe_Str__File__Path("destination/file.json")
 
-        self.file_system.save(source_path, self.test_file)
-        self.file_system.save_content(source_content_path, self.test_content_bytes)
+        self.memory_fs__edit.save(source_path, self.test_file)
+        self.memory_fs__edit.save_content(source_content_path, self.test_content_bytes)
 
-        assert self.file_system.copy    (source_path, dest_path) is True
+        assert self.memory_fs__edit.copy(source_path, dest_path) is True
         assert self.file_system.exists  (source_path           ) is True
         assert self.file_system.exists  (dest_path             ) is True
         assert self.file_system.load    (source_path           ) is self.test_file
         assert self.file_system.load    (dest_path             ) is self.test_file
 
-        assert self.file_system.copy(Safe_Str__File__Path("missing"), dest_path) is False      # Copy non-existent file
+        assert self.memory_fs__edit.copy(Safe_Str__File__Path("missing"), dest_path) is False      # Copy non-existent file
 
     def test_clear(self):                                                                        # Tests clearing all files and directories
-        self.file_system.save(Safe_Str__File__Path("file1.json"), self.test_file)
-        self.file_system.save(Safe_Str__File__Path("file2.json"), self.test_file)
-        self.file_system.save_content(Safe_Str__File__Path("file1.html"), self.test_content_bytes)
+        self.memory_fs__edit.save(Safe_Str__File__Path("file1.json"), self.test_file)
+        self.memory_fs__edit.save(Safe_Str__File__Path("file2.json"), self.test_file)
+        self.memory_fs__edit.save_content(Safe_Str__File__Path("file1.html"), self.test_content_bytes)
 
         assert len(self.file_system.files       ) > 0
         assert len(self.file_system.content_data) > 0
@@ -193,10 +197,10 @@ class test_Memory_FS__Memory__File_System(TestCase):
                                          info     = file_info_2,
                                          metadata = self.test_metadata)
 
-        self.file_system.save        (Safe_Str__File__Path("dir1/file1.txt.json"), file_1)
-        self.file_system.save        (Safe_Str__File__Path("dir2/file2.txt.json"), file_2)
-        self.file_system.save_content(Safe_Str__File__Path("dir1/file1.txt"     ), content_1)
-        self.file_system.save_content(Safe_Str__File__Path("dir2/file2.txt"     ), content_2)
+        self.memory_fs__edit.save        (Safe_Str__File__Path("dir1/file1.txt.json"), file_1)
+        self.memory_fs__edit.save        (Safe_Str__File__Path("dir2/file2.txt.json"), file_2)
+        self.memory_fs__edit.save_content(Safe_Str__File__Path("dir1/file1.txt"     ), content_1)
+        self.memory_fs__edit.save_content(Safe_Str__File__Path("dir2/file2.txt"     ), content_2)
 
         stats = self.file_system.stats()
 

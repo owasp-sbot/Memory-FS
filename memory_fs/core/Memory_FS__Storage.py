@@ -1,4 +1,6 @@
 from typing                                                    import Dict, List, Optional, Any
+from osbot_utils.decorators.methods.cache_on_self              import cache_on_self
+from memory_fs.actions.Memory_FS__Edit                         import Memory_FS__Edit
 from osbot_utils.helpers.Safe_Id                               import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path         import Safe_Str__File__Path
 from osbot_utils.helpers.safe_str.Safe_Str__Hash               import safe_str_hash
@@ -18,6 +20,10 @@ from memory_fs.schemas.Enum__Memory_FS__Serialization          import Enum__Memo
 
 class Memory_FS__Storage(Type_Safe):                                                      # Storage implementation that coordinates file operations with path handlers
     file_system : Memory_FS__File_System
+
+    @cache_on_self
+    def memory_fs__edit(self):
+        return Memory_FS__Edit(file_system=self.file_system)
 
     def list_files(self, prefix: Safe_Str__File__Path = None                                    # List all files in storage
                     ) -> List[Safe_Str__File__Path]:
@@ -98,12 +104,12 @@ class Memory_FS__Storage(Type_Safe):                                            
 
         # Save metadata files
         for handler_name, path in metadata_paths.items():
-            if self.file_system.save(path, file):
+            if self.memory_fs__edit().save(path, file):
                 saved_paths[handler_name] = path
 
         # Save content files
         for handler_name, path in content_paths.items():
-            self.file_system.save_content(path, content_bytes)
+            self.memory_fs__edit().save_content(path, content_bytes)
 
         return saved_paths
 
@@ -192,12 +198,12 @@ class Memory_FS__Storage(Type_Safe):                                            
         if file and file.metadata.paths:
             # Delete using actual paths from metadata
             for handler_name, path in file.metadata.paths.items():
-                results[handler_name] = self.file_system.delete(path)
+                results[handler_name] = self.memory_fs__edit().delete(path)
 
             # Also delete content files
             if file.metadata.content_paths:
                 for path in file.metadata.content_paths.values():
-                    self.file_system.delete_content(path)
+                    self.memory_fs__edit().delete_content(path)
         else:
             # Fallback: try to delete from all configured handlers
             for handler in file_config.path_handlers:

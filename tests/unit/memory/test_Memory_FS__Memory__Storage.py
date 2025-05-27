@@ -1,5 +1,7 @@
 from datetime                                                import datetime
 from unittest                                                import TestCase
+
+from memory_fs.Memory_FS import Memory_FS
 from osbot_utils.helpers.Safe_Id                             import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path       import Safe_Str__File__Path
 from memory_fs.core.Memory_FS__File_System                   import Memory_FS__File_System
@@ -15,7 +17,9 @@ from memory_fs.file_types.Memory_FS__File__Type__Png         import Memory_FS__F
 class test_Memory_FS__Memory__Storage(TestCase):
 
     def setUp(self):                                                                             # Initialize test data
-        self.file_system      = Memory_FS__File_System()
+        self.memory_fs        = Memory_FS()
+        self.memory_fs__edit  = self.memory_fs.edit()
+        self.file_system      = self.memory_fs.file_system
         self.storage          = Memory_FS__Storage(file_system = self.file_system)
 
         # Create handlers
@@ -84,8 +88,6 @@ class test_Memory_FS__Memory__Storage(TestCase):
         saved_paths      = self.storage.save(markdown_content, config_markdown)
 
         # Verify file extension
-        from osbot_utils.utils.Dev import pprint
-        pprint(saved_paths)
         assert saved_paths[Safe_Id("latest")].endswith("file.json")     # todo: bug: should be file.md (logic is broken since at the moment we are storing the files as file.md and file.json)
 
         # Verify content is saved as plain string (not JSON)
@@ -152,7 +154,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
         # Delete temporal file to ensure we're loading from latest
         temporal_path = saved_paths[Safe_Id("temporal")]
-        self.file_system.delete(temporal_path)
+        self.memory_fs__edit.delete(temporal_path)
 
         loaded_file = self.storage.load(config_with_default)
         assert loaded_file is not None
@@ -194,7 +196,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
         saved_paths = self.storage.save(self.test_data, config_with_default)
 
         # Delete temporal to show we only check default
-        self.file_system.delete(saved_paths[Safe_Id("temporal")])
+        self.memory_fs__edit.delete(saved_paths[Safe_Id("temporal")])
 
         assert self.storage.exists(config_with_default) is True
 
@@ -205,7 +207,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert self.storage.exists(self.test_config) is True
 
         # Delete one file - should now return False
-        self.file_system.delete(saved_paths[Safe_Id("temporal")])
+        self.memory_fs__edit.delete(saved_paths[Safe_Id("temporal")])
         assert self.storage.exists(self.test_config) is False
 
     def test_delete(self):                                                                       # Tests deleting files
