@@ -3,7 +3,6 @@ from unittest                                                import TestCase
 from memory_fs.Memory_FS                                     import Memory_FS
 from osbot_utils.helpers.Safe_Id                             import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path       import Safe_Str__File__Path
-from memory_fs.core.Memory_FS__Storage                       import Memory_FS__Storage
 from memory_fs.schemas.Schema__Memory_FS__File__Config       import Schema__Memory_FS__File__Config
 from memory_fs.schemas.Schema__Memory_FS__Path__Handler      import Schema__Memory_FS__Path__Handler
 from memory_fs.file_types.Memory_FS__File__Type__Json        import Memory_FS__File__Type__Json
@@ -15,11 +14,14 @@ from memory_fs.file_types.Memory_FS__File__Type__Png         import Memory_FS__F
 class test_Memory_FS__Memory__Storage(TestCase):
 
     def setUp(self):                                                                             # Initialize test data
-        self.memory_fs        = Memory_FS()
-        self.memory_fs__data  = self.memory_fs.data()
-        self.memory_fs__edit  = self.memory_fs.edit()
-        self.file_system      = self.memory_fs.file_system
-        self.storage          = Memory_FS__Storage(file_system = self.file_system)
+        self.memory_fs          = Memory_FS()
+        self.memory_fs__data    = self.memory_fs.data   ()
+        self.memory_fs__delete  = self.memory_fs.delete ()
+        self.memory_fs__edit    = self.memory_fs.edit   ()
+        self.memory_fs__exists  = self.memory_fs.exists ()
+        self.memory_fs__load    = self.memory_fs.load   ()
+        self.memory_fs__save    = self.memory_fs.save   ()
+        self.file_system        = self.memory_fs.file_system
 
         # Create handlers
         self.latest_handler   = Schema__Memory_FS__Path__Handler(name    = Safe_Id("latest"),
@@ -42,12 +44,8 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
         self.test_data = "test content"
 
-    def test_init(self):                                                                         # Tests basic initialization
-        assert type(self.storage) is Memory_FS__Storage
-        assert self.storage.file_system is self.file_system
-
     def test_save_string_data_as_json(self):                                                    # Tests saving string data with JSON file type
-        saved_paths = self.storage.save(self.test_data, self.test_config)
+        saved_paths = self.memory_fs__save.save(self.test_data, self.test_config)
 
         assert len(saved_paths)                       == 2
         assert Safe_Id("latest")                      in saved_paths
@@ -73,9 +71,9 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
     def test_save_dict_data_as_json(self):                                                      # Tests saving dict data with JSON file type
         test_dict = {"key": "value", "number": 42}
-        saved_paths = self.storage.save(test_dict, self.test_config)
+        saved_paths = self.memory_fs__save.save(test_dict, self.test_config)
 
-        loaded_data = self.storage.load_data(self.test_config)
+        loaded_data = self.memory_fs__load.load_data(self.test_config)
         assert loaded_data == test_dict
 
     def test_save_string_data_as_markdown(self):                                               # Tests saving string data with Markdown file type
@@ -84,13 +82,13 @@ class test_Memory_FS__Memory__Storage(TestCase):
                                                           tags          = set())
 
         markdown_content = "# Test Header\n\nThis is a test."
-        saved_paths      = self.storage.save(markdown_content, config_markdown)
+        saved_paths      = self.memory_fs__save.save(markdown_content, config_markdown)
 
         # Verify file extension
         assert saved_paths[Safe_Id("latest")].endswith("file.json")     # todo: bug: should be file.md (logic is broken since at the moment we are storing the files as file.md and file.json)
 
         # Verify content is saved as plain string (not JSON)
-        loaded_data = self.storage.load_data(config_markdown)
+        loaded_data = self.memory_fs__load.load_data(config_markdown)
         assert loaded_data == markdown_content
 
     def test_save_html_content(self):                                                           # Tests saving HTML content
@@ -99,12 +97,12 @@ class test_Memory_FS__Memory__Storage(TestCase):
                                                       tags          = set())
 
         html_content = "<html><body><h1>Test</h1></body></html>"
-        saved_paths = self.storage.save(html_content, config_html, file_name="index")
+        saved_paths = self.memory_fs__save.save(html_content, config_html, file_name="index")
 
         # Verify file name and extension
         assert saved_paths[Safe_Id("latest")].endswith("index.json")    # todo: bug: should be index.html
 
-        loaded_data = self.storage.load_data(config_html)
+        loaded_data = self.memory_fs__load.load_data(config_html)
         assert loaded_data != html_content                              # BUG: should be equal
         assert loaded_data is None                                      # BUG: should not be None
 
@@ -115,18 +113,18 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
         # Simulate PNG data (just bytes for testing)
         png_data = b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR"
-        saved_paths = self.storage.save(png_data, config_png, file_name="image")
+        saved_paths = self.memory_fs__save.save(png_data, config_png, file_name="image")
 
         # Verify file extension
         assert saved_paths[Safe_Id("latest")].endswith("image.json")      # todo: bug: should be image.png
 
         # Verify binary data is preserved
-        loaded_data = self.storage.load_data(config_png)
+        loaded_data = self.memory_fs__load.load_data(config_png)
         assert loaded_data != png_data                          # BUG: should be equal
         assert loaded_data is None                              # BUG: should not be none
 
         # Verify encoding is BINARY
-        loaded_file = self.storage.load(config_png)
+        loaded_file = self.memory_fs__load.load(config_png)
         assert loaded_file is None                              # BUG: should not be none
         #assert loaded_file.info.content.encoding.value is None  # BINARY
 
@@ -137,7 +135,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
         )
 
         with self.assertRaises(ValueError) as context:
-            self.storage.save(self.test_data, config_no_type)
+            self.memory_fs__save.save(self.test_data, config_no_type)
 
         assert "file_config.file_type is required" in str(context.exception)
 
@@ -149,13 +147,13 @@ class test_Memory_FS__Memory__Storage(TestCase):
             tags            = set()
         )
 
-        saved_paths = self.storage.save(self.test_data, config_with_default)
+        saved_paths = self.memory_fs__save.save(self.test_data, config_with_default)
 
         # Delete temporal file to ensure we're loading from latest
         temporal_path = saved_paths[Safe_Id("temporal")]
         self.memory_fs__edit.delete(temporal_path)
 
-        loaded_file = self.storage.load(config_with_default)
+        loaded_file = self.memory_fs__load.load(config_with_default)
         assert loaded_file is not None
         assert loaded_file.info.file_ext == Safe_Id("json")
 
@@ -167,15 +165,15 @@ class test_Memory_FS__Memory__Storage(TestCase):
             "list": [1, 2, 3]
         }
 
-        self.storage.save(test_data, self.test_config)
+        self.memory_fs__save.save(test_data, self.test_config)
 
         # Load using load_data
-        loaded_data = self.storage.load_data(self.test_config)
+        loaded_data = self.memory_fs__load.load_data(self.test_config)
         assert loaded_data == test_data
 
     def test_file_type_properties_in_saved_file(self):                                         # Tests that file type properties are correctly saved
-        saved_paths = self.storage.save(self.test_data, self.test_config)
-        loaded_file = self.storage.load(self.test_config)
+        saved_paths = self.memory_fs__save.save(self.test_data, self.test_config)
+        loaded_file = self.memory_fs__load.load(self.test_config)
 
         # Verify file info matches file type
         assert loaded_file.info.file_ext == self.file_type_json.file_extension
@@ -190,37 +188,37 @@ class test_Memory_FS__Memory__Storage(TestCase):
             tags            = set()
         )
 
-        assert self.storage.exists(config_with_default) is False
+        assert self.memory_fs__exists.exists(config_with_default) is False
 
-        saved_paths = self.storage.save(self.test_data, config_with_default)
+        saved_paths = self.memory_fs__save.save(self.test_data, config_with_default)
 
         # Delete temporal to show we only check default
         self.memory_fs__edit.delete(saved_paths[Safe_Id("temporal")])
 
-        assert self.storage.exists(config_with_default) is True
+        assert self.memory_fs__exists.exists(config_with_default) is True
 
     def test_exists_without_default_handler_all_must_exist(self):                               # Tests exists without default (all must exist)
-        assert self.storage.exists(self.test_config) is False
+        assert self.memory_fs__exists.exists(self.test_config) is False
 
-        saved_paths = self.storage.save(self.test_data, self.test_config)
-        assert self.storage.exists(self.test_config) is True
+        saved_paths = self.memory_fs__save.save(self.test_data, self.test_config)
+        assert self.memory_fs__exists.exists(self.test_config) is True
 
         # Delete one file - should now return False
         self.memory_fs__edit.delete(saved_paths[Safe_Id("temporal")])
-        assert self.storage.exists(self.test_config) is False
+        assert self.memory_fs__exists.exists(self.test_config) is False
 
     def test_delete(self):                                                                       # Tests deleting files
-        saved_paths = self.storage.save(self.test_data, self.test_config)
+        saved_paths = self.memory_fs__save.save(self.test_data, self.test_config)
 
         # Get content paths before deletion
-        file = self.storage.load(self.test_config)
+        file = self.memory_fs__load.load(self.test_config)
         content_paths = list(file.metadata.content_paths.values())
 
-        results = self.storage.delete(self.test_config)
+        results = self.memory_fs__delete.delete(self.test_config)
 
         assert results[Safe_Id("latest")] is True
         assert results[Safe_Id("temporal")] is True
-        assert self.storage.exists(self.test_config) is False
+        assert self.memory_fs__exists.exists(self.test_config) is False
 
         # Verify content was also deleted
         for content_path in content_paths:
@@ -229,7 +227,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
     def test_disabled_handler(self):                                                            # Tests disabled handlers are skipped
         self.temporal_handler.enabled = False
 
-        saved_paths = self.storage.save(self.test_data, self.test_config)
+        saved_paths = self.memory_fs__save.save(self.test_data, self.test_config)
 
         assert len(saved_paths) == 1
         assert Safe_Id("latest") in saved_paths
@@ -242,11 +240,11 @@ class test_Memory_FS__Memory__Storage(TestCase):
             tags          = set()
         )
 
-        saved_paths = self.storage.save(self.test_data, empty_config)
+        saved_paths = self.memory_fs__save.save(self.test_data, empty_config)
         assert len(saved_paths) == 0
 
-        assert self.storage.exists(empty_config) is False
-        assert self.storage.load(empty_config) is None
+        assert self.memory_fs__exists.exists(empty_config) is False
+        assert self.memory_fs__load.load(empty_config) is None
 
     def test_handler_types(self):                                                               # Tests different handler types
         versioned_handler = Schema__Memory_FS__Path__Handler(name = Safe_Id("versioned"))
@@ -263,7 +261,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
             tags = set()
         )
 
-        saved_paths = self.storage.save(self.test_data, config)
+        saved_paths = self.memory_fs__save.save(self.test_data, config)
 
         assert len(saved_paths) == 4
         assert Safe_Id("latest") in saved_paths
@@ -291,10 +289,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
             tags          = set()
         )
 
-        self.storage.save("content1", config_1, file_name="file1")
-        self.storage.save("content2", config_2, file_name="file2")
+        self.memory_fs__save.save("content1", config_1, file_name="file1")
+        self.memory_fs__save.save("content2", config_2, file_name="file2")
 
-        all_files = self.storage.list_files()
+        all_files = self.memory_fs__data.list_files()
 
         now = datetime.now()
         time_path = now.strftime("%Y/%m/%d/%H")
@@ -304,14 +302,14 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert Safe_Str__File__Path(f"{time_path}/file2.json") in all_files  # Metadata is always .json
 
     def test_clear(self):                                                                        # Tests clearing storage
-        self.storage.save("content1", self.test_config)
+        self.memory_fs__save.save("content1", self.test_config)
 
-        assert len(self.storage.list_files())     > 0
+        assert len(self.memory_fs__data.list_files())     > 0
         assert len(self.file_system.content_data) > 0
 
-        self.storage.clear()
+        self.memory_fs__edit.clear()
 
-        assert len(self.storage.list_files())     == 0
+        assert len(self.memory_fs__data.list_files())     == 0
         assert len(self.file_system.content_data) == 0
 
     def test_stats(self):                                                                        # Tests storage statistics
@@ -327,10 +325,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
             tags          = set()
         )
 
-        self.storage.save("short", config_1)
-        self.storage.save("much longer content", config_2)
+        self.memory_fs__save.save("short", config_1)
+        self.memory_fs__save.save("much longer content", config_2)
 
-        stats = self.storage.stats()
+        stats = self.memory_fs__data.stats()
 
         assert stats[Safe_Id("type")] == Safe_Id("memory")
         assert stats[Safe_Id("file_count")] == 2                                                # 2 metadata files
