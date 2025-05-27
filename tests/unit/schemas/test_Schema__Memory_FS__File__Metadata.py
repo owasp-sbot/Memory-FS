@@ -13,15 +13,11 @@ class test_Schema__Memory_FS__File__Metadata(TestCase):
             assert type(_) is Schema__Memory_FS__File__Metadata
             assert _.obj() == __(content_hash          = None,
                                  chain_hash            = None,
-                                 previous_version_path = None,
-                                 paths                 = __(),
-                                 content_paths         = __(),
+                                 previous_version_path = None       ,
+                                 paths                 = __()       ,
+                                 content_paths         = __()       ,
                                  timestamp             = _.timestamp,
-                                 file_id               = _.file_id,
-                                 config                =__(default_handler = None ,
-                                                           path_handlers   = []   ,
-                                                           file_type       = None ,
-                                                           tags            = []  ))
+                                 size                  = 0          )
 
             kwargs = dict(paths = {"path_id":"an_path"})
             with Schema__Memory_FS__File__Metadata(**kwargs) as _:

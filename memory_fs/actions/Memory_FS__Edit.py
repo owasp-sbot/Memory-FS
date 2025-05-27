@@ -63,6 +63,7 @@ class Memory_FS__Edit(Type_Safe):
         self.file_system.files[path] = file                                                                # Store the file metadata
         return True
 
+    # todo:need to save the length in the metadata
     def save_content(self, path    : Safe_Str__File__Path ,                                    # Save raw content at the given path
                            content : bytes
                       ) -> bool:

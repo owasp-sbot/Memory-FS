@@ -61,8 +61,9 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert self.memory_fs__data.exists(saved_paths[Safe_Id("temporal")]) is True
 
         # Verify content was saved and is JSON formatted
-        loaded_file = self.memory_fs__data.load(saved_paths[Safe_Id("latest")])
-        content_path = loaded_file.info.content.content_path
+        loaded_file   = self.memory_fs__data.load(saved_paths[Safe_Id("latest")])
+        content_path = loaded_file.config.content_path
+
         assert self.memory_fs__data.exists_content(content_path) is True
 
         # JSON serialization should wrap string in quotes
@@ -155,7 +156,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
         loaded_file = self.memory_fs__load.load(config_with_default)
         assert loaded_file is not None
-        assert loaded_file.info.file_ext == Safe_Id("json")
+        assert loaded_file.config.file_type.file_extension == Safe_Id("json")
 
     def test_load_data_method(self):                                                            # Tests the new load_data method
         # Save different types of data
@@ -176,9 +177,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
         loaded_file = self.memory_fs__load.load(self.test_config)
 
         # Verify file info matches file type
-        assert loaded_file.info.file_ext == self.file_type_json.file_extension
-        assert loaded_file.info.content_type == self.file_type_json.content_type
-        assert loaded_file.info.content.encoding == self.file_type_json.encoding
+        with loaded_file.config.file_type as _:
+            assert _.file_extension == self.file_type_json.file_extension
+            assert _.content_type == self.file_type_json.content_type
+            assert _.encoding == self.file_type_json.encoding
 
     def test_exists_with_default_handler(self):                                                 # Tests exists with default handler
         config_with_default = Schema__Memory_FS__File__Config(
