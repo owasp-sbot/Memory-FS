@@ -1,32 +1,32 @@
-from typing                                                             import Dict, List, Optional, Any
-from osbot_utils.helpers.Safe_Id                                        import Safe_Id
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path                  import Safe_Str__File__Path
-from osbot_utils.helpers.safe_str.Safe_Str__Hash                        import safe_str_hash
-from osbot_utils.helpers.safe_str.Safe_Str__File__Name                  import Safe_Str__File__Name
-from osbot_utils.helpers.safe_int.Safe_UInt__FileSize                   import Safe_UInt__FileSize
-from osbot_utils.type_safe.Type_Safe                                    import Type_Safe
-from memory_fs.memory.Cloud_FS__Memory__File_System           import Cloud_FS__Memory__File_System
-from memory_fs.schemas.Schema__Cloud_FS__File                 import Schema__Cloud_FS__File
-from memory_fs.schemas.Schema__Cloud_FS__File__Config         import Schema__Cloud_FS__File__Config
-from memory_fs.schemas.Schema__Cloud_FS__File__Content        import Schema__Cloud_FS__File__Content
-from memory_fs.schemas.Schema__Cloud_FS__File__Info           import Schema__Cloud_FS__File__Info
-from memory_fs.schemas.Schema__Cloud_FS__File__Metadata       import Schema__Cloud_FS__File__Metadata
-from memory_fs.schemas.Schema__Cloud_FS__Path__Handler        import Schema__Cloud_FS__Path__Handler
-from memory_fs.schemas.Enum__Cloud_FS__File__Encoding         import Enum__Cloud_FS__File__Encoding
-from memory_fs.schemas.Enum__Cloud_FS__Serialization          import Enum__Cloud_FS__Serialization
+from typing                                                    import Dict, List, Optional, Any
+from osbot_utils.helpers.Safe_Id                               import Safe_Id
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path         import Safe_Str__File__Path
+from osbot_utils.helpers.safe_str.Safe_Str__Hash               import safe_str_hash
+from osbot_utils.helpers.safe_str.Safe_Str__File__Name         import Safe_Str__File__Name
+from osbot_utils.helpers.safe_int.Safe_UInt__FileSize          import Safe_UInt__FileSize
+from osbot_utils.type_safe.Type_Safe                           import Type_Safe
+from memory_fs.memory.Memory_FS__File_System                   import Memory_FS__File_System
+from memory_fs.schemas.Schema__Memory_FS__File                 import Schema__Memory_FS__File
+from memory_fs.schemas.Schema__Memory_FS__File__Config         import Schema__Memory_FS__File__Config
+from memory_fs.schemas.Schema__Memory_FS__File__Content        import Schema__Memory_FS__File__Content
+from memory_fs.schemas.Schema__Memory_FS__File__Info           import Schema__Memory_FS__File__Info
+from memory_fs.schemas.Schema__Memory_FS__File__Metadata       import Schema__Memory_FS__File__Metadata
+from memory_fs.schemas.Schema__Memory_FS__Path__Handler        import Schema__Memory_FS__Path__Handler
+from memory_fs.schemas.Enum__Memory_FS__File__Encoding         import Enum__Memory_FS__File__Encoding
+from memory_fs.schemas.Enum__Memory_FS__Serialization          import Enum__Memory_FS__Serialization
 
 
-class Cloud_FS__Memory__Storage(Type_Safe):                                                      # Storage implementation that coordinates file operations with path handlers
-    file_system : Cloud_FS__Memory__File_System
+class Memory_FS__Storage(Type_Safe):                                                      # Storage implementation that coordinates file operations with path handlers
+    file_system : Memory_FS__File_System
 
     def list_files(self, prefix: Safe_Str__File__Path = None                                    # List all files in storage
                     ) -> List[Safe_Str__File__Path]:
         return self.file_system.list_files(prefix)
 
-    def save(self, file_data   : Any,                                                           # Save file data using all configured path handlers
-                   file_config : Schema__Cloud_FS__File__Config,
-                   file_name   : str = "file"
-              ) -> Dict[Safe_Id, Safe_Str__File__Path]:
+    def save(self, file_data   : Any,  # Save file data using all configured path handlers
+             file_config : Schema__Memory_FS__File__Config,
+             file_name   : str = "file"
+             ) -> Dict[Safe_Id, Safe_Str__File__Path]:
 
         # Get file type from config
         file_type = file_config.file_type
@@ -37,7 +37,7 @@ class Cloud_FS__Memory__Storage(Type_Safe):                                     
         content_bytes = self._serialize_data(file_data, file_type)
 
         # Calculate content hash and size
-        if file_type.encoding == Enum__Cloud_FS__File__Encoding.BINARY:
+        if file_type.encoding == Enum__Memory_FS__File__Encoding.BINARY:
             content_hash = safe_str_hash(str(content_bytes))
         else:
             content_hash = safe_str_hash(content_bytes.decode(file_type.encoding.value))
@@ -65,14 +65,14 @@ class Cloud_FS__Memory__Storage(Type_Safe):                                     
         first_content_path = list(content_paths.values())[0] if content_paths else Safe_Str__File__Path("")
 
         # Create file content reference
-        file_content = Schema__Cloud_FS__File__Content(
+        file_content = Schema__Memory_FS__File__Content(
             size         = content_size,
             encoding     = file_type.encoding,
             content_path = first_content_path
         )
 
         # Create file info
-        file_info = Schema__Cloud_FS__File__Info(
+        file_info = Schema__Memory_FS__File__Info(
             file_name    = Safe_Str__File__Name(f"{file_name}.{file_type.file_extension}"),
             file_ext     = file_type.file_extension,
             content_type = file_type.content_type,
@@ -80,7 +80,7 @@ class Cloud_FS__Memory__Storage(Type_Safe):                                     
         )
 
         # Create metadata
-        metadata = Schema__Cloud_FS__File__Metadata(
+        metadata = Schema__Memory_FS__File__Metadata(
             paths         = metadata_paths,
             content_paths = content_paths,
             content_hash  = content_hash,
@@ -88,7 +88,7 @@ class Cloud_FS__Memory__Storage(Type_Safe):                                     
         )
 
         # Create the complete file
-        file = Schema__Cloud_FS__File(
+        file = Schema__Memory_FS__File(
             config   = file_config,
             info     = file_info,
             metadata = metadata
@@ -107,8 +107,8 @@ class Cloud_FS__Memory__Storage(Type_Safe):                                     
 
         return saved_paths
 
-    def load(self, file_config : Schema__Cloud_FS__File__Config                                 # Load file from the appropriate path based on config
-              ) -> Optional[Schema__Cloud_FS__File]:
+    def load(self, file_config : Schema__Memory_FS__File__Config  # Load file from the appropriate path based on config
+             ) -> Optional[Schema__Memory_FS__File]:
 
         if file_config.default_handler:
             # Load from default handler's path only
@@ -127,8 +127,8 @@ class Cloud_FS__Memory__Storage(Type_Safe):                                     
 
         return None
 
-    def load_content(self, file_config : Schema__Cloud_FS__File__Config                         # Load content for a file
-                      ) -> Optional[bytes]:
+    def load_content(self, file_config : Schema__Memory_FS__File__Config  # Load content for a file
+                     ) -> Optional[bytes]:
         # First load the metadata to get content path
         file = self.load(file_config)
         if not file:
@@ -151,8 +151,8 @@ class Cloud_FS__Memory__Storage(Type_Safe):                                     
 
         return None
 
-    def load_data(self, file_config : Schema__Cloud_FS__File__Config                            # Load and deserialize file data
-                   ) -> Optional[Any]:
+    def load_data(self, file_config : Schema__Memory_FS__File__Config  # Load and deserialize file data
+                  ) -> Optional[Any]:
         # Load raw content
         content_bytes = self.load_content(file_config)
         if not content_bytes:
@@ -166,8 +166,8 @@ class Cloud_FS__Memory__Storage(Type_Safe):                                     
         # Deserialize based on file type
         return self._deserialize_data(content_bytes, file_config.file_type)
 
-    def exists(self, file_config : Schema__Cloud_FS__File__Config                               # Check if file exists based on config strategy
-                ) -> bool:
+    def exists(self, file_config : Schema__Memory_FS__File__Config  # Check if file exists based on config strategy
+               ) -> bool:
 
         if file_config.default_handler:
             # Check only the default handler's path
@@ -182,8 +182,8 @@ class Cloud_FS__Memory__Storage(Type_Safe):                                     
                         return False
             return len(file_config.path_handlers) > 0  # At least one handler must be configured
 
-    def delete(self, file_config : Schema__Cloud_FS__File__Config                               # Delete file from all configured paths
-                ) -> Dict[Safe_Id, bool]:
+    def delete(self, file_config : Schema__Memory_FS__File__Config  # Delete file from all configured paths
+               ) -> Dict[Safe_Id, bool]:
         results = {}
 
         # First, try to load the file to get all its paths
@@ -211,31 +211,31 @@ class Cloud_FS__Memory__Storage(Type_Safe):                                     
     def _serialize_data(self, data: Any, file_type) -> bytes:                                   # Serialize data based on file type's serialization method
         serialization = file_type.serialization
 
-        if serialization == Enum__Cloud_FS__Serialization.STRING:
+        if serialization == Enum__Memory_FS__Serialization.STRING:
             if isinstance(data, str):
                 return data.encode(file_type.encoding.value)
             else:
                 return str(data).encode(file_type.encoding.value)
 
-        elif serialization == Enum__Cloud_FS__Serialization.JSON:
+        elif serialization == Enum__Memory_FS__Serialization.JSON:
             import json
             json_str = json.dumps(data, indent=2)
             return json_str.encode(file_type.encoding.value)
 
-        elif serialization == Enum__Cloud_FS__Serialization.BINARY:
+        elif serialization == Enum__Memory_FS__Serialization.BINARY:
             if isinstance(data, bytes):
                 return data
             else:
                 raise ValueError(f"Binary serialization expects bytes, got {type(data)}")
 
-        elif serialization == Enum__Cloud_FS__Serialization.BASE64:
+        elif serialization == Enum__Memory_FS__Serialization.BASE64:
             import base64
             if isinstance(data, bytes):
                 return base64.b64encode(data)
             else:
                 return base64.b64encode(str(data).encode('utf-8'))
 
-        elif serialization == Enum__Cloud_FS__Serialization.TYPE_SAFE:
+        elif serialization == Enum__Memory_FS__Serialization.TYPE_SAFE:
             if hasattr(data, 'json'):
                 json_str = data.json()
                 return json_str.encode(file_type.encoding.value)
@@ -248,22 +248,22 @@ class Cloud_FS__Memory__Storage(Type_Safe):                                     
     def _deserialize_data(self, content_bytes: bytes, file_type) -> Any:                        # Deserialize data based on file type's serialization method
         serialization = file_type.serialization
 
-        if serialization == Enum__Cloud_FS__Serialization.STRING:
+        if serialization == Enum__Memory_FS__Serialization.STRING:
             return content_bytes.decode(file_type.encoding.value)
 
-        elif serialization == Enum__Cloud_FS__Serialization.JSON:
+        elif serialization == Enum__Memory_FS__Serialization.JSON:
             import json
             json_str = content_bytes.decode(file_type.encoding.value)
             return json.loads(json_str)
 
-        elif serialization == Enum__Cloud_FS__Serialization.BINARY:
+        elif serialization == Enum__Memory_FS__Serialization.BINARY:
             return content_bytes
 
-        elif serialization == Enum__Cloud_FS__Serialization.BASE64:
+        elif serialization == Enum__Memory_FS__Serialization.BASE64:
             import base64
             return base64.b64decode(content_bytes)
 
-        elif serialization == Enum__Cloud_FS__Serialization.TYPE_SAFE:
+        elif serialization == Enum__Memory_FS__Serialization.TYPE_SAFE:
             # This would need the actual Type_Safe class to deserialize
             # For now, return the JSON string
             return content_bytes.decode(file_type.encoding.value)
@@ -271,19 +271,19 @@ class Cloud_FS__Memory__Storage(Type_Safe):                                     
         else:
             raise ValueError(f"Unknown serialization method: {serialization}")
 
-    def _get_handler_path(self, file_config : Schema__Cloud_FS__File__Config,                   # Get the path for a specific handler
-                                handler     : Schema__Cloud_FS__Path__Handler,
-                                file_name   : str = "file"
-                         ) -> Optional[Safe_Str__File__Path]:
+    def _get_handler_path(self, file_config : Schema__Memory_FS__File__Config,  # Get the path for a specific handler
+                          handler     : Schema__Memory_FS__Path__Handler,
+                          file_name   : str = "file"
+                          ) -> Optional[Safe_Str__File__Path]:
         # This is simplified - in reality, would need the actual file info
         # For now, generate a basic path
         file_ext = file_config.file_type.file_extension if file_config.file_type else "json"
         return self._simulate_handler_path(handler, file_name, file_ext, True)
 
-    def _simulate_handler_path(self, handler     : Schema__Cloud_FS__Path__Handler,             # Simulate path generation for different handler types
-                                    file_name   : str,
-                                    file_ext    : str,
-                                    is_metadata : bool = True
+    def _simulate_handler_path(self, handler     : Schema__Memory_FS__Path__Handler,  # Simulate path generation for different handler types
+                               file_name   : str,
+                               file_ext    : str,
+                               is_metadata : bool = True
                                ) -> Optional[Safe_Str__File__Path]:
 
         # Determine file extension

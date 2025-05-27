@@ -1,37 +1,37 @@
-from datetime                                                       import datetime
-from unittest                                                       import TestCase
-from osbot_utils.helpers.Safe_Id                                    import Safe_Id
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path              import Safe_Str__File__Path
-from memory_fs.memory.Cloud_FS__Memory__File_System       import Cloud_FS__Memory__File_System
-from memory_fs.memory.Cloud_FS__Memory__Storage           import Cloud_FS__Memory__Storage
-from memory_fs.schemas.Schema__Cloud_FS__File__Config     import Schema__Cloud_FS__File__Config
-from memory_fs.schemas.Schema__Cloud_FS__Path__Handler    import Schema__Cloud_FS__Path__Handler
-from memory_fs.file_types.Cloud_FS__File__Type__Json      import Cloud_FS__File__Type__Json
-from memory_fs.file_types.Cloud_FS__File__Type__Markdown  import Cloud_FS__File__Type__Markdown
-from memory_fs.file_types.Cloud_FS__File__Type__Html      import Cloud_FS__File__Type__Html
-from memory_fs.file_types.Cloud_FS__File__Type__Png       import Cloud_FS__File__Type__Png
+from datetime                                                import datetime
+from unittest                                                import TestCase
+from osbot_utils.helpers.Safe_Id                             import Safe_Id
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path       import Safe_Str__File__Path
+from memory_fs.memory.Memory_FS__File_System                 import Memory_FS__File_System
+from memory_fs.memory.Memory_FS__Storage                     import Memory_FS__Storage
+from memory_fs.schemas.Schema__Memory_FS__File__Config       import Schema__Memory_FS__File__Config
+from memory_fs.schemas.Schema__Memory_FS__Path__Handler      import Schema__Memory_FS__Path__Handler
+from memory_fs.file_types.Memory_FS__File__Type__Json        import Memory_FS__File__Type__Json
+from memory_fs.file_types.Memory_FS__File__Type__Markdown    import Memory_FS__File__Type__Markdown
+from memory_fs.file_types.Memory_FS__File__Type__Html        import Memory_FS__File__Type__Html
+from memory_fs.file_types.Memory_FS__File__Type__Png         import Memory_FS__File__Type__Png
 
 
-class test_Cloud_FS__Memory__Storage(TestCase):
+class test_Memory_FS__Memory__Storage(TestCase):
 
     def setUp(self):                                                                             # Initialize test data
-        self.file_system      = Cloud_FS__Memory__File_System()
-        self.storage          = Cloud_FS__Memory__Storage(file_system = self.file_system)
+        self.file_system      = Memory_FS__File_System()
+        self.storage          = Memory_FS__Storage(file_system = self.file_system)
 
         # Create handlers
-        self.latest_handler   = Schema__Cloud_FS__Path__Handler(name    = Safe_Id("latest"),
-                                                                enabled = True)
-        self.temporal_handler = Schema__Cloud_FS__Path__Handler(name    = Safe_Id("temporal"),
-                                                                enabled = True)
+        self.latest_handler   = Schema__Memory_FS__Path__Handler(name    = Safe_Id("latest"),
+                                                                 enabled = True)
+        self.temporal_handler = Schema__Memory_FS__Path__Handler(name    = Safe_Id("temporal"),
+                                                                 enabled = True)
 
         # Create file types
-        self.file_type_json     = Cloud_FS__File__Type__Json    ()
-        self.file_type_markdown = Cloud_FS__File__Type__Markdown()
-        self.file_type_html     = Cloud_FS__File__Type__Html    ()
-        self.file_type_png      = Cloud_FS__File__Type__Png     ()
+        self.file_type_json     = Memory_FS__File__Type__Json    ()
+        self.file_type_markdown = Memory_FS__File__Type__Markdown()
+        self.file_type_html     = Memory_FS__File__Type__Html    ()
+        self.file_type_png      = Memory_FS__File__Type__Png     ()
 
         # Test config with handlers and default file type
-        self.test_config = Schema__Cloud_FS__File__Config(
+        self.test_config = Schema__Memory_FS__File__Config(
             path_handlers = [self.latest_handler, self.temporal_handler],
             file_type     = self.file_type_json,
             tags          = set()
@@ -40,7 +40,7 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         self.test_data = "test content"
 
     def test_init(self):                                                                         # Tests basic initialization
-        assert type(self.storage)       is Cloud_FS__Memory__Storage
+        assert type(self.storage) is Memory_FS__Storage
         assert self.storage.file_system is self.file_system
 
     def test_save_string_data_as_json(self):                                                    # Tests saving string data with JSON file type
@@ -76,9 +76,9 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         assert loaded_data == test_dict
 
     def test_save_string_data_as_markdown(self):                                               # Tests saving string data with Markdown file type
-        config_markdown = Schema__Cloud_FS__File__Config(path_handlers = [self.latest_handler  ],
-                                                         file_type     = self.file_type_markdown,
-                                                         tags          = set()                  )
+        config_markdown = Schema__Memory_FS__File__Config(path_handlers = [self.latest_handler],
+                                                          file_type     = self.file_type_markdown,
+                                                          tags          = set())
 
         markdown_content = "# Test Header\n\nThis is a test."
         saved_paths      = self.storage.save(markdown_content, config_markdown)
@@ -93,9 +93,9 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         assert loaded_data == markdown_content
 
     def test_save_html_content(self):                                                           # Tests saving HTML content
-        config_html = Schema__Cloud_FS__File__Config(path_handlers = [self.latest_handler],
-                                                     file_type     = self.file_type_html  ,
-                                                     tags          = set()                )
+        config_html = Schema__Memory_FS__File__Config(path_handlers = [self.latest_handler],
+                                                      file_type     = self.file_type_html,
+                                                      tags          = set())
 
         html_content = "<html><body><h1>Test</h1></body></html>"
         saved_paths = self.storage.save(html_content, config_html, file_name="index")
@@ -108,9 +108,9 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         assert loaded_data is None                                      # BUG: should not be None
 
     def test_save_binary_data_as_png(self):                                                     # Tests saving binary data with PNG file type
-        config_png = Schema__Cloud_FS__File__Config(path_handlers = [self.latest_handler],
-                                                    file_type     = self.file_type_png  ,
-                                                    tags          = set()               )
+        config_png = Schema__Memory_FS__File__Config(path_handlers = [self.latest_handler],
+                                                     file_type     = self.file_type_png,
+                                                     tags          = set())
 
         # Simulate PNG data (just bytes for testing)
         png_data = b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR"
@@ -130,7 +130,7 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         #assert loaded_file.info.content.encoding.value is None  # BINARY
 
     def test_save_without_file_type_raises_error(self):                                        # Tests that saving without file type raises error
-        config_no_type = Schema__Cloud_FS__File__Config(
+        config_no_type = Schema__Memory_FS__File__Config(
             path_handlers = [self.latest_handler],
             tags          = set()
         )
@@ -141,7 +141,7 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         assert "file_config.file_type is required" in str(context.exception)
 
     def test_load_with_default_handler(self):                                                   # Tests loading with default handler
-        config_with_default = Schema__Cloud_FS__File__Config(
+        config_with_default = Schema__Memory_FS__File__Config(
             path_handlers   = [self.latest_handler, self.temporal_handler],
             default_handler = self.latest_handler,
             file_type       = self.file_type_json,
@@ -182,7 +182,7 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         assert loaded_file.info.content.encoding == self.file_type_json.encoding
 
     def test_exists_with_default_handler(self):                                                 # Tests exists with default handler
-        config_with_default = Schema__Cloud_FS__File__Config(
+        config_with_default = Schema__Memory_FS__File__Config(
             path_handlers   = [self.latest_handler, self.temporal_handler],
             default_handler = self.latest_handler,
             file_type       = self.file_type_json,
@@ -235,7 +235,7 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         assert Safe_Id("temporal") not in saved_paths
 
     def test_empty_handlers(self):                                                              # Tests behavior with no handlers
-        empty_config = Schema__Cloud_FS__File__Config(
+        empty_config = Schema__Memory_FS__File__Config(
             path_handlers = [],
             file_type     = self.file_type_json,
             tags          = set()
@@ -248,10 +248,10 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         assert self.storage.load(empty_config) is None
 
     def test_handler_types(self):                                                               # Tests different handler types
-        versioned_handler = Schema__Cloud_FS__Path__Handler(name = Safe_Id("versioned"))
-        custom_handler = Schema__Cloud_FS__Path__Handler(name = Safe_Id("custom"))
+        versioned_handler = Schema__Memory_FS__Path__Handler(name = Safe_Id("versioned"))
+        custom_handler = Schema__Memory_FS__Path__Handler(name = Safe_Id("custom"))
 
-        config = Schema__Cloud_FS__File__Config(
+        config = Schema__Memory_FS__File__Config(
             path_handlers = [
                 self.latest_handler,
                 self.temporal_handler,
@@ -278,13 +278,13 @@ class test_Cloud_FS__Memory__Storage(TestCase):
 
     def test_list_files(self):                                                                  # Tests listing files
         # Create configs with different handlers to avoid path collisions
-        config_1 = Schema__Cloud_FS__File__Config(
+        config_1 = Schema__Memory_FS__File__Config(
             path_handlers = [self.latest_handler],
             file_type     = self.file_type_json,
             tags          = set()
         )
 
-        config_2 = Schema__Cloud_FS__File__Config(
+        config_2 = Schema__Memory_FS__File__Config(
             path_handlers = [self.temporal_handler],
             file_type     = self.file_type_markdown,
             tags          = set()
@@ -314,13 +314,13 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         assert len(self.file_system.content_data) == 0
 
     def test_stats(self):                                                                        # Tests storage statistics
-        config_1 = Schema__Cloud_FS__File__Config(
+        config_1 = Schema__Memory_FS__File__Config(
             path_handlers = [self.latest_handler],
             file_type     = self.file_type_json,
             tags          = set()
         )
 
-        config_2 = Schema__Cloud_FS__File__Config(
+        config_2 = Schema__Memory_FS__File__Config(
             path_handlers = [self.temporal_handler],
             file_type     = self.file_type_json,
             tags          = set()

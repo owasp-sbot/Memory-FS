@@ -1,10 +1,10 @@
-from typing                                                      import List
-from osbot_utils.helpers.Safe_Id                                 import Safe_Id
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path           import Safe_Str__File__Path
-from memory_fs.schemas.Schema__Cloud_FS__Path__Handler import Schema__Cloud_FS__Path__Handler
+from typing                                             import List
+from osbot_utils.helpers.Safe_Id                        import Safe_Id
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
+from memory_fs.schemas.Schema__Memory_FS__Path__Handler import Schema__Memory_FS__Path__Handler
 
 
-class Path__Handler__Temporal(Schema__Cloud_FS__Path__Handler): # Handler that stores files in temporal directory structure
+class Path__Handler__Temporal(Schema__Memory_FS__Path__Handler): # Handler that stores files in temporal directory structure
     name  : Safe_Id       = Safe_Id("temporal")
     areas : List[Safe_Id] = []
 

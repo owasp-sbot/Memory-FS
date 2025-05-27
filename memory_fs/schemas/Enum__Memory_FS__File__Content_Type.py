@@ -1,6 +1,6 @@
 from enum import Enum
 
-class Enum__Cloud_FS__File__Content_Type(Enum):
+class Enum__Memory_FS__File__Content_Type(Enum):
     HTML       : str = 'text/html; charset=utf-8'
     JSON       : str = 'application/json; charset=utf-8'
     JPEG       : str = 'image/jpeg'
