@@ -1,6 +1,6 @@
 from unittest                                               import TestCase
-
-from memory_fs.file.Memory_FS__File import Memory_FS__File
+from osbot_utils.utils.Objects                              import __
+from memory_fs.file.Memory_FS__File                         import Memory_FS__File
 from memory_fs.file_types.Memory_FS__File__Type__Text       import Memory_FS__File__Type__Text
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from memory_fs.path_handlers.Path__Handler__Latest          import Path__Handler__Latest
@@ -8,8 +8,7 @@ from memory_fs.path_handlers.Path__Handler__Temporal        import Path__Handler
 from memory_fs.project.Schema__Memory_FS__Project__Config   import Schema__Memory_FS__Project__Path_Strategy, Schema__Memory_FS__Project__Config
 from memory_fs.Memory_FS                                    import Memory_FS
 from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
-from osbot_utils.utils.Objects                              import __, type_full_name
-from memory_fs.project.Memory_FS__Project import Memory_FS__Project
+from memory_fs.project.Memory_FS__Project                   import Memory_FS__Project
 
 
 class test_Memory_FS__Project(TestCase):
@@ -23,6 +22,7 @@ class test_Memory_FS__Project(TestCase):
         cls.path_strategies     = { cls.path_strategy_name: cls.path_strategy}
         cls.project_config      = Schema__Memory_FS__Project__Config       (name   = cls.project_name      , path_strategies = cls.path_strategies)
         cls.project             = Memory_FS__Project                       (config = cls.project_config                                           )
+        cls.path_now            = Path__Handler__Temporal().path_now()
 
     def test__init__(self):
         with self.project as _:
@@ -43,6 +43,16 @@ class test_Memory_FS__Project(TestCase):
                           file_type     = Memory_FS__File__Type__Text()          )
             file = _.file(**kwargs)
             assert type(file) is Memory_FS__File
+            assert file.obj() == __(file_config = __(file_id     = file.file_config.file_id,
+                                                     file_name   = 'an-file',
+                                                     file_paths  = ['latest', self.path_now],
+                                                     file_type   = __(name           = 'text'   ,
+                                                                      content_type   ='TXT'     ,
+                                                                      file_extension = 'txt'    ,
+                                                                      encoding       = 'UTF_8'  ,
+                                                                      serialization  = 'STRING')),
+                                    storage    = __(storage_type = 'memory',
+                                                    file_system  = __(files=__(), content_data=__())))
 
     def test_memory_fs(self):
         with self.project.memory_fs() as _:

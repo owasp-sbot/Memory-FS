@@ -1,4 +1,5 @@
 from typing                                             import Dict
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from memory_fs.actions.Memory_FS__Edit                  import Memory_FS__Edit
 from memory_fs.actions.Memory_FS__Load                  import Memory_FS__Load
 from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
@@ -22,28 +23,18 @@ class Memory_FS__Delete(Type_Safe):
     def memory__fs_storage(self):
         return Memory_FS__Storage(file_system=self.storage.file_system)
 
-    def delete(self, file_config : Schema__Memory_FS__File__Config  # Delete file from all configured paths
+    def delete(self, file_config : Schema__Memory_FS__File__Config                  # Delete file from all configured paths
                 ) -> Dict[Safe_Id, bool]:
-        results = {}
+        files_deleted = []
 
-        # First, try to load the file to get all its paths
-        file = self.memory_fs__load().load(file_config)
+        for file_path in file_config.file_paths:
+            content_path  = Safe_Str__File__Path(f"{file_path}/{file_config.file_name}.{file_config.file_type.file_extension}")
+            metadata_path = Safe_Str__File__Path(content_path + ".fs.json")                   # todo: refactor this into a separate class (which will handle the case of the ".fs.json" extension)
 
-        if file and file.metadata.paths:
-            # Delete using actual paths from metadata
-            for handler_name, path in file.metadata.paths.items():
-                results[handler_name] = self.memory_fs__edit().delete(path)
+            if self.memory_fs__edit().delete_content(content_path):
+                files_deleted.append(content_path)
 
-            # Also delete content files
-            if file.metadata.content_paths:
-                for path in file.metadata.content_paths.values():
-                    self.memory_fs__edit().delete_content(path)
-        else:
-            # Fallback: try to delete from all configured handlers
-            for handler in file_config.path_handlers:
-                if handler.enabled:
-                    # Generate expected paths and try to delete
-                    # This is a simplified version - in reality, we'd need more info
-                    results[handler.name] = False
+            if self.memory_fs__edit().delete(metadata_path):
+                files_deleted.append(metadata_path)
 
-        return results
+        return files_deleted

@@ -12,24 +12,14 @@ class test_Memory_FS__File(TestCase):
     def test__init__(self):
         with self.file as _:
             assert type(_) is Memory_FS__File
-            assert _.obj() == __(file     = __(config   =__(content_path    = None,
-                                                            default_handler = None,
-                                                            file_type       = __(name           = None,
-                                                                                 content_type   = None,
-                                                                                 file_extension = None,
-                                                                                 encoding       = None,
-                                                                                 serialization  = None),
-                                                            file_name       = None,
-                                                            file_paths      = []  ,
-                                                            path_handlers   = []  ,
-                                                            tags            = []  ),
-                                               file_id  = _.file.file_id   ,
-                                               metadata = __(content_hash          = None ,
-                                                             chain_hash            = None ,
-                                                             previous_version_path = None ,
-                                                             paths                 = __() ,
-                                                             content_paths         = __() ,
-                                                             size                  = 0    ,
-                                                             timestamp             = _.file.metadata.timestamp )),
+            assert _.obj() == __(file_config   =__(file_id         = _.file_config.file_id,
+                                                   file_name       = None,
+                                                   file_paths      = []  ,
+                                                   file_type       = __(name          = None,
+                                                                       content_type   = None,
+                                                                       file_extension = None,
+                                                                       encoding       = None,
+                                                                       serialization  = None)),
+
                                  storage=__(storage_type='memory',
                                             file_system=__(files=__(), content_data=__())))

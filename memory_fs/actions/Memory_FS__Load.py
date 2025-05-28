@@ -1,4 +1,5 @@
 from typing                                             import Optional, Any
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from memory_fs.actions.Memory_FS__Data                  import Memory_FS__Data
 from memory_fs.actions.Memory_FS__Deserialize           import Memory_FS__Deserialize
 from memory_fs.actions.Memory_FS__Paths                 import Memory_FS__Paths
@@ -26,28 +27,25 @@ class Memory_FS__Load(Type_Safe):
 
     def load(self, file_config : Schema__Memory_FS__File__Config  # Load file from the appropriate path based on config
               ) -> Optional[Schema__Memory_FS__File]:
-
-        if file_config.default_handler:
-            # Load from default handler's path only
-            path = self.memory_fs__paths()._get_handler_path(file_config, file_config.default_handler)
-            if path:
-                return self.memory_fs__data().load(path)
-        else:
-            # Try each handler in order until we find the file
-            for handler in file_config.path_handlers:
-                if handler.enabled:
-                    path = self.memory_fs__paths()._get_handler_path(file_config, handler)
-                    if path and self.memory_fs__data().exists(path):
-                        file = self.memory_fs__data().load(path)
-                        if file:
-                            return file
+        for file_path in file_config.file_paths:                        # Try each handler in order until we find the file              # todo: see if we need to add back the logic to have a default file path variable
+            full_file_path = Safe_Str__File__Path(f"{file_path}/{file_config.file_name}.{file_config.file_type.file_extension}.fs.json")
+            file           = self.memory_fs__data().load(full_file_path)
+            if file:
+                return file
 
         return None
 
     def load_content(self, file_config : Schema__Memory_FS__File__Config  # Load content for a file
                       ) -> Optional[bytes]:
+        for file_path in file_config.file_paths:                        # Try each handler in order until we find the file  # todo: see if we need to add back the logic to have a default file path variable
+            full_file_path = Safe_Str__File__Path(f"{file_path}/{file_config.file_name}.{file_config.file_type.file_extension}")
+            content_bytes  = self.memory_fs__data().load_content(full_file_path)
+            if content_bytes:
+                return content_bytes
+        return None
+
         # First load the metadata to get content path
-        file = self.load(file_config)
+        file = self.load_content(file_config)
         if not file:
             return None
 
@@ -73,11 +71,6 @@ class Memory_FS__Load(Type_Safe):
         # Load raw content
         content_bytes = self.load_content(file_config)
         if not content_bytes:
-            return None
-
-        # Load metadata to get file type info
-        file = self.load(file_config)
-        if not file:
             return None
 
         # Deserialize based on file type

@@ -24,13 +24,12 @@ class Memory_FS__Data(Type_Safe):
         if not file:
             return None
 
-        content_size = int(file.metadata.size)                                         # Get size from metadata
+        content_size = int(file.metadata.content__size)                                # Get size from metadata
         return {Safe_Id("exists")       : True                                          ,
                 Safe_Id("size")         : content_size                                  ,
-                Safe_Id("content_hash") : file.metadata.content_hash                    ,
+                Safe_Id("content_hash") : file.metadata.content__hash                   ,
                 Safe_Id("timestamp")    : file.metadata.timestamp                       ,
-                Safe_Id("content_type") : file.config.file_type.content_type.value                                  ,
-                Safe_Id("paths")        : file.metadata.paths                           }
+                Safe_Id("content_type") : file.config.file_type.content_type.value      }
 
     def list_files(self, prefix : Safe_Str__File__Path = None                                  # List all files, optionally filtered by prefix
                     ) -> List[Safe_Str__File__Path]:                                           # todo: see if we need this method

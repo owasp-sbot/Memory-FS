@@ -2,7 +2,6 @@ from memory_fs.actions.Memory_FS__Delete            import Memory_FS__Delete
 from memory_fs.actions.Memory_FS__Exists            import Memory_FS__Exists
 from memory_fs.actions.Memory_FS__Load              import Memory_FS__Load
 from memory_fs.actions.Memory_FS__Save              import Memory_FS__Save
-from memory_fs.file.Memory_FS__File__Storage        import Memory_FS__File__Storage
 from memory_fs.storage.Memory_FS__Storage           import Memory_FS__Storage
 from osbot_utils.decorators.methods.cache_on_self   import cache_on_self
 from memory_fs.actions.Memory_FS__Data              import Memory_FS__Data

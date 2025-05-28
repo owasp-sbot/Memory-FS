@@ -28,9 +28,7 @@ class test_Memory_FS__Memory__File_System(TestCase):
         # Create file components according to new schema
         self.file_type        = Memory_FS__File__Type__Json()
         self.test_config      = Schema__Memory_FS__File__Config  (file_type     = self.file_type)
-        self.test_metadata    = Schema__Memory_FS__File__Metadata(paths         = {Safe_Id("test"): self.test_path},
-                                                                  content_paths = {Safe_Id("test"): self.test_content_path},
-                                                                  content_hash  = safe_str_hash("test content"   ))
+        self.test_metadata    = Schema__Memory_FS__File__Metadata(content__hash  = safe_str_hash("test content"   ))
         self.test_file       = Schema__Memory_FS__File           (config        = self.test_config,
                                                                   metadata      = self.test_metadata)
 
@@ -51,7 +49,7 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert self.memory_fs__data.exists          (self.test_path                   ) is True
         assert self.memory_fs__data.exists_content  (self.test_content_path   ) is True
 
-    def test_load(self):                                                                         # Tests loading files
+    def test__bug__load(self):                                                                         # Tests loading files
         assert self.memory_fs__data.load        (self.test_path                     ) is None
         assert self.memory_fs__data.load_content(self.test_content_path     ) is None
 
@@ -62,9 +60,9 @@ class test_Memory_FS__Memory__File_System(TestCase):
         loaded_content = self.memory_fs__data.load_content(self.test_content_path)
 
         assert loaded_file is self.test_file
-        assert loaded_file.metadata.size         != Safe_UInt__FileSize(len(self.test_content_bytes)) # BUG: todo: bug the size is not being captured on the save action
-        assert loaded_file.metadata.size         == 0
-        assert loaded_file.metadata.content_hash == safe_str_hash("test content")
+        assert loaded_file.metadata.content__size != Safe_UInt__FileSize(len(self.test_content_bytes)) # BUG: todo: bug the size is not being captured on the save action
+        assert loaded_file.metadata.content__size == 0
+        assert loaded_file.metadata.content__hash == safe_str_hash("test content")
         assert loaded_content == self.test_content_bytes
 
     def test_delete(self):                                                                       # Tests deleting files
@@ -109,7 +107,6 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert info[Safe_Id("content_hash")] == safe_str_hash("test content")
         assert info[Safe_Id("timestamp"   )] == self.test_metadata.timestamp
         assert info[Safe_Id("content_type")] == "application/json; charset=utf-8"
-        assert info[Safe_Id("paths"       )] == {Safe_Id("test"): self.test_path}
 
     def test_move(self):                                                                         # Tests moving files
         source_path         = Safe_Str__File__Path("source/file.json")
@@ -162,19 +159,13 @@ class test_Memory_FS__Memory__File_System(TestCase):
         content_1 = b"short"
         content_2 = b"much longer content"
 
-        test_config_1   = Schema__Memory_FS__File__Config   (content_path = Safe_Str__File__Path("dir1/file1.txt"),
-                                                             file_type    = Memory_FS__File__Type__Text()           )
-        test_metadata_1  = Schema__Memory_FS__File__Metadata(paths         = {Safe_Id("test"): self.test_path},
-                                                             content_paths = {Safe_Id("test"): self.test_content_path},
-                                                             content_hash  = safe_str_hash("test content"   ),
-                                                             size         = Safe_UInt__FileSize(len(content_1)))
+        test_config_1   = Schema__Memory_FS__File__Config   (file_type     = Memory_FS__File__Type__Text()           )
+        test_metadata_1  = Schema__Memory_FS__File__Metadata(content__hash = safe_str_hash("test content"   ),
+                                                             content__size = Safe_UInt__FileSize(len(content_1)))
 
-        test_config_2   = Schema__Memory_FS__File__Config   (content_path = Safe_Str__File__Path("dir2/file2.txt"),
-                                                             file_type    = Memory_FS__File__Type__Text()           )
-        test_metadata_2  = Schema__Memory_FS__File__Metadata(paths         = {Safe_Id("test"): self.test_path       },
-                                                             content_paths = {Safe_Id("test"): self.test_content_path},
-                                                             content_hash  = safe_str_hash("test content"           ),
-                                                             size          = len(content_2))
+        test_config_2   = Schema__Memory_FS__File__Config   (file_type     = Memory_FS__File__Type__Text()           )
+        test_metadata_2  = Schema__Memory_FS__File__Metadata(content__hash = safe_str_hash("test content"           ),
+                                                             content__size = len(content_2))
 
 
 

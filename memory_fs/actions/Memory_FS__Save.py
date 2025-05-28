@@ -6,7 +6,6 @@ from memory_fs.schemas.Schema__Memory_FS__File              import Schema__Memor
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata
 from memory_fs.schemas.Schema__Memory_FS__File__Type        import Schema__Memory_FS__File__Type
 from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
-from osbot_utils.helpers.safe_int.Safe_UInt__FileSize       import Safe_UInt__FileSize
 from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding      import Enum__Memory_FS__File__Encoding
 from osbot_utils.decorators.methods.cache_on_self           import cache_on_self
@@ -32,8 +31,7 @@ class Memory_FS__Save(Type_Safe):
         return Memory_FS__Serialize(storage=self.storage)
 
     def save(self, file_data   : Any,  # Save file data using all configured path handlers
-                   file_config : Schema__Memory_FS__File__Config,
-                   file_name   : str = "file"
+                   file_config : Schema__Memory_FS__File__Config
               ) -> Dict[Safe_Id, Safe_Str__File__Path]:
 
         # Get file type from config
@@ -50,49 +48,25 @@ class Memory_FS__Save(Type_Safe):
         else:
             content_hash = safe_str_hash(content_bytes.decode(file_type.encoding.value))
 
-        content_size = Safe_UInt__FileSize(len(content_bytes))
-
-        # Generate all paths for metadata and content using handlers from config
-        metadata_paths = {}
-        content_paths  = {}
-
-        for handler in file_config.path_handlers:
-            if handler.enabled:
-                handler_name = handler.name
-                # For now, simulate path generation - in real implementation,
-                # handlers would have their own generate_path method
-                metadata_path = self.memory__fs_paths()._simulate_handler_path(handler, file_name, file_type.file_extension, True)
-                content_path  = self.memory__fs_paths()._simulate_handler_path(handler, file_name, file_type.file_extension, False)
-
-                if metadata_path:
-                    metadata_paths[handler_name] = metadata_path
-                if content_path:
-                    content_paths[handler_name] = content_path
+        content_size = len(content_bytes)
+        saved_paths  = []
+        metadata     = Schema__Memory_FS__File__Metadata(content__hash  = content_hash ,
+                                                         content__size  = content_size )
+        for file_path in file_config.file_paths:
+            content_path  = Safe_Str__File__Path(f"{file_path}/{file_config.file_name}.{file_type.file_extension}")
+            metadata_path = Safe_Str__File__Path(content_path + ".fs.json")                   # todo: refactor this into a separate class (which will handle the case of the ".fs.json" extension)
 
 
+            file = Schema__Memory_FS__File(config  = file_config,                           # Create the complete file
+                                           metadata = metadata )
 
-        # Use first content path for the content reference
-        first_content_path = list(content_paths.values())[0] if content_paths else Safe_Str__File__Path("")
-        file_config.content_path = first_content_path   # todo: this is only capturing the last of the path_handlers (we need a much better solution)
 
-        # Create metadata
-        metadata = Schema__Memory_FS__File__Metadata(paths         = metadata_paths,
-                                                     content_paths = content_paths ,
-                                                     content_hash  = content_hash  )
+            if self.memory_fs__edit().save(metadata_path, file):                            # Save metadata files # todo: this is no the 'metadata' file, this is the "fs.json"
+                saved_paths.append(metadata_path)
 
-        # Create the complete file
-        file = Schema__Memory_FS__File(config   = file_config,
-                                       metadata = metadata   )
+            if self.memory_fs__edit().save_content(content_path, content_bytes):            # Save content files
+                saved_paths.append(content_path)
 
-        saved_paths = {}
 
-        # Save metadata files
-        for handler_name, path in metadata_paths.items():
-            if self.memory_fs__edit().save(path, file):
-                saved_paths[handler_name] = path
-
-        # Save content files
-        for handler_name, path in content_paths.items():
-            self.memory_fs__edit().save_content(path, content_bytes)
 
         return saved_paths
