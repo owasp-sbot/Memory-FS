@@ -30,4 +30,6 @@ class test_Memory_FS__File(TestCase):
                                                              paths                 = __() ,
                                                              content_paths         = __() ,
                                                              size                  = 0    ,
-                                                             timestamp             = _.file.metadata.timestamp )))
+                                                             timestamp             = _.file.metadata.timestamp )),
+                                 storage=__(storage_type='memory',
+                                            file_system=__(files=__(), content_data=__())))

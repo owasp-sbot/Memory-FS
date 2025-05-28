@@ -1,6 +1,5 @@
 from memory_fs.actions.Memory_FS__Delete            import Memory_FS__Delete
 from memory_fs.actions.Memory_FS__Exists            import Memory_FS__Exists
-from memory_fs.actions.Memory_FS__File__New         import Memory_FS__File__New
 from memory_fs.actions.Memory_FS__Load              import Memory_FS__Load
 from memory_fs.actions.Memory_FS__Save              import Memory_FS__Save
 from memory_fs.file.Memory_FS__File__Storage        import Memory_FS__File__Storage
@@ -33,10 +32,6 @@ class Memory_FS(Type_Safe):
     @cache_on_self
     def load(self):
         return Memory_FS__Load(storage=self.storage)
-
-    @cache_on_self
-    def new(self, file_storage: Memory_FS__File__Storage = None):
-        return Memory_FS__File__New(storage=self.storage, file_storage=file_storage)
 
     @cache_on_self
     def save(self):

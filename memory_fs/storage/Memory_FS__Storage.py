@@ -1,9 +1,11 @@
+from osbot_utils.helpers.Safe_Id            import Safe_Id
 from memory_fs.core.Memory_FS__File_System  import Memory_FS__File_System
 from osbot_utils.type_safe.Type_Safe        import Type_Safe
 
 class Memory_FS__Storage(Type_Safe):
-    file_system: Memory_FS__File_System                     # this is now the only place this object exists
-                                                            # todo: we need to refactor this into class that has all the methods below, but has no access to the memory object (since each provider will have it's own version of it)
+    storage_type : Safe_Id = Safe_Id('memory')
+    file_system  : Memory_FS__File_System                   # todo: we need to refactor this into class that has all the methods below, but has no access to the memory object (since each provider will have it's own version of it)
+
     def content_data(self):
         return self.file_system.content_data
 
