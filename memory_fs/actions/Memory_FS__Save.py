@@ -4,6 +4,7 @@ from memory_fs.actions.Memory_FS__Paths                     import Memory_FS__Pa
 from memory_fs.actions.Memory_FS__Serialize                 import Memory_FS__Serialize
 from memory_fs.schemas.Schema__Memory_FS__File              import Schema__Memory_FS__File
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata
+from memory_fs.schemas.Schema__Memory_FS__File__Type import Schema__Memory_FS__File__Type
 from osbot_utils.helpers.safe_str.Safe_Str__File__Name      import Safe_Str__File__Name
 from osbot_utils.helpers.safe_int.Safe_UInt__FileSize       import Safe_UInt__FileSize
 from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
@@ -38,8 +39,8 @@ class Memory_FS__Save(Type_Safe):
 
         # Get file type from config
         file_type = file_config.file_type
-        if not file_type:
-            raise ValueError("file_config.file_type is required")
+        if type(file_type) is Schema__Memory_FS__File__Type:            # means that is it the default class (which should be abstracted)
+            raise ValueError("file_config.file_type is required")     # todo: see if we still need this (also this check should happen inside the _serialize_data method, since that is the one that needs this data)
 
         # Convert data to bytes based on file type's serialization method
         content_bytes = self.memory_fs__serialize()._serialize_data(file_data, file_type)

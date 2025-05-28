@@ -130,10 +130,8 @@ class test_Memory_FS__Memory__Storage(TestCase):
         #assert loaded_file.info.content.encoding.value is None  # BINARY
 
     def test_save_without_file_type_raises_error(self):                                        # Tests that saving without file type raises error
-        config_no_type = Schema__Memory_FS__File__Config(
-            path_handlers = [self.latest_handler],
-            tags          = set()
-        )
+        config_no_type = Schema__Memory_FS__File__Config(path_handlers = [self.latest_handler],
+                                                         tags          = set())
 
         with self.assertRaises(ValueError) as context:
             self.memory_fs__save.save(self.test_data, config_no_type)

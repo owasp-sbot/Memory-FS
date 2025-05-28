@@ -8,8 +8,8 @@ from osbot_utils.type_safe.Type_Safe                       import Type_Safe
 
 
 class Schema__Memory_FS__File__Type(Type_Safe):
-    name           : Safe_Id                             # Logical name: "json", "jpeg", "markdown"
-    content_type   : Enum__Memory_FS__File__Content_Type  # Validated HTTP content type
-    file_extension : Safe_Id                             # Primary extension: "jpg", "md", "yml"
-    encoding       : Enum__Memory_FS__File__Encoding
-    serialization  : Enum__Memory_FS__Serialization
+    name           : Safe_Id                             = None # Logical name: "json", "jpeg", "markdown"
+    content_type   : Enum__Memory_FS__File__Content_Type = None # Validated HTTP content type
+    file_extension : Safe_Id                             = None # Primary extension: "jpg", "md", "yml"
+    encoding       : Enum__Memory_FS__File__Encoding     = None
+    serialization  : Enum__Memory_FS__Serialization      = None
