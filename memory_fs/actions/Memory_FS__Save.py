@@ -52,21 +52,14 @@ class Memory_FS__Save(Type_Safe):
         saved_paths  = []
         metadata     = Schema__Memory_FS__File__Metadata(content__hash  = content_hash ,
                                                          content__size  = content_size )
-        for file_path in file_config.file_paths:
-            content_path  = Safe_Str__File__Path(f"{file_path}/{file_config.file_name}.{file_type.file_extension}")
-            metadata_path = Safe_Str__File__Path(content_path + ".fs.json")                   # todo: refactor this into a separate class (which will handle the case of the ".fs.json" extension)
 
+        file = Schema__Memory_FS__File(config  = file_config,                           # Create the complete file
+                                      metadata = metadata )
 
-            file = Schema__Memory_FS__File(config  = file_config,                           # Create the complete file
-                                           metadata = metadata )
+        saved_pages__file    = self.memory_fs__edit().save        (file_config = file_config, file    = file         )
+        saved_pages__content = self.memory_fs__edit().save_content(file_config = file_config, content = content_bytes)
 
+        saved_paths.extend(saved_pages__file   )
+        saved_paths.extend(saved_pages__content)
 
-            if self.memory_fs__edit().save(metadata_path, file):                            # Save metadata files # todo: this is no the 'metadata' file, this is the "fs.json"
-                saved_paths.append(metadata_path)
-
-            if self.memory_fs__edit().save_content(content_path, content_bytes):            # Save content files
-                saved_paths.append(content_path)
-
-
-
-        return saved_paths
+        return sorted(saved_paths)

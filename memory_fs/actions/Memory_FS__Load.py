@@ -27,8 +27,11 @@ class Memory_FS__Load(Type_Safe):
 
     def load(self, file_config : Schema__Memory_FS__File__Config  # Load file from the appropriate path based on config
               ) -> Optional[Schema__Memory_FS__File]:
+        full_file_name = Safe_Str__File__Path(f"{file_config.file_name}.{file_config.file_type.file_extension}.fs.json")
+        if not file_config.file_paths:
+            return self.memory_fs__data().load(full_file_name)
         for file_path in file_config.file_paths:                        # Try each handler in order until we find the file              # todo: see if we need to add back the logic to have a default file path variable
-            full_file_path = Safe_Str__File__Path(f"{file_path}/{file_config.file_name}.{file_config.file_type.file_extension}.fs.json")
+            full_file_path = Safe_Str__File__Path(f"{file_path}/{full_file_name}")
             file           = self.memory_fs__data().load(full_file_path)
             if file:
                 return file

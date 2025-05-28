@@ -49,10 +49,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
     def test_save_string_data_as_json(self):                                                    # Tests saving string data with JSON file type
         saved_paths               = self.memory_fs__save.save(self.test_data, self.test_config)
 
-        assert saved_paths       == [self.file_id__latest__metadata ,
-                                     self.file_id__latest__content  ,
-                                     self.file_id__now__metadata    ,
-                                     self.file_id__now__content     ]
+        assert sorted(saved_paths) == sorted([self.file_id__latest__metadata ,
+                                              self.file_id__latest__content  ,
+                                              self.file_id__now__metadata    ,
+                                              self.file_id__now__content     ])
         assert len(saved_paths)  == 4
 
         # Verify metadata files were saved
@@ -84,10 +84,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
         markdown_content = "# Test Header\n\nThis is a test."
         saved_paths      = self.memory_fs__save.save(markdown_content, config_markdown)
-        assert saved_paths == [ 'latest/an-file.md.fs.json'          ,
-                                'latest/an-file.md'                  ,
-                                f'{self.path_now}/an-file.md.fs.json',
-                                f'{self.path_now}/an-file.md'        ]
+        assert saved_paths == sorted([ 'latest/an-file.md.fs.json'          ,
+                                        'latest/an-file.md'                  ,
+                                        f'{self.path_now}/an-file.md.fs.json',
+                                        f'{self.path_now}/an-file.md'        ])
 
         # Verify content is saved as plain string (not JSON)
         loaded_data = self.memory_fs__load.load_data(config_markdown)
@@ -100,10 +100,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
         html_content = "<html><body><h1>Test</h1></body></html>"
         saved_paths = self.memory_fs__save.save(html_content, config_html)
-        assert saved_paths == [ 'latest/index.html.fs.json'          ,
-                                'latest/index.html'                  ,
-                                f'{self.path_now}/index.html.fs.json',
-                                f'{self.path_now}/index.html'        ]
+        assert saved_paths == sorted([ 'latest/index.html.fs.json'          ,
+                                        'latest/index.html'                  ,
+                                        f'{self.path_now}/index.html.fs.json',
+                                        f'{self.path_now}/index.html'        ])
 
         loaded_data = self.memory_fs__load.load_data(config_html)
         assert loaded_data == html_content
@@ -116,10 +116,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
         # Simulate PNG data (just bytes for testing)
         png_data    = b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR"
         saved_paths = self.memory_fs__save.save(png_data, config_png, )
-        assert saved_paths == [ 'latest/image.png.fs.json'          ,
-                                'latest/image.png'                  ,
-                                f'{self.path_now}/image.png.fs.json',
-                                f'{self.path_now}/image.png'        ]
+        assert saved_paths == sorted([ 'latest/image.png.fs.json'          ,
+                                        'latest/image.png'                  ,
+                                        f'{self.path_now}/image.png.fs.json',
+                                        f'{self.path_now}/image.png'        ])
 
 
         # Verify binary data is preserved
@@ -171,7 +171,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert self.memory_fs__exists.exists(self.test_config) is True
 
         # Delete one file - should now return False
-        assert self.memory_fs__edit.delete(saved_paths[0]) is True
+        assert self.memory_fs__edit.delete  (saved_paths[1]  ) is True                          # todo: need a better way to do this test (instead of doing saved_paths[1] )
         assert self.memory_fs__exists.exists(self.test_config) is False
 
     def test_delete(self):                                                                       # Tests deleting files
@@ -190,13 +190,14 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
     def test_empty_file_paths(self):                                                              # Tests behavior with no handlers
         empty_config = Schema__Memory_FS__File__Config(file_paths = []                 ,
-                                                       file_type  = self.file_type_json)
+                                                         file_type  = self.file_type_json)
+        saved_paths  = self.memory_fs__save.save(self.test_data, empty_config)
+        file_name    = empty_config.file_name
+        assert len(saved_paths) == 2
+        assert saved_paths      == [f'{file_name}.json', f'{file_name}.json.fs.json']
 
-        saved_paths = self.memory_fs__save.save(self.test_data, empty_config)
-        assert len(saved_paths) == 0
-
-        assert self.memory_fs__exists.exists(empty_config) is False
-        assert self.memory_fs__load.load    (empty_config) is None
+        assert self.memory_fs__exists.exists(empty_config  ) is True                            # confirm file was created
+        assert type(self.memory_fs__load.load(empty_config)) is Schema__Memory_FS__File         # and we can get it
 
     def test_list_files(self):                                                                  # Tests listing files
         # Create configs with different file_types to avoid path collisions
