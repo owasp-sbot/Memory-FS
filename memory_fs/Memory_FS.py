@@ -1,8 +1,9 @@
 from memory_fs.actions.Memory_FS__Delete            import Memory_FS__Delete
 from memory_fs.actions.Memory_FS__Exists            import Memory_FS__Exists
-from memory_fs.actions.Memory_FS__Files             import Memory_FS__Files
+from memory_fs.actions.Memory_FS__File__New         import Memory_FS__File__New
 from memory_fs.actions.Memory_FS__Load              import Memory_FS__Load
 from memory_fs.actions.Memory_FS__Save              import Memory_FS__Save
+from memory_fs.file.Memory_FS__File__Storage        import Memory_FS__File__Storage
 from osbot_utils.decorators.methods.cache_on_self   import cache_on_self
 from memory_fs.actions.Memory_FS__Data              import Memory_FS__Data
 from memory_fs.actions.Memory_FS__Edit              import Memory_FS__Edit
@@ -30,12 +31,12 @@ class Memory_FS(Type_Safe):
         return Memory_FS__Exists(file_system=self.file_system)
 
     @cache_on_self
-    def files(self):
-        return Memory_FS__Files(file_system=self.file_system)
-
-    @cache_on_self
     def load(self):
         return Memory_FS__Load(file_system=self.file_system)
+
+    @cache_on_self
+    def new(self, file_storage: Memory_FS__File__Storage = None):
+        return Memory_FS__File__New(file_system=self.file_system, file_storage=file_storage)
 
     @cache_on_self
     def save(self):

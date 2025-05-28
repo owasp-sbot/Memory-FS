@@ -20,6 +20,7 @@ class test_Memory_FS__File(TestCase):
                                                                                  encoding       = None,
                                                                                  serialization  = None),
                                                             file_name       = None,
+                                                            file_paths      = []  ,
                                                             path_handlers   = []  ,
                                                             tags            = []  ),
                                                file_id  = _.file.file_id   ,

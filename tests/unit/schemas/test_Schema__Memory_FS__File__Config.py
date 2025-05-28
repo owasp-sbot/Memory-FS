@@ -16,5 +16,6 @@ class test_Schema__Memory_FS__File__Config(TestCase):
                                                      file_extension = None,
                                                      encoding       = None,
                                                      serialization  = None),
+                                 file_paths      = [],
                                  path_handlers   = []  ,
                                  tags            = []  )
