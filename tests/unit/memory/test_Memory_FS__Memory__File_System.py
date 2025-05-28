@@ -1,19 +1,16 @@
-from unittest                                              import TestCase
-from memory_fs.Memory_FS                                   import Memory_FS
-from memory_fs.file_types.Memory_FS__File__Type__Json import Memory_FS__File__Type__Json
-from memory_fs.file_types.Memory_FS__File__Type__Txt import Memory_FS__File__Type__Text
-from osbot_utils.type_safe.Type_Safe__Dict                 import Type_Safe__Dict
-from osbot_utils.helpers.Safe_Id                           import Safe_Id
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path     import Safe_Str__File__Path
-from osbot_utils.helpers.safe_str.Safe_Str__File__Name     import Safe_Str__File__Name
-from osbot_utils.helpers.safe_str.Safe_Str__Hash           import safe_str_hash
-from osbot_utils.helpers.safe_int.Safe_UInt__FileSize      import Safe_UInt__FileSize
-from memory_fs.core.Memory_FS__File_System                 import Memory_FS__File_System
-from memory_fs.schemas.Schema__Memory_FS__File             import Schema__Memory_FS__File
-from memory_fs.schemas.Schema__Memory_FS__File__Config     import Schema__Memory_FS__File__Config
-from memory_fs.schemas.Enum__Memory_FS__File__Content_Type import Enum__Memory_FS__File__Content_Type
-from memory_fs.schemas.Enum__Memory_FS__File__Encoding     import Enum__Memory_FS__File__Encoding
-from memory_fs.schemas.Schema__Memory_FS__File__Metadata   import Schema__Memory_FS__File__Metadata
+from unittest                                               import TestCase
+from memory_fs.Memory_FS                                    import Memory_FS
+from memory_fs.file_types.Memory_FS__File__Type__Json       import Memory_FS__File__Type__Json
+from memory_fs.file_types.Memory_FS__File__Type__Txt        import Memory_FS__File__Type__Text
+from osbot_utils.type_safe.Type_Safe__Dict                  import Type_Safe__Dict
+from osbot_utils.helpers.Safe_Id                            import Safe_Id
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
+from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
+from osbot_utils.helpers.safe_int.Safe_UInt__FileSize       import Safe_UInt__FileSize
+from memory_fs.core.Memory_FS__File_System                  import Memory_FS__File_System
+from memory_fs.schemas.Schema__Memory_FS__File              import Schema__Memory_FS__File
+from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
+from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata
 
 # todo: all this logic needs to be refactored into the new Memory_FS__* classes
 class test_Memory_FS__Memory__File_System(TestCase):
@@ -22,7 +19,8 @@ class test_Memory_FS__Memory__File_System(TestCase):
         self.memory_fs          = Memory_FS()
         self.memory_fs__data    = self.memory_fs.data()
         self.memory_fs__edit    = self.memory_fs.edit()
-        self.file_system        = self.memory_fs.file_system
+        self.storage            = self.memory_fs.storage
+        self.file_system        = self.storage.file_system
         self.test_path          = Safe_Str__File__Path("test/folder/file.json")
         self.test_content_path  = Safe_Str__File__Path("test/folder/file.html")
         self.test_content_bytes = b"test content"

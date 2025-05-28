@@ -1,13 +1,10 @@
 from unittest                                        import TestCase
-
-from osbot_utils.utils.Objects import __
-
+from osbot_utils.utils.Objects                       import __
 from memory_fs.file.Memory_FS__File__Storage         import Schema__Memory_FS__File__Storage__Config, Memory_FS__File__Storage
 from memory_fs.path_handlers.Path__Handler__Latest   import Path__Handler__Latest
 from memory_fs.path_handlers.Path__Handler__Temporal import Path__Handler__Temporal
 from memory_fs.Memory_FS                             import Memory_FS
 from memory_fs.actions.Memory_FS__File__New          import Memory_FS__File__New
-
 from osbot_utils.utils.Dev                           import pprint
 
 
@@ -37,7 +34,7 @@ class test_Memory_FS__File__New(TestCase):
                                                                           file_extension = 'txt'    ,
                                                                           encoding       = 'UTF_8'  ,
                                                                           serialization  = 'STRING' ),
-                                                     file_paths=['latest', '2025/05/28/14'],
+                                                     file_paths=['latest', self.path_now],
                                                      tags=[]),
                                          file_id  = _.file.file_id,
                                          metadata = __(content_hash          = None                 ,

@@ -21,7 +21,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
         self.memory_fs__exists  = self.memory_fs.exists ()
         self.memory_fs__load    = self.memory_fs.load   ()
         self.memory_fs__save    = self.memory_fs.save   ()
-        self.file_system        = self.memory_fs.file_system
+        self.file_system        = self.memory_fs.storage.file_system
 
         # Create handlers
         self.latest_handler   = Schema__Memory_FS__Path__Handler(name    = Safe_Id("latest"),

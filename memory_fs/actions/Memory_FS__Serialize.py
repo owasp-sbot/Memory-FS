@@ -1,10 +1,10 @@
 from typing                                             import Any
 from memory_fs.schemas.Enum__Memory_FS__Serialization   import Enum__Memory_FS__Serialization
+from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
-from memory_fs.core.Memory_FS__File_System              import Memory_FS__File_System
 
 class Memory_FS__Serialize(Type_Safe):
-    file_system: Memory_FS__File_System
+    storage     : Memory_FS__Storage
 
     def _serialize_data(self, data: Any, file_type) -> bytes:                                   # Serialize data based on file type's serialization method
         serialization = file_type.serialization

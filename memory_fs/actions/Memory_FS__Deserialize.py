@@ -1,12 +1,11 @@
-from typing import Any
-
-from memory_fs.core.Memory_FS__File_System import Memory_FS__File_System
-from memory_fs.schemas.Enum__Memory_FS__Serialization import Enum__Memory_FS__Serialization
-from osbot_utils.type_safe.Type_Safe import Type_Safe
+from typing                                             import Any
+from memory_fs.schemas.Enum__Memory_FS__Serialization   import Enum__Memory_FS__Serialization
+from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
+from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 
 class Memory_FS__Deserialize(Type_Safe):
-    file_system: Memory_FS__File_System
+    storage     : Memory_FS__Storage
 
     def _deserialize_data(self, content_bytes: bytes, file_type) -> Any:                        # Deserialize data based on file type's serialization method
         serialization = file_type.serialization

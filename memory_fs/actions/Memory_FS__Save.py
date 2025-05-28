@@ -4,25 +4,24 @@ from memory_fs.actions.Memory_FS__Paths                     import Memory_FS__Pa
 from memory_fs.actions.Memory_FS__Serialize                 import Memory_FS__Serialize
 from memory_fs.schemas.Schema__Memory_FS__File              import Schema__Memory_FS__File
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata
-from memory_fs.schemas.Schema__Memory_FS__File__Type import Schema__Memory_FS__File__Type
-from osbot_utils.helpers.safe_str.Safe_Str__File__Name      import Safe_Str__File__Name
+from memory_fs.schemas.Schema__Memory_FS__File__Type        import Schema__Memory_FS__File__Type
+from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
 from osbot_utils.helpers.safe_int.Safe_UInt__FileSize       import Safe_UInt__FileSize
 from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding      import Enum__Memory_FS__File__Encoding
 from osbot_utils.decorators.methods.cache_on_self           import cache_on_self
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
-from memory_fs.core.Memory_FS__File_System                  import Memory_FS__File_System
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
 from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 
 
 class Memory_FS__Save(Type_Safe):
-    file_system: Memory_FS__File_System
+    storage     : Memory_FS__Storage
 
     @cache_on_self
     def memory_fs__edit(self):
-        return Memory_FS__Edit(file_system=self.file_system)
+        return Memory_FS__Edit(storage=self.storage)
 
     @cache_on_self
     def memory__fs_paths(self):
@@ -30,7 +29,7 @@ class Memory_FS__Save(Type_Safe):
 
     @cache_on_self
     def memory_fs__serialize(self):
-        return Memory_FS__Serialize(file_system=self.file_system)
+        return Memory_FS__Serialize(storage=self.storage)
 
     def save(self, file_data   : Any,  # Save file data using all configured path handlers
                    file_config : Schema__Memory_FS__File__Config,
