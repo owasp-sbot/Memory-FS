@@ -86,7 +86,7 @@ class Memory_FS__Edit(Type_Safe):
                            content : bytes
               ) -> List[Safe_Str__File__Path]:
         files_to_save  = []
-        full_file_name = f"{file_config.file_name}.{file_config.file_type.file_extension}"
+        full_file_name = f"{file_config.file_name}.{file_config.file_type.file_extension}"      # todo: refactor this into a method or class focused on creating the file name (one for example that takes into account when the file_type.file_extension is not set)
         if file_config.file_paths:
             for file_path in file_config.file_paths:
                 content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")

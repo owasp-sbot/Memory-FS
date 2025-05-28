@@ -1,5 +1,3 @@
-from typing import List
-
 from memory_fs.schemas.Enum__Memory_FS__File__Content_Type import Enum__Memory_FS__File__Content_Type
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding     import Enum__Memory_FS__File__Encoding
 from memory_fs.schemas.Enum__Memory_FS__Serialization      import Enum__Memory_FS__Serialization
