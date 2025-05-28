@@ -7,8 +7,6 @@ from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
 from memory_fs.schemas.Schema__Memory_FS__File          import Schema__Memory_FS__File
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
-from memory_fs.core.Memory_FS__File_System              import Memory_FS__File_System
-
 
 class Memory_FS__Load(Type_Safe):
     storage     : Memory_FS__Storage

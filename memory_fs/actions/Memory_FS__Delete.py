@@ -5,7 +5,6 @@ from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storag
 from osbot_utils.helpers.Safe_Id                        import Safe_Id
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
-from memory_fs.core.Memory_FS__File_System              import Memory_FS__File_System
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 class Memory_FS__Delete(Type_Safe):
