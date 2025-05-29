@@ -12,9 +12,8 @@ class test_Memory_FS__File(TestCase):
     def test__init__(self):
         with self.file as _:
             assert type(_) is Memory_FS__File
-            assert _.obj() == __(file_config   =__(file_id         = _.file_config.file_id  ,
-                                                   file_name       = _.file_config.file_name,
-                                                   file_paths      = []  ,
+            assert _.obj() == __(file_config   =__(file_id       = _.file_config.file_id,
+                                                   file_paths      = [],
                                                    file_type       = __(name          = None,
                                                                        content_type   = None,
                                                                        file_extension = None,

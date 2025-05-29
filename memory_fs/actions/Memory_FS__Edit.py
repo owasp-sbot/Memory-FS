@@ -66,7 +66,7 @@ class Memory_FS__Edit(Type_Safe):
                    file       : Schema__Memory_FS__File             # refactor out the metadata from this , and put it on a separate file we then would not need this Schema__Memory_FS__File class
               ) -> List[Safe_Str__File__Path]:
         files_to_save = []
-        full_file_name = f"{file_config.file_name}.{file_config.file_type.file_extension}"
+        full_file_name = f"{file_config.file_id}.{file_config.file_type.file_extension}"
         if file_config.file_paths:                                  # if we have file_paths define mapp them all
             for file_path in file_config.file_paths:
                 content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")
@@ -86,7 +86,7 @@ class Memory_FS__Edit(Type_Safe):
                            content : bytes
               ) -> List[Safe_Str__File__Path]:
         files_to_save  = []
-        full_file_name = f"{file_config.file_name}.{file_config.file_type.file_extension}"      # todo: refactor this into a method or class focused on creating the file name (one for example that takes into account when the file_type.file_extension is not set)
+        full_file_name = f"{file_config.file_id}.{file_config.file_type.file_extension}"      # todo: refactor this into a method or class focused on creating the file name (one for example that takes into account when the file_type.file_extension is not set)
         if file_config.file_paths:
             for file_path in file_config.file_paths:
                 content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")

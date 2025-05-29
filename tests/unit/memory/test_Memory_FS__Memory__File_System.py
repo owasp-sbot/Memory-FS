@@ -27,13 +27,13 @@ class test_Memory_FS__Memory__File_System(TestCase):
 
         # Create file components according to new schema
         self.file_content     = "test content"
-        self.file_name        = 'an-file'
+        self.file_id        = 'an-file'
         self.file_type        = Memory_FS__File__Type__Json()
-        self.test_config      = Schema__Memory_FS__File__Config  (file_name     = self.file_name,
+        self.test_config      = Schema__Memory_FS__File__Config  (file_id       = self.file_id,
                                                                   file_type     = self.file_type)
-        self.test_metadata    = Schema__Memory_FS__File__Metadata(content__hash  = safe_str_hash(self.file_content))
-        self.test_file        = Schema__Memory_FS__File           (config        = self.test_config,
-                                                                   metadata      = self.test_metadata)
+        self.test_metadata    = Schema__Memory_FS__File__Metadata(content__hash = safe_str_hash(self.file_content))
+        self.test_file        = Schema__Memory_FS__File          (config        = self.test_config,
+                                                                  metadata      = self.test_metadata)
 
     def test_init(self):                                                                         # Tests basic initialization
         assert type(self.file_system             ) is Memory_FS__File_System
@@ -170,12 +170,12 @@ class test_Memory_FS__Memory__File_System(TestCase):
         content_1 = b"short"
         content_2 = b"much longer content"
 
-        test_config_1    = Schema__Memory_FS__File__Config  (file_name     = "file-1",
+        test_config_1    = Schema__Memory_FS__File__Config  (file_id       = "file-1",
                                                              file_type     = Memory_FS__File__Type__Text()  )
         test_metadata_1  = Schema__Memory_FS__File__Metadata(content__hash = safe_str_hash("test content"   ),
                                                              content__size = Safe_UInt__FileSize(len(content_1)))
 
-        test_config_2    = Schema__Memory_FS__File__Config  (file_name     = "file-2"                       ,
+        test_config_2    = Schema__Memory_FS__File__Config  (file_id       = "file-2"                       ,
                                                              file_type     = Memory_FS__File__Type__Text()  )
         test_metadata_2  = Schema__Memory_FS__File__Metadata(content__hash = safe_str_hash("test content"   ),
                                                              content__size = len(content_2))

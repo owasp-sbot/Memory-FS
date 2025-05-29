@@ -28,7 +28,7 @@ class Memory_FS__Delete(Type_Safe):
         files_deleted = []
 
         for file_path in file_config.file_paths:
-            content_path  = Safe_Str__File__Path(f"{file_path}/{file_config.file_name}.{file_config.file_type.file_extension}")
+            content_path  = Safe_Str__File__Path(f"{file_path}/{file_config.file_id}.{file_config.file_type.file_extension}")
             metadata_path = Safe_Str__File__Path(content_path + ".fs.json")                   # todo: refactor this into a separate class (which will handle the case of the ".fs.json" extension)
 
             if self.memory_fs__edit().delete_content(content_path):

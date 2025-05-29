@@ -18,7 +18,8 @@ class Memory_FS__Exists(Type_Safe):
 
     def exists(self, file_config : Schema__Memory_FS__File__Config  # todo: see if we need to add the default path (or to have a separate "exists strategy")
                 ) -> bool:
-        full_file_name = Safe_Str__File__Path(f"{file_config.file_name}.{file_config.file_type.file_extension}.fs.json")          # note that we only looking for the "fs.json" files
+
+        full_file_name = Safe_Str__File__Path(f"{file_config.file_id}.{file_config.file_type.file_extension}.fs.json")          # note that we only looking for the "fs.json" files
         if not file_config.file_paths:                                              # if there are no file paths
             return self.memory_fs__data().exists(full_file_name)                    # just search for it
         for file_path in file_config.file_paths:                                    # for all paths
