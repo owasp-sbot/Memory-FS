@@ -43,16 +43,17 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert len(self.file_system.content_data ) == 0
 
     def test_save_and_exists(self):                                                             # Tests saving files and checking existence
-        assert self.memory_fs__data.exists          (self.test_path           ) is False
-        assert self.memory_fs__data.exists_content  (self.test_content_path   ) is False
+        assert self.memory_fs__data.exists_content  (self.test_config   ) is False
+        assert self.memory_fs__data.exists          (self.test_config   ) is False
 
         assert self.memory_fs__edit.save            (file_config = self.test_config, file    = self.test_file          ) == ['an-file.json.fs.json']
         assert self.memory_fs__edit.save_content    (file_config = self.test_config, content = self.test_content_bytes ) == ['an-file.json'        ]
 
-        assert self.memory_fs__data.exists          (self.test_path           ) is True
-        assert self.memory_fs__data.exists_content  (self.test_content_path   ) is True
+        assert self.memory_fs__data.exists_content  (self.test_config   ) is True
+        assert self.memory_fs__data.exists          (self.test_config   ) is True
 
-    def test__bug__load(self):                                                                         # Tests loading files
+
+    def test__load(self):                                                                         # Tests loading files
         assert self.memory_fs__data.load        (self.test_path             ) is None
         assert self.memory_fs__data.load_content(self.test_content_path     ) is None
 
@@ -63,20 +64,29 @@ class test_Memory_FS__Memory__File_System(TestCase):
         loaded_content = self.memory_fs__data.load_content(self.test_content_path)
 
         assert loaded_file is self.test_file
-        assert loaded_file.metadata.content__size != Safe_UInt__FileSize(len(self.test_content_bytes)) # BUG: todo: bug the size is not being captured on the save action
-        assert loaded_file.metadata.content__size == 0
+        assert loaded_file.metadata.content__size != Safe_UInt__FileSize(len(self.test_content_bytes))                  # BUG
+        assert loaded_file.metadata.content__size == 0                                                                  # BUG
         assert loaded_file.metadata.content__hash == safe_str_hash("test content")
         assert loaded_content == self.test_content_bytes
+
+    def test__bug__load(self):  # Tests loading files
+        assert self.memory_fs__edit.save(file_config=self.test_config, file=self.test_file) == ['an-file.json.fs.json']
+        loaded_file = self.memory_fs__data.load(self.test_path)
+        assert loaded_file.metadata.content__size != Safe_UInt__FileSize(len(self.test_content_bytes)) # BUG: todo: bug the size is not being captured on the save action
+
 
     def test_delete(self):                                                                       # Tests deleting files
         assert self.memory_fs__edit.save            (file_config = self.test_config, file    = self.test_file          ) == ['an-file.json.fs.json']
         assert self.memory_fs__edit.save_content    (file_config = self.test_config, content = self.test_content_bytes ) == ['an-file.json'        ]
 
-        assert self.memory_fs__edit.delete          (self.test_path) is True
-        assert self.memory_fs__edit.delete_content  (self.test_content_path) is True
-        assert self.memory_fs__data.exists          (self.test_path) is False
-        assert self.memory_fs__data.exists_content  (self.test_content_path) is False
-        assert self.memory_fs__edit.delete          (self.test_path) is False                                # Delete non-existent file
+        assert self.memory_fs__data.exists          (self.test_config) is True
+        assert self.memory_fs__data.exists_content  (self.test_config) is True
+        assert self.memory_fs__edit.delete          (self.test_config ) == ['an-file.json.fs.json']
+        assert self.memory_fs__edit.delete_content  (self.test_config ) == ['an-file.json'        ]
+
+        assert self.memory_fs__data.exists          (self.test_config ) is False
+        assert self.memory_fs__data.exists_content  (self.test_config ) is False
+        assert self.memory_fs__edit.delete          (self.test_config ) == []                                           # Delete non-existent file
 
     def test_list_files(self):                                                                   # Tests listing files
         path_1         = Safe_Str__File__Path("folder1")

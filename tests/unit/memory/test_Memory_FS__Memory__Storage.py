@@ -20,7 +20,6 @@ class test_Memory_FS__Memory__Storage(TestCase):
         self.memory_fs__data    = self.memory_fs.data   ()
         self.memory_fs__delete  = self.memory_fs.delete ()
         self.memory_fs__edit    = self.memory_fs.edit   ()
-        self.memory_fs__exists  = self.memory_fs.exists ()
         self.memory_fs__load    = self.memory_fs.load   ()
         self.memory_fs__save    = self.memory_fs.save   ()
         self.file_system        = self.memory_fs.storage.file_system
@@ -56,12 +55,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert len(saved_paths)  == 4
 
         # Verify metadata files were saved
-        assert self.memory_fs__data.exists(self.file_id__latest__metadata       ) is True
-        assert self.memory_fs__data.exists(self.file_id__now__metadata          ) is True
+        assert self.memory_fs__data.exists(self.test_config                     ) is True
 
         # Verify content files were saved
-        assert self.memory_fs__data.exists_content(self.file_id__latest__content) is True
-        assert self.memory_fs__data.exists_content(self.file_id__now__content   ) is True
+        assert self.memory_fs__data.exists_content(self.test_config) is True
 
         #  Verify content was saved and is JSON formatted
         loaded_file   = self.memory_fs__data.load        (self.file_id__latest__metadata)
@@ -163,16 +160,16 @@ class test_Memory_FS__Memory__Storage(TestCase):
             assert _.encoding       == self.file_type_json.encoding
 
     def test_exists_without_default_handler_all_must_exist(self):                               # Tests exists without default (all must exist)
-        assert self.memory_fs__exists.exists(self.test_config) is False
-        return
+        assert self.memory_fs__data.exists(self.test_config) is False
         saved_paths = self.memory_fs__save.save(self.test_data, self.test_config)
         assert len(saved_paths) == 4
 
-        assert self.memory_fs__exists.exists(self.test_config) is True
+        assert self.memory_fs__data.exists(self.test_config) is True
 
         # Delete one file - should now return False
-        assert self.memory_fs__edit.delete  (saved_paths[1]  ) is True                          # todo: need a better way to do this test (instead of doing saved_paths[1] )
-        assert self.memory_fs__exists.exists(self.test_config) is False
+        assert self.memory_fs__edit.delete  (self.test_config ) == ['latest/an-file.json.fs.json',
+                                                                    f'{self.path_now}/an-file.json.fs.json']
+        assert self.memory_fs__data.exists(self.test_config) is False
 
     def test_delete(self):                                                                       # Tests deleting files
         files_created = self.memory_fs__save.save(self.test_data, self.test_config)
@@ -186,7 +183,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
         assert sorted(files_created) == sorted(files_deleted)
 
-        assert self.memory_fs__exists.exists(self.test_config) is False
+        assert self.memory_fs__data.exists(self.test_config) is False
 
     def test_empty_file_paths(self):                                                              # Tests behavior with no handlers
         empty_config = Schema__Memory_FS__File__Config(file_paths = []                 ,
@@ -196,7 +193,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert len(saved_paths) == 2
         assert saved_paths      == [f'{file_id}.json', f'{file_id}.json.fs.json']
 
-        assert self.memory_fs__exists.exists(empty_config  ) is True                            # confirm file was created
+        assert self.memory_fs__data.exists(empty_config  ) is True                            # confirm file was created
         assert type(self.memory_fs__load.load(empty_config)) is Schema__Memory_FS__File         # and we can get it
 
     def test_list_files(self):                                                                  # Tests listing files

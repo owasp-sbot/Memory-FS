@@ -1,5 +1,4 @@
 from typing                                             import Dict
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from memory_fs.actions.Memory_FS__Edit                  import Memory_FS__Edit
 from memory_fs.actions.Memory_FS__Load                  import Memory_FS__Load
 from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
@@ -25,16 +24,7 @@ class Memory_FS__Delete(Type_Safe):
 
     def delete(self, file_config : Schema__Memory_FS__File__Config                  # Delete file from all configured paths
                 ) -> Dict[Safe_Id, bool]:
-        files_deleted = []
 
-        for file_path in file_config.file_paths:
-            content_path  = Safe_Str__File__Path(f"{file_path}/{file_config.file_id}.{file_config.file_type.file_extension}")
-            metadata_path = Safe_Str__File__Path(content_path + ".fs.json")                   # todo: refactor this into a separate class (which will handle the case of the ".fs.json" extension)
-
-            if self.memory_fs__edit().delete_content(content_path):
-                files_deleted.append(content_path)
-
-            if self.memory_fs__edit().delete(metadata_path):
-                files_deleted.append(metadata_path)
-
-        return files_deleted
+        files_deleted         = self.memory_fs__edit().delete        (file_config)
+        files_deleted_content = self.memory_fs__edit().delete_content(file_config)
+        return files_deleted + files_deleted_content

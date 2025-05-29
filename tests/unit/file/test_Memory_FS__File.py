@@ -22,3 +22,7 @@ class test_Memory_FS__File(TestCase):
 
                                  storage=__(storage_type='memory',
                                             file_system=__(files=__(), content_data=__())))
+
+    def test_exists(self):
+        with self.file as _:
+            assert _.exists() is False

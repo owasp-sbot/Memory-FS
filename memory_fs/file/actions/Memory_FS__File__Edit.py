@@ -1,6 +1,6 @@
 from typing                                             import Any
 from memory_fs.actions.Memory_FS__Data                  import Memory_FS__Data
-from memory_fs.actions.Memory_FS__Paths import Memory_FS__Paths
+from memory_fs.actions.Memory_FS__Paths                 import Memory_FS__Paths
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
 from memory_fs.actions.Memory_FS__Edit                  import Memory_FS__Edit
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
