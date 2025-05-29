@@ -52,31 +52,7 @@ class Memory_FS__Data(Type_Safe):
                       ) -> Optional[bytes]:
         return self.storage.file__content(path)
 
-    def paths(self, file_config: Schema__Memory_FS__File__Config):  # todo: refactor this to the Memory_FS__Paths class
-        full_file_paths = []
-        full_file_name = f"{file_config.file_name}.{file_config.file_type.file_extension}"
-        if file_config.file_paths:                                  # if we have file_paths define mapp them all
-            for file_path in file_config.file_paths:
-                content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")
-                full_file_path = Safe_Str__File__Path(content_path + ".fs.json")         # todo: refactor this into a better location
 
-                full_file_paths.append(full_file_path)
-        else:
-            full_file_paths.append(full_file_name)
-
-        return full_file_paths
-
-    def paths__content(self, file_config: Schema__Memory_FS__File__Config):  # todo: refactor this to the Memory_FS__Paths class
-        full_file_paths = []
-        full_file_name = Safe_Str__File__Path(f"{file_config.file_name}.{file_config.file_type.file_extension}")
-        if file_config.file_paths:                                  # if we have file_paths define mapp them all
-            for file_path in file_config.file_paths:
-                content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")
-                full_file_paths.append(content_path)
-        else:
-            full_file_paths.append(full_file_name)
-
-        return full_file_paths
 
     # todo: this should return a python object (and most likely moved into a Memory_FS__Stats class)
     def stats(self) -> Dict[Safe_Id, Any]:                                                     # Get file system statistics

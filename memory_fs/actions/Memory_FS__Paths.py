@@ -1,47 +1,34 @@
-from typing                                                 import Optional
-from osbot_utils.helpers.Safe_Id                            import Safe_Id
-from memory_fs.schemas.Schema__Memory_FS__Path__Handler     import Schema__Memory_FS__Path__Handler
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
-from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
-from osbot_utils.type_safe.Type_Safe                        import Type_Safe
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
+from memory_fs.schemas.Schema__Memory_FS__File__Config import Schema__Memory_FS__File__Config
+from osbot_utils.type_safe.Type_Safe                   import Type_Safe
+
+#  ".fs.json" to be saved as {file_name}.config
+#  metatada to be saved as {file_name}.metadata
 
 class Memory_FS__Paths(Type_Safe):
 
-    def _get_handler_path(self, file_config : Schema__Memory_FS__File__Config,  # Get the path for a specific handler
-                                handler     : Schema__Memory_FS__Path__Handler,
-                                file_name   : str = "file"
-                           ) -> Optional[Safe_Str__File__Path]:
-        # This is simplified - in reality, would need the actual file info
-        # For now, generate a basic path
-        file_ext = file_config.file_type.file_extension if file_config.file_type else "json"
-        return self._simulate_handler_path(handler, file_name, file_ext, True)
+    def paths(self, file_config: Schema__Memory_FS__File__Config):
+        full_file_paths = []
+        full_file_name = f"{file_config.file_name}.{file_config.file_type.file_extension}"
+        if file_config.file_paths:                                  # if we have file_paths define mapp them all
+            for file_path in file_config.file_paths:
+                content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")
+                full_file_path = Safe_Str__File__Path(content_path + ".fs.json")         # todo: refactor this into a better location
 
-    def _simulate_handler_path(self, handler     : Schema__Memory_FS__Path__Handler,  # Simulate path generation for different handler types
-                               file_name   : str,
-                               file_ext    : str,
-                               is_metadata : bool = True
-                               ) -> Optional[Safe_Str__File__Path]:
+                full_file_paths.append(full_file_path)
+        else:
+            full_file_paths.append(full_file_name)
 
-        # Determine file extension
-        ext = ".json" if is_metadata else f".{file_ext}"
+        return full_file_paths
 
-        if handler.name == Safe_Id("latest"):
-            return Safe_Str__File__Path(f"latest/{file_name}{ext}")
+    def paths__content(self, file_config: Schema__Memory_FS__File__Config):  # todo: refactor this to the Memory_FS__Paths class
+        full_file_paths = []
+        full_file_name = Safe_Str__File__Path(f"{file_config.file_name}.{file_config.file_type.file_extension}")
+        if file_config.file_paths:                                  # if we have file_paths define mapp them all
+            for file_path in file_config.file_paths:
+                content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")
+                full_file_paths.append(content_path)
+        else:
+            full_file_paths.append(full_file_name)
 
-        elif handler.name == Safe_Id("temporal"):
-            from datetime import datetime
-            now = datetime.now()
-            time_path = now.strftime("%Y/%m/%d/%H")
-            # In real implementation, areas would come from the handler
-            return Safe_Str__File__Path(f"{time_path}/{file_name}{ext}")
-
-        elif handler.name == Safe_Id("versioned"):
-            # In real implementation, version would be calculated from chain
-            version = 1
-            return Safe_Str__File__Path(f"v{version}/{file_name}{ext}")
-
-        elif handler.name == Safe_Id("custom"):
-            # In real implementation, would use handler's custom path
-            return Safe_Str__File__Path(f"custom/{file_name}{ext}")
-
-        return None
+        return full_file_paths
