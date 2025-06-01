@@ -1,22 +1,38 @@
 from typing                                                 import List, Optional, Dict, Any
-from memory_fs.schemas.Schema__Memory_FS__File              import Schema__Memory_FS__File
+from osbot_utils.type_safe.decorators.type_safe             import type_safe
+from memory_fs.actions.Memory_FS__Paths                     import Memory_FS__Paths
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
+from osbot_utils.decorators.methods.cache_on_self           import cache_on_self
+from memory_fs.schemas.Schema__Memory_FS__File              import Schema__Memory_FS__File
 from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 
-
 class Memory_FS__Data(Type_Safe):
     storage     : Memory_FS__Storage
 
-    def exists(self, path : Safe_Str__File__Path                                               # Check if a file exists at the given path
-                ) -> bool:
-        return path in self.storage.files()                                                    # todo: refactor since this is going to be platform specific (specially since we shouldn't circle through all files to see if the file exists)
+    @cache_on_self
+    def paths(self):
+        return Memory_FS__Paths()
 
-    def exists_content(self, path : Safe_Str__File__Path                                       # Check if content exists at the given path
-                        ) -> bool:
-        return path in self.storage.content_data()
+    @type_safe
+    def exists(self, file_config : Schema__Memory_FS__File__Config
+                ) -> bool:                                                          # todo: see if we need to add the default path (or to have a separate "exists strategy")
+        files = self.storage.files()
+        for full_file_path in self.paths().paths(file_config):
+            if full_file_path in files:                                             # todo: refactor since this is going to be platform specific (specially since we shouldn't circle through all files to see if the file exists)
+                return True                                                         # we only check if we found one of them
+        return False                                                                # if none were found, return False
+
+    @type_safe
+    def exists_content(self, file_config : Schema__Memory_FS__File__Config
+                 ) -> bool:
+        content_files =  self.storage.content_data()
+        for full_file_path in self.paths().paths__content(file_config):
+            if full_file_path in content_files:
+                return True
+        return False
 
     # todo: this method should return a strongly typed class (ideally one from the file)
     def get_file_info(self, path : Safe_Str__File__Path                                        # Get file information (size, hash, etc.)
@@ -52,31 +68,7 @@ class Memory_FS__Data(Type_Safe):
                       ) -> Optional[bytes]:
         return self.storage.file__content(path)
 
-    def paths(self, file_config: Schema__Memory_FS__File__Config):  # todo: refactor this to the Memory_FS__Paths class
-        full_file_paths = []
-        full_file_name = f"{file_config.file_name}.{file_config.file_type.file_extension}"
-        if file_config.file_paths:                                  # if we have file_paths define mapp them all
-            for file_path in file_config.file_paths:
-                content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")
-                full_file_path = Safe_Str__File__Path(content_path + ".fs.json")         # todo: refactor this into a better location
 
-                full_file_paths.append(full_file_path)
-        else:
-            full_file_paths.append(full_file_name)
-
-        return full_file_paths
-
-    def paths__content(self, file_config: Schema__Memory_FS__File__Config):  # todo: refactor this to the Memory_FS__Paths class
-        full_file_paths = []
-        full_file_name = Safe_Str__File__Path(f"{file_config.file_name}.{file_config.file_type.file_extension}")
-        if file_config.file_paths:                                  # if we have file_paths define mapp them all
-            for file_path in file_config.file_paths:
-                content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")
-                full_file_paths.append(content_path)
-        else:
-            full_file_paths.append(full_file_name)
-
-        return full_file_paths
 
     # todo: this should return a python object (and most likely moved into a Memory_FS__Stats class)
     def stats(self) -> Dict[Safe_Id, Any]:                                                     # Get file system statistics

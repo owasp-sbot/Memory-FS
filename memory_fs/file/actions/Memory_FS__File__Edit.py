@@ -1,5 +1,6 @@
 from typing                                             import Any
 from memory_fs.actions.Memory_FS__Data                  import Memory_FS__Data
+from memory_fs.actions.Memory_FS__Paths                 import Memory_FS__Paths
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
 from memory_fs.actions.Memory_FS__Edit                  import Memory_FS__Edit
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
@@ -18,8 +19,12 @@ class Memory_FS__File__Edit(Type_Safe):
     def storage_edit(self):
         return Memory_FS__Edit(storage=self.storage)
 
+    @cache_on_self
+    def storage_paths(self):
+        return Memory_FS__Paths()
+
     def load__content(self):
-        paths = self.storage_data().paths__content(self.file__config)
+        paths = self.storage_paths().paths__content(self.file__config)
         if paths:
             path  = paths[0]                    # todo: this logic should be inside the storage_data
             return self.storage_data().load_content(path)

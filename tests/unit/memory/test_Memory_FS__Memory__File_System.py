@@ -27,13 +27,13 @@ class test_Memory_FS__Memory__File_System(TestCase):
 
         # Create file components according to new schema
         self.file_content     = "test content"
-        self.file_name        = 'an-file'
+        self.file_id        = 'an-file'
         self.file_type        = Memory_FS__File__Type__Json()
-        self.test_config      = Schema__Memory_FS__File__Config  (file_name     = self.file_name,
+        self.test_config      = Schema__Memory_FS__File__Config  (file_id       = self.file_id,
                                                                   file_type     = self.file_type)
-        self.test_metadata    = Schema__Memory_FS__File__Metadata(content__hash  = safe_str_hash(self.file_content))
-        self.test_file        = Schema__Memory_FS__File           (config        = self.test_config,
-                                                                   metadata      = self.test_metadata)
+        self.test_metadata    = Schema__Memory_FS__File__Metadata(content__hash = safe_str_hash(self.file_content))
+        self.test_file        = Schema__Memory_FS__File          (config        = self.test_config,
+                                                                  metadata      = self.test_metadata)
 
     def test_init(self):                                                                         # Tests basic initialization
         assert type(self.file_system             ) is Memory_FS__File_System
@@ -43,16 +43,17 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert len(self.file_system.content_data ) == 0
 
     def test_save_and_exists(self):                                                             # Tests saving files and checking existence
-        assert self.memory_fs__data.exists          (self.test_path           ) is False
-        assert self.memory_fs__data.exists_content  (self.test_content_path   ) is False
+        assert self.memory_fs__data.exists_content  (self.test_config   ) is False
+        assert self.memory_fs__data.exists          (self.test_config   ) is False
 
         assert self.memory_fs__edit.save            (file_config = self.test_config, file    = self.test_file          ) == ['an-file.json.fs.json']
         assert self.memory_fs__edit.save_content    (file_config = self.test_config, content = self.test_content_bytes ) == ['an-file.json'        ]
 
-        assert self.memory_fs__data.exists          (self.test_path           ) is True
-        assert self.memory_fs__data.exists_content  (self.test_content_path   ) is True
+        assert self.memory_fs__data.exists_content  (self.test_config   ) is True
+        assert self.memory_fs__data.exists          (self.test_config   ) is True
 
-    def test__bug__load(self):                                                                         # Tests loading files
+
+    def test__load(self):                                                                         # Tests loading files
         assert self.memory_fs__data.load        (self.test_path             ) is None
         assert self.memory_fs__data.load_content(self.test_content_path     ) is None
 
@@ -63,20 +64,29 @@ class test_Memory_FS__Memory__File_System(TestCase):
         loaded_content = self.memory_fs__data.load_content(self.test_content_path)
 
         assert loaded_file is self.test_file
-        assert loaded_file.metadata.content__size != Safe_UInt__FileSize(len(self.test_content_bytes)) # BUG: todo: bug the size is not being captured on the save action
-        assert loaded_file.metadata.content__size == 0
+        assert loaded_file.metadata.content__size != Safe_UInt__FileSize(len(self.test_content_bytes))                  # BUG
+        assert loaded_file.metadata.content__size == 0                                                                  # BUG
         assert loaded_file.metadata.content__hash == safe_str_hash("test content")
         assert loaded_content == self.test_content_bytes
+
+    def test__bug__load(self):  # Tests loading files
+        assert self.memory_fs__edit.save(file_config=self.test_config, file=self.test_file) == ['an-file.json.fs.json']
+        loaded_file = self.memory_fs__data.load(self.test_path)
+        assert loaded_file.metadata.content__size != Safe_UInt__FileSize(len(self.test_content_bytes)) # BUG: todo: bug the size is not being captured on the save action
+
 
     def test_delete(self):                                                                       # Tests deleting files
         assert self.memory_fs__edit.save            (file_config = self.test_config, file    = self.test_file          ) == ['an-file.json.fs.json']
         assert self.memory_fs__edit.save_content    (file_config = self.test_config, content = self.test_content_bytes ) == ['an-file.json'        ]
 
-        assert self.memory_fs__edit.delete          (self.test_path) is True
-        assert self.memory_fs__edit.delete_content  (self.test_content_path) is True
-        assert self.memory_fs__data.exists          (self.test_path) is False
-        assert self.memory_fs__data.exists_content  (self.test_content_path) is False
-        assert self.memory_fs__edit.delete          (self.test_path) is False                                # Delete non-existent file
+        assert self.memory_fs__data.exists          (self.test_config) is True
+        assert self.memory_fs__data.exists_content  (self.test_config) is True
+        assert self.memory_fs__edit.delete          (self.test_config ) == ['an-file.json.fs.json']
+        assert self.memory_fs__edit.delete_content  (self.test_config ) == ['an-file.json'        ]
+
+        assert self.memory_fs__data.exists          (self.test_config ) is False
+        assert self.memory_fs__data.exists_content  (self.test_config ) is False
+        assert self.memory_fs__edit.delete          (self.test_config ) == []                                           # Delete non-existent file
 
     def test_list_files(self):                                                                   # Tests listing files
         path_1         = Safe_Str__File__Path("folder1")
@@ -170,12 +180,12 @@ class test_Memory_FS__Memory__File_System(TestCase):
         content_1 = b"short"
         content_2 = b"much longer content"
 
-        test_config_1    = Schema__Memory_FS__File__Config  (file_name     = "file-1",
+        test_config_1    = Schema__Memory_FS__File__Config  (file_id       = "file-1",
                                                              file_type     = Memory_FS__File__Type__Text()  )
         test_metadata_1  = Schema__Memory_FS__File__Metadata(content__hash = safe_str_hash("test content"   ),
                                                              content__size = Safe_UInt__FileSize(len(content_1)))
 
-        test_config_2    = Schema__Memory_FS__File__Config  (file_name     = "file-2"                       ,
+        test_config_2    = Schema__Memory_FS__File__Config  (file_id       = "file-2"                       ,
                                                              file_type     = Memory_FS__File__Type__Text()  )
         test_metadata_2  = Schema__Memory_FS__File__Metadata(content__hash = safe_str_hash("test content"   ),
                                                              content__size = len(content_2))

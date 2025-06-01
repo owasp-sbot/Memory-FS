@@ -1,5 +1,4 @@
 from memory_fs.actions.Memory_FS__Delete            import Memory_FS__Delete
-from memory_fs.actions.Memory_FS__Exists            import Memory_FS__Exists
 from memory_fs.actions.Memory_FS__Load              import Memory_FS__Load
 from memory_fs.actions.Memory_FS__Save              import Memory_FS__Save
 from memory_fs.storage.Memory_FS__Storage           import Memory_FS__Storage
@@ -23,10 +22,6 @@ class Memory_FS(Type_Safe):
     @cache_on_self
     def edit(self):
         return Memory_FS__Edit(storage=self.storage)
-
-    @cache_on_self
-    def exists(self):
-        return Memory_FS__Exists(storage=self.storage)
 
     @cache_on_self
     def load(self):

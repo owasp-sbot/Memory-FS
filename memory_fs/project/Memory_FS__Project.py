@@ -10,7 +10,7 @@ from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 class Memory_FS__Project(Type_Safe):
     config: Schema__Memory_FS__Project__Config
 
-    def file(self, file_name     : Safe_Id,
+    def file(self, file_id     : Safe_Id,
                    path_strategy: Schema__Memory_FS__Project__Path_Strategy,
                    file_type    : Schema__Memory_FS__File__Type
               ) -> Memory_FS__File:
@@ -24,7 +24,7 @@ class Memory_FS__Project(Type_Safe):
             with file.file_config as _:
                 _.file_type  = file_type
                 _.file_paths = file_paths
-                _.file_name  = file_name
+                _.file_id  = file_id
             return file
 
     @cache_on_self

@@ -38,13 +38,12 @@ class test_Memory_FS__Project(TestCase):
 
     def test_file(self):
         with self.project as _:
-            kwargs = dict(file_name     = "an-file"                              ,
+            kwargs = dict(file_id     = "an-file"                              ,
                           path_strategy = _.path_strategy(self.path_strategy_name),
                           file_type     = Memory_FS__File__Type__Text()          )
             file = _.file(**kwargs)
             assert type(file) is Memory_FS__File
-            assert file.obj() == __(file_config = __(file_id     = file.file_config.file_id,
-                                                     file_name   = 'an-file',
+            assert file.obj() == __(file_config = __(file_id   = 'an-file',
                                                      file_paths  = ['latest', self.path_now],
                                                      file_type   = __(name           = 'text'   ,
                                                                       content_type   ='TXT'     ,
