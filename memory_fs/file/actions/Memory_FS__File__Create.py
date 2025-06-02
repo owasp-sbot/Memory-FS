@@ -19,6 +19,6 @@ class Memory_FS__File__Create(Type_Safe):
             if _.exists() is False:
                 return _.paths()                # todo: finish implementation of this method
                 return 'creating'
-            
+
     def exists(self):
         return self.file_data().exists()

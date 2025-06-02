@@ -1,9 +1,10 @@
-from unittest                       import TestCase
+from unittest                                       import TestCase
+from memory_fs.file.Memory_FS__File                 import Memory_FS__File
+from memory_fs.file.actions.Memory_FS__File__Create import Memory_FS__File__Create
+
 
 from osbot_utils.utils.Dev import pprint
 
-from memory_fs.file.Memory_FS__File import Memory_FS__File
-from memory_fs.file.actions.Memory_FS__File__Create import Memory_FS__File__Create
 
 
 class test_Memory_FS__File__Create(TestCase):
@@ -28,4 +29,4 @@ class test_Memory_FS__File__Create(TestCase):
         with self.file_create as _:
             assert type(_) is Memory_FS__File__Create
             # todo: finish this method implementation
-            #pprint(_.create())
+            pprint(_.create())
