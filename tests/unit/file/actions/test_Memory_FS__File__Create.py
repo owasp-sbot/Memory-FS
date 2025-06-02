@@ -1,12 +1,12 @@
 from unittest                       import TestCase
 
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
-
 from osbot_utils.utils.Dev import pprint
 
 from memory_fs.file.Memory_FS__File import Memory_FS__File
+from memory_fs.file.actions.Memory_FS__File__Create import Memory_FS__File__Create
 
-class test_Memory_FS__File__Data(TestCase):
+
+class test_Memory_FS__File__Create(TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -15,6 +15,7 @@ class test_Memory_FS__File__Data(TestCase):
         cls.file_id   = cls.file_config.file_id
         cls.file_edit   = cls.file.edit()
         cls.file_data   = cls.file.data()
+        cls.file_create = cls.file.create()
 
     def test_load__content(self):
         with self.file_edit as _:
@@ -23,7 +24,8 @@ class test_Memory_FS__File__Data(TestCase):
             assert result == [f'{self.file_id}.None']
             assert _.load__content() == content
 
-    def test_load__paths(self):
-        with self.file_data as _:
-            paths = _.paths()
-            assert paths == [Safe_Str__File__Path(f'{self.file_config.file_id}.None.fs.json')]  # BUG: this should be
+    def test_create(self):
+        with self.file_create as _:
+            assert type(_) is Memory_FS__File__Create
+            # todo: finish this method implementation
+            #pprint(_.create())

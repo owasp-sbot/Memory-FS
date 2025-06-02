@@ -20,14 +20,13 @@ class Memory_FS__Load(Type_Safe):
     def memory_fs__deserialize(self):
         return Memory_FS__Deserialize(storage=self.storage)
 
-    @cache_on_self
-    def memory_fs__paths(self):
-        return Memory_FS__Paths()
+    def memory_fs__paths(self, file_config : Schema__Memory_FS__File__Config):
+        return Memory_FS__Paths(file__config=file_config)
 
 
     def load(self, file_config : Schema__Memory_FS__File__Config  # Load file from the appropriate path based on config
               ) -> Optional[Schema__Memory_FS__File]:
-        full_file_paths = self.memory_fs__paths().paths(file_config=file_config)
+        full_file_paths = self.memory_fs__paths(file_config=file_config).paths()
         for full_file_path in full_file_paths:
             file = self.memory_fs__data().load(full_file_path)
             if file:
@@ -36,7 +35,7 @@ class Memory_FS__Load(Type_Safe):
 
     def load_content(self, file_config : Schema__Memory_FS__File__Config  # Load content for a file
                       ) -> Optional[bytes]:
-        full_file_paths = self.memory_fs__paths().paths__content(file_config=file_config)
+        full_file_paths = self.memory_fs__paths(file_config=file_config).paths__content()
         for full_file_path in full_file_paths:
             content_bytes  = self.memory_fs__data().load_content(full_file_path)
             if content_bytes:

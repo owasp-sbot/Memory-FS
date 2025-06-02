@@ -1,19 +1,28 @@
+from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
+from memory_fs.actions.Memory_FS__File_Name             import Memory_FS__File_Name
 from osbot_utils.type_safe.decorators.type_safe         import type_safe
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
-#  ".fs.json" to be saved as {file_id}.config
-#  metatada to be saved as {file_id}.metadata
+# todo:
+#  content to be saved as {file_id}.{extension}
+#  ".fs.json" to be saved as {file_id}.{extension}.config
+#  metatada to be saved as {file_id}.{extension}.metadata
 
 class Memory_FS__Paths(Type_Safe):
+    file__config: Schema__Memory_FS__File__Config
+
+    @cache_on_self
+    def file_name(self):
+        return Memory_FS__File_Name(file_config=self.file__config)
 
     @type_safe
-    def paths(self, file_config: Schema__Memory_FS__File__Config):
+    def paths(self):
         full_file_paths = []
-        full_file_name = Safe_Str__File__Path(f"{file_config.file_id}.{file_config.file_type.file_extension}")
-        if file_config.file_paths:                                  # if we have file_paths define mapp them all
-            for file_path in file_config.file_paths:
+        full_file_name = Safe_Str__File__Path(f"{self.file__config.file_id}.{self.file__config.file_type.file_extension}")
+        if self.file__config.file_paths:                                  # if we have file_paths define mapp them all
+            for file_path in self.file__config.file_paths:
                 content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")
                 full_file_path = Safe_Str__File__Path(content_path + ".fs.json")         # todo: refactor this into a better location
 
@@ -23,11 +32,11 @@ class Memory_FS__Paths(Type_Safe):
 
         return full_file_paths
 
-    def paths__content(self, file_config: Schema__Memory_FS__File__Config):
+    def paths__content(self):
         full_file_paths = []
-        full_file_name = Safe_Str__File__Path(f"{file_config.file_id}.{file_config.file_type.file_extension}")
-        if file_config.file_paths:                                  # if we have file_paths define mapp them all
-            for file_path in file_config.file_paths:
+        full_file_name = Safe_Str__File__Path(f"{self.file__config.file_id}.{self.file__config.file_type.file_extension}")
+        if self.file__config.file_paths:                                  # if we have file_paths define mapp them all
+            for file_path in self.file__config.file_paths:
                 content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")
                 full_file_paths.append(content_path)
         else:

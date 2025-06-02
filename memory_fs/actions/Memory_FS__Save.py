@@ -1,6 +1,5 @@
 from typing                                                 import Any, Dict
 from memory_fs.actions.Memory_FS__Edit                      import Memory_FS__Edit
-from memory_fs.actions.Memory_FS__Paths                     import Memory_FS__Paths
 from memory_fs.actions.Memory_FS__Serialize                 import Memory_FS__Serialize
 from memory_fs.schemas.Schema__Memory_FS__File              import Schema__Memory_FS__File
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata
@@ -21,10 +20,6 @@ class Memory_FS__Save(Type_Safe):
     @cache_on_self
     def memory_fs__edit(self):
         return Memory_FS__Edit(storage=self.storage)
-
-    @cache_on_self
-    def memory__fs_paths(self):
-        return Memory_FS__Paths()
 
     @cache_on_self
     def memory_fs__serialize(self):
