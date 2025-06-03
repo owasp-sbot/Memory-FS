@@ -51,7 +51,8 @@ class test_Memory_FS__Project(TestCase):
                                                                       encoding       = 'UTF_8'  ,
                                                                       serialization  = 'STRING')),
                                     storage    = __(storage_type = 'memory',
-                                                    file_system  = __(files=__(), content_data=__())))
+                                                    file_system  = __(files=__(), content_data=__()),
+                                                    storage_fs   = __()                            ))
 
     def test_memory_fs(self):
         with self.project.memory_fs() as _:

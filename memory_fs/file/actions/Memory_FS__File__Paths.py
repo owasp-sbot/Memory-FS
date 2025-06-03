@@ -1,5 +1,5 @@
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
-from memory_fs.actions.Memory_FS__File_Name             import Memory_FS__File_Name
+from memory_fs.file.actions.Memory_FS__File__Name       import Memory_FS__File__Name
 from osbot_utils.type_safe.decorators.type_safe         import type_safe
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
@@ -10,15 +10,15 @@ from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 #  ".fs.json" to be saved as {file_id}.{extension}.config
 #  metatada to be saved as {file_id}.{extension}.metadata
 
-class Memory_FS__Paths(Type_Safe):
+class Memory_FS__File__Paths(Type_Safe):
     file__config: Schema__Memory_FS__File__Config
 
     @cache_on_self
     def file_name(self):
-        return Memory_FS__File_Name(file__config=self.file__config)
+        return Memory_FS__File__Name(file__config=self.file__config)
 
     @type_safe
-    def paths(self):
+    def paths(self):            # todo: this file should return all paths (config, content and metadata), not just the config ones, which is what it is doing at the moment
         full_file_paths = []
         if self.file__config.file_paths:                                  # if we have file_paths define mapp them all
             for file_path in self.file__config.file_paths:
@@ -27,6 +27,18 @@ class Memory_FS__Paths(Type_Safe):
         else:
             full_file_path = self.file_name().config__for_path()
             full_file_paths.append(full_file_path)
+
+        return full_file_paths
+
+    def paths__config(self) -> Safe_Str__File__Path:
+        full_file_paths = []
+        full_file_name = self.file_name().config()
+        if self.file__config.file_paths:                                  # if we have file_paths define mapp them all
+            for file_path in self.file__config.file_paths:
+                content_path = self.file_name().config__for_path(file_path)
+                full_file_paths.append(content_path)
+        else:
+            full_file_paths.append(Safe_Str__File__Path(full_file_name))
 
         return full_file_paths
 

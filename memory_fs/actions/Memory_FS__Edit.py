@@ -1,6 +1,6 @@
 from typing                                             import List
 from osbot_utils.type_safe.decorators.type_safe         import type_safe
-from memory_fs.actions.Memory_FS__Paths                 import Memory_FS__Paths
+from memory_fs.file.actions.Memory_FS__File__Paths      import Memory_FS__File__Paths
 from memory_fs.schemas.Schema__Memory_FS__File          import Schema__Memory_FS__File
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
@@ -12,7 +12,7 @@ class Memory_FS__Edit(Type_Safe):
     storage     : Memory_FS__Storage
 
     def memory_fs__paths(self, file__config : Schema__Memory_FS__File__Config):
-        return Memory_FS__Paths(file__config=file__config)
+        return Memory_FS__File__Paths(file__config=file__config)
 
     def clear(self) -> None:                                                                    # Clear all files and directories
         self.storage.files       ().clear()         # todo: refactor this logic to storage

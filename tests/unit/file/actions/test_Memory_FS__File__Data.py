@@ -1,5 +1,5 @@
 from unittest                                          import TestCase
-from memory_fs.actions.Memory_FS__File_Name            import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
+from memory_fs.file.actions.Memory_FS__File__Name      import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
 
 from osbot_utils.utils.Dev import pprint
@@ -13,8 +13,8 @@ class test_Memory_FS__File__Data(TestCase):
         cls.file        = Memory_FS__File()
         cls.file_config = cls.file.file_config
         cls.file_id   = cls.file_config.file_id
-        cls.file_edit   = cls.file.edit()
-        cls.file_data   = cls.file.data()
+        cls.file_edit   = cls.file.file__edit()
+        cls.file_data   = cls.file.file__data()
 
     def test_load__content(self):
         with self.file_edit as _:

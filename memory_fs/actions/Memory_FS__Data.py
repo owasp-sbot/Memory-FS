@@ -1,6 +1,6 @@
 from typing                                                 import List, Optional, Dict, Any
 from osbot_utils.type_safe.decorators.type_safe             import type_safe
-from memory_fs.actions.Memory_FS__Paths                     import Memory_FS__Paths
+from memory_fs.file.actions.Memory_FS__File__Paths          import Memory_FS__File__Paths
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
 from memory_fs.schemas.Schema__Memory_FS__File              import Schema__Memory_FS__File
 from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
@@ -12,7 +12,7 @@ class Memory_FS__Data(Type_Safe):
     storage     : Memory_FS__Storage
 
     def paths(self, file_config : Schema__Memory_FS__File__Config):
-        return Memory_FS__Paths(file__config=file_config)
+        return Memory_FS__File__Paths(file__config=file_config)
 
     @type_safe
     def exists(self, file_config : Schema__Memory_FS__File__Config

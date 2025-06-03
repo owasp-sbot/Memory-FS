@@ -1,6 +1,6 @@
 from unittest                                               import TestCase
 from memory_fs.Memory_FS                                    import Memory_FS
-from memory_fs.actions.Memory_FS__File_Name                 import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
+from memory_fs.file.actions.Memory_FS__File__Name           import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from memory_fs.file_types.Memory_FS__File__Type__Json       import Memory_FS__File__Type__Json
 from memory_fs.file_types.Memory_FS__File__Type__Text       import Memory_FS__File__Type__Text
 from osbot_utils.type_safe.Type_Safe__Dict                  import Type_Safe__Dict

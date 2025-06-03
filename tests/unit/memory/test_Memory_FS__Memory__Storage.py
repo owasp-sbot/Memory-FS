@@ -1,5 +1,5 @@
 from unittest                                                import TestCase
-from memory_fs.actions.Memory_FS__File_Name                  import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
+from memory_fs.file.actions.Memory_FS__File__Name            import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding       import Enum__Memory_FS__File__Encoding
 from memory_fs.schemas.Schema__Memory_FS__File               import Schema__Memory_FS__File
 from memory_fs.Memory_FS                                     import Memory_FS

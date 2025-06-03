@@ -12,19 +12,25 @@ class Memory_FS__File(Type_Safe):
     storage     : Memory_FS__Storage
 
     @cache_on_self
-    def create(self):
+    def file__create(self):
         return Memory_FS__File__Create(file__config=self.file_config, storage=self.storage)
 
     @cache_on_self
-    def data(self):
+    def file__data(self):
         return Memory_FS__File__Data(file__config=self.file_config, storage= self.storage)
 
     @cache_on_self
-    def edit(self):
+    def file__edit(self):
         return Memory_FS__File__Edit(file__config=self.file_config, storage= self.storage)
 
 
     # helper methods that are very common in files          # todo: see if we need them (i.e. are they really useful and make it easy for dev's experience)
 
+    def create(self):
+        return self.file__create().create()
+
     def exists(self):
-        return self.data().exists()
+        return self.file__data().exists()
+
+    def file_id(self):
+        return self.file_config.file_id

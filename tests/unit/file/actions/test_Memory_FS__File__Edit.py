@@ -10,7 +10,7 @@ class test_Memory_FS__File__Edit(TestCase):
         cls.file        = Memory_FS__File()
         cls.file_config = cls.file.file_config
         cls.file_id   = cls.file_config.file_id
-        cls.file_edit   = cls.file.edit()
+        cls.file_edit   = cls.file.file__edit()
 
     def test__init__(self):
         with self.file_edit as _:
