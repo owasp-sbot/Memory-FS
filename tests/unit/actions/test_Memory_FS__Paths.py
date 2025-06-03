@@ -161,9 +161,7 @@ class test_Memory_FS__Paths(TestCase):
         with Memory_FS__Paths(file__config=file_config)  as _:
 
             paths = _.paths()
-            # This will create paths like 'test-file.None.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'
-            assert paths == [Safe_Str__File__Path(f'test-file.None.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
+            assert paths == [Safe_Str__File__Path(f'test-file.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
             content_paths = _.paths__content()
-            # This will create paths like 'test-file.None'
-            assert content_paths == [Safe_Str__File__Path('test-file.None')]
+            assert content_paths == [Safe_Str__File__Path('test-file')]

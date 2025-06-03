@@ -21,7 +21,7 @@ class test_Memory_FS__File__Create(TestCase):
         with self.file_edit as _:
             content = b'this is some content'
             result  = _.save__content(content)
-            assert result == [f'{self.file_id}.None']
+            assert result == [f'{self.file_id}']
             assert _.load__content() == content
 
     def test_create(self):

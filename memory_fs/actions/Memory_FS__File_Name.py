@@ -31,9 +31,19 @@ class Memory_FS__File_Name(Type_Safe):
 
 
     def content(self) -> Safe_Str__File__Path:
-        elements = [self.file__config.file_id, str(self.file__config.file_type.file_extension)]     # BUG: need to handle null values in file_extension
+        elements = [self.file__config.file_id]     # BUG: need to handle null values in file_extension
+        if self.file__config.file_type.file_extension:
+            elements.append(str(self.file__config.file_type.file_extension))                        # todo: see if need the str(..) here
         return self.build(elements)
 
     def content__for_path(self, file_path: Safe_Str__File__Path=None                                # support empty or non paths (which usually indicates that we are in the root folder)
                           ) -> Safe_Str__File__Path:                                                # return a strongly typed path
         return self.for_path(file_path=file_path, file_name=self.content())
+
+    def metadata(self) -> Safe_Str__File__Name:
+        elements = [self.content(), FILE_EXTENSION__MEMORY_FS__FILE__METADATA]
+        return self.build(elements)
+
+    def metadata__for_path(self, file_path: Safe_Str__File__Path=None                     # support empty or non paths (which usually indicates that we are in the root folder)
+                          ) -> Safe_Str__File__Path:                                    # return a strongly typed path
+        return self.for_path(file_path=file_path, file_name=self.metadata())

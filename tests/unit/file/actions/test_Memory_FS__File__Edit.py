@@ -21,10 +21,10 @@ class test_Memory_FS__File__Edit(TestCase):
         with self.file_edit as _:
             content = b'this is some content'
             result  = _.save__content(content)
-            assert result == [f'{self.file_id}.None']
+            assert result == [f'{self.file_id}']
             assert _.load__content() == content
 
 
     def test__bug__save__is_not_handling_null_extensions(self):
         with self.file_edit as _:
-            assert _.save__content(b'') == [f'{self.file_id}.None']  # BUG but we are not handling ok when file_type.file_extension is not set
+            assert _.save__content(b'') == [f'{self.file_id}']
