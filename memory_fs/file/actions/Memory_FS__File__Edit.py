@@ -19,12 +19,11 @@ class Memory_FS__File__Edit(Type_Safe):
     def storage_edit(self):
         return Memory_FS__Edit(storage=self.storage)
 
-    @cache_on_self
     def storage_paths(self):
-        return Memory_FS__Paths()
+        return Memory_FS__Paths(file__config=self.file__config)
 
     def load__content(self):
-        paths = self.storage_paths().paths__content(self.file__config)
+        paths = self.storage_paths().paths__content()
         if paths:
             path  = paths[0]                    # todo: this logic should be inside the storage_data
             return self.storage_data().load_content(path)

@@ -2,7 +2,6 @@ from typing                                                 import List, Optiona
 from osbot_utils.type_safe.decorators.type_safe             import type_safe
 from memory_fs.actions.Memory_FS__Paths                     import Memory_FS__Paths
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
-from osbot_utils.decorators.methods.cache_on_self           import cache_on_self
 from memory_fs.schemas.Schema__Memory_FS__File              import Schema__Memory_FS__File
 from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
@@ -12,15 +11,14 @@ from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 class Memory_FS__Data(Type_Safe):
     storage     : Memory_FS__Storage
 
-    @cache_on_self
-    def paths(self):
-        return Memory_FS__Paths()
+    def paths(self, file_config : Schema__Memory_FS__File__Config):
+        return Memory_FS__Paths(file__config=file_config)
 
     @type_safe
     def exists(self, file_config : Schema__Memory_FS__File__Config
                 ) -> bool:                                                          # todo: see if we need to add the default path (or to have a separate "exists strategy")
         files = self.storage.files()
-        for full_file_path in self.paths().paths(file_config):
+        for full_file_path in self.paths(file_config).paths():
             if full_file_path in files:                                             # todo: refactor since this is going to be platform specific (specially since we shouldn't circle through all files to see if the file exists)
                 return True                                                         # we only check if we found one of them
         return False                                                                # if none were found, return False
@@ -29,7 +27,7 @@ class Memory_FS__Data(Type_Safe):
     def exists_content(self, file_config : Schema__Memory_FS__File__Config
                  ) -> bool:
         content_files =  self.storage.content_data()
-        for full_file_path in self.paths().paths__content(file_config):
+        for full_file_path in self.paths(file_config).paths__content():
             if full_file_path in content_files:
                 return True
         return False

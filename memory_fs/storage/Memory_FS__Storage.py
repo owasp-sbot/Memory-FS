@@ -9,7 +9,7 @@ class Memory_FS__Storage(Type_Safe):
     def content_data(self):
         return self.file_system.content_data
 
-    def file(self, path):                                   # todo: review this usage since at the moment this is returning the file's .fs.json data
+    def file(self, path):
         return self.files().get(path)
 
     def file__content(self, path):
