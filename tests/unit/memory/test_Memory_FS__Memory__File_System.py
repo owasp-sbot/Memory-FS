@@ -1,5 +1,6 @@
 from unittest                                               import TestCase
 from memory_fs.Memory_FS                                    import Memory_FS
+from memory_fs.actions.Memory_FS__File_Name                 import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from memory_fs.file_types.Memory_FS__File__Type__Json       import Memory_FS__File__Type__Json
 from memory_fs.file_types.Memory_FS__File__Type__Text       import Memory_FS__File__Type__Text
 from osbot_utils.type_safe.Type_Safe__Dict                  import Type_Safe__Dict
@@ -21,7 +22,7 @@ class test_Memory_FS__Memory__File_System(TestCase):
         self.memory_fs__edit    = self.memory_fs.edit()
         self.storage            = self.memory_fs.storage
         self.file_system        = self.storage.file_system
-        self.test_path          = Safe_Str__File__Path("an-file.json.fs.json")
+        self.test_path          = Safe_Str__File__Path(f"an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}")
         self.test_content_path  = Safe_Str__File__Path("an-file.json")
         self.test_content_bytes = b"test content"
 
@@ -46,8 +47,8 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert self.memory_fs__data.exists_content  (self.test_config   ) is False
         assert self.memory_fs__data.exists          (self.test_config   ) is False
 
-        assert self.memory_fs__edit.save            (file_config = self.test_config, file    = self.test_file          ) == ['an-file.json.fs.json']
-        assert self.memory_fs__edit.save_content    (file_config = self.test_config, content = self.test_content_bytes ) == ['an-file.json'        ]
+        assert self.memory_fs__edit.save            (file_config = self.test_config, file    = self.test_file          ) == [f'an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}']
+        assert self.memory_fs__edit.save_content    (file_config = self.test_config, content = self.test_content_bytes ) == [ 'an-file.json'        ]
 
         assert self.memory_fs__data.exists_content  (self.test_config   ) is True
         assert self.memory_fs__data.exists          (self.test_config   ) is True
@@ -57,8 +58,8 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert self.memory_fs__data.load        (self.test_path             ) is None
         assert self.memory_fs__data.load_content(self.test_content_path     ) is None
 
-        assert self.memory_fs__edit.save            (file_config = self.test_config, file    = self.test_file          ) == ['an-file.json.fs.json']
-        assert self.memory_fs__edit.save_content    (file_config = self.test_config, content = self.test_content_bytes ) == ['an-file.json'        ]
+        assert self.memory_fs__edit.save            (file_config = self.test_config, file    = self.test_file          ) == [f'an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}']
+        assert self.memory_fs__edit.save_content    (file_config = self.test_config, content = self.test_content_bytes ) == [ 'an-file.json'        ]
 
         loaded_file    = self.memory_fs__data.load        (self.test_path)
         loaded_content = self.memory_fs__data.load_content(self.test_content_path)
@@ -70,19 +71,19 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert loaded_content == self.test_content_bytes
 
     def test__bug__load(self):  # Tests loading files
-        assert self.memory_fs__edit.save(file_config=self.test_config, file=self.test_file) == ['an-file.json.fs.json']
+        assert self.memory_fs__edit.save(file_config=self.test_config, file=self.test_file) == [f'an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}']
         loaded_file = self.memory_fs__data.load(self.test_path)
         assert loaded_file.metadata.content__size != Safe_UInt__FileSize(len(self.test_content_bytes)) # BUG: todo: bug the size is not being captured on the save action
 
 
     def test_delete(self):                                                                       # Tests deleting files
-        assert self.memory_fs__edit.save            (file_config = self.test_config, file    = self.test_file          ) == ['an-file.json.fs.json']
-        assert self.memory_fs__edit.save_content    (file_config = self.test_config, content = self.test_content_bytes ) == ['an-file.json'        ]
+        assert self.memory_fs__edit.save            (file_config = self.test_config, file    = self.test_file          ) == [f'an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}']
+        assert self.memory_fs__edit.save_content    (file_config = self.test_config, content = self.test_content_bytes ) == [ 'an-file.json'        ]
 
         assert self.memory_fs__data.exists          (self.test_config) is True
         assert self.memory_fs__data.exists_content  (self.test_config) is True
-        assert self.memory_fs__edit.delete          (self.test_config ) == ['an-file.json.fs.json']
-        assert self.memory_fs__edit.delete_content  (self.test_config ) == ['an-file.json'        ]
+        assert self.memory_fs__edit.delete          (self.test_config ) == [f'an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}']
+        assert self.memory_fs__edit.delete_content  (self.test_config ) == [ 'an-file.json'        ]
 
         assert self.memory_fs__data.exists          (self.test_config ) is False
         assert self.memory_fs__data.exists_content  (self.test_config ) is False
@@ -92,7 +93,7 @@ class test_Memory_FS__Memory__File_System(TestCase):
         path_1         = Safe_Str__File__Path("folder1")
         path_2         = Safe_Str__File__Path("folder1/sub-folder-1")
         path_3         = Safe_Str__File__Path("folder2")
-        full_file_name = 'an-file.json.fs.json'
+        full_file_name = f'an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'
         self.test_config.file_paths = [path_1]
         assert self.memory_fs__edit.save (file_config = self.test_config, file = self.test_file) == [f'folder1/{full_file_name}']
 
@@ -118,7 +119,7 @@ class test_Memory_FS__Memory__File_System(TestCase):
 
     def test_get_file_info(self):                                                                # Tests getting file information
         assert self.memory_fs__data.get_file_info(self.test_path) is None
-        assert self.memory_fs__edit.save         (file_config=self.test_config, file=self.test_file) == ['an-file.json.fs.json']
+        assert self.memory_fs__edit.save         (file_config=self.test_config, file=self.test_file) == [f'an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}']
         info = self.memory_fs__data.get_file_info(self.test_path)
 
         assert info[Safe_Id("exists"      )] is True
@@ -165,8 +166,8 @@ class test_Memory_FS__Memory__File_System(TestCase):
     #     assert self.memory_fs__edit.copy(Safe_Str__File__Path("missing"), dest_path) is False      # Copy non-existent file
 
     def test_clear(self):                                                                        # Tests clearing all files and directories
-        assert self.memory_fs__edit.save            (file_config = self.test_config, file    = self.test_file          ) == ['an-file.json.fs.json']
-        assert self.memory_fs__edit.save_content    (file_config = self.test_config, content = self.test_content_bytes ) == ['an-file.json'        ]
+        assert self.memory_fs__edit.save            (file_config = self.test_config, file    = self.test_file          ) == [f'an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}']
+        assert self.memory_fs__edit.save_content    (file_config = self.test_config, content = self.test_content_bytes ) == [ 'an-file.json'        ]
 
         assert len(self.file_system.files       ) > 0
         assert len(self.file_system.content_data) > 0
@@ -199,11 +200,11 @@ class test_Memory_FS__Memory__File_System(TestCase):
         file_2 = Schema__Memory_FS__File(config   = test_config_2,
                                          metadata = test_metadata_2)
 
-        assert self.memory_fs__edit.save            (file_config = test_config_1, file    = file_1    ) == ['file-1.txt.fs.json']
-        assert self.memory_fs__edit.save_content    (file_config = test_config_1, content = content_1 ) == ['file-1.txt'        ]
+        assert self.memory_fs__edit.save            (file_config = test_config_1, file    = file_1    ) == [f'file-1.txt.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}']
+        assert self.memory_fs__edit.save_content    (file_config = test_config_1, content = content_1 ) == [ 'file-1.txt'        ]
 
-        assert self.memory_fs__edit.save            (file_config = test_config_2, file    = file_2    ) == ['file-2.txt.fs.json']
-        assert self.memory_fs__edit.save_content    (file_config = test_config_2, content = content_2 ) == ['file-2.txt'        ]
+        assert self.memory_fs__edit.save            (file_config = test_config_2, file    = file_2    ) == [f'file-2.txt.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}']
+        assert self.memory_fs__edit.save_content    (file_config = test_config_2, content = content_2 ) == [ 'file-2.txt'        ]
 
         stats = self.memory_fs__data.stats()
 

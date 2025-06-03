@@ -1,8 +1,5 @@
 from unittest                                           import TestCase
-
-from osbot_utils.helpers.safe_str.Safe_Str__File__Name import Safe_Str__File__Name
-
-from memory_fs.actions.Memory_FS__File_Name             import Memory_FS__File_Name
+from memory_fs.actions.Memory_FS__File_Name             import Memory_FS__File_Name, FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from memory_fs.actions.Memory_FS__Paths                 import Memory_FS__Paths
 from memory_fs.file_types.Memory_FS__File__Type__Json   import Memory_FS__File__Type__Json
 from memory_fs.file_types.Memory_FS__File__Type__Text   import Memory_FS__File__Type__Text
@@ -38,7 +35,7 @@ class test_Memory_FS__Paths(TestCase):
         paths = self.paths.paths()
         assert type(paths) is list
         assert len(paths)  == 1
-        assert paths       == [Safe_Str__File__Path('test-file.json.fs.json')]
+        assert paths       == [Safe_Str__File__Path(f'test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
     def test_paths_with_single_path(self):                                                      # Test paths() with single file path
         path = Safe_Str__File__Path("folder/subfolder")
@@ -46,7 +43,7 @@ class test_Memory_FS__Paths(TestCase):
 
         paths = self.paths.paths()
         assert len(paths) == 1
-        assert paths      == [Safe_Str__File__Path('folder/subfolder/test-file.json.fs.json')]
+        assert paths      == [Safe_Str__File__Path(f'folder/subfolder/test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
     def test_paths_with_multiple_paths(self):                                                   # Test paths() with multiple file paths
         paths_list = [Safe_Str__File__Path("path1"),
@@ -56,24 +53,24 @@ class test_Memory_FS__Paths(TestCase):
 
         paths = self.paths.paths()
         assert len(paths) == 3
-        assert paths      == [Safe_Str__File__Path('path1/test-file.json.fs.json'),
-                              Safe_Str__File__Path('path2/sub/test-file.json.fs.json'),
-                              Safe_Str__File__Path('path3/sub/deep/test-file.json.fs.json')]
+        assert paths      == [Safe_Str__File__Path(f'path1/test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'),
+                              Safe_Str__File__Path(f'path2/sub/test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'),
+                              Safe_Str__File__Path(f'path3/sub/deep/test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
     def test_paths_different_file_types(self):                                                  # Test paths() with different file types
         # Test with JSON
         paths_json = self.paths.paths()
-        assert paths_json == [Safe_Str__File__Path('test-file.json.fs.json')]
+        assert paths_json == [Safe_Str__File__Path(f'test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
         # Test with Text
         self.file_config.file_type = self.file_type_text
         paths_text = Memory_FS__Paths(file__config=self.file_config).paths()
-        assert paths_text == [Safe_Str__File__Path('test-file.txt.fs.json')]
+        assert paths_text == [Safe_Str__File__Path(f'test-file.txt.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
         # Test with PNG
         self.file_config.file_type = self.file_type_png
         paths_png = Memory_FS__Paths(file__config=self.file_config).paths()
-        assert paths_png == [Safe_Str__File__Path('test-file.png.fs.json')]
+        assert paths_png == [Safe_Str__File__Path(f'test-file.png.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
     def test_paths__content_no_file_paths(self):                                               # Test paths__content() when no file_paths are defined
         paths = self.paths.paths__content()
@@ -120,7 +117,7 @@ class test_Memory_FS__Paths(TestCase):
         self.file_config.file_paths = [Safe_Str__File__Path("data")]
 
         paths = Memory_FS__Paths(file__config=self.file_config).paths()
-        assert paths == [Safe_Str__File__Path('data/my-file_2024_v1.json.fs.json')]
+        assert paths == [Safe_Str__File__Path(f'data/my-file_2024_v1.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
     def test_paths_empty_file_id(self):                                                        # Test behavior with empty file_id
         # Note: Safe_Id might not allow empty strings, but testing the edge case
@@ -128,7 +125,7 @@ class test_Memory_FS__Paths(TestCase):
             empty_id_config = Schema__Memory_FS__File__Config(file_id   = Safe_Id(""),
                                                              file_type = self.file_type_json)
             paths = Memory_FS__Paths(file__config=empty_id_config).paths()
-            assert paths == [Safe_Str__File__Path('.json.fs.json')]
+            assert paths == [Safe_Str__File__Path('.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
         except:
             # Safe_Id validation might prevent empty strings
             pass
@@ -148,24 +145,24 @@ class test_Memory_FS__Paths(TestCase):
     def test_todo_comments_implementation(self):                                               # Test areas marked with TODO comments
         # TODO items mentioned in the code:
         # 1. content to be saved as {file_id}.{extension}
-        # 2. ".fs.json" to be saved as {file_id}.{extension}.config
+        # 2. config {file_id}.{extension}.config
         # 3. metadata to be saved as {file_id}.{extension}.metadata
 
-        # Current implementation uses .fs.json suffix
+        # Current implementation uses .{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG} suffix
         paths = self.paths.paths()
-        assert all(str(p).endswith('.fs.json') for p in paths)
+        assert all(str(p).endswith(f'.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}') for p in paths)
 
-        # Content paths don't have .fs.json suffix
+        # Content paths don't have .{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG} suffix
         content_paths = self.paths.paths__content()
-        assert all(not str(p).endswith('.fs.json') for p in content_paths)
+        assert all(not str(p).endswith(f'.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}') for p in content_paths)
 
     def test_bug_none_extension(self):                                                         # Test bug when file_type.file_extension is None
         file_config = Schema__Memory_FS__File__Config(file_id='test-file')                     # Create a file type with no extension set
         with Memory_FS__Paths(file__config=file_config)  as _:
 
             paths = _.paths()
-            # This will create paths like 'test-file.None.fs.json'
-            assert paths == [Safe_Str__File__Path('test-file.None.fs.json')]
+            # This will create paths like 'test-file.None.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'
+            assert paths == [Safe_Str__File__Path(f'test-file.None.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
             content_paths = _.paths__content()
             # This will create paths like 'test-file.None'

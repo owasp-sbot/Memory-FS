@@ -1,4 +1,5 @@
 from unittest                                                import TestCase
+from memory_fs.actions.Memory_FS__File_Name                  import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding       import Enum__Memory_FS__File__Encoding
 from memory_fs.schemas.Schema__Memory_FS__File               import Schema__Memory_FS__File
 from memory_fs.Memory_FS                                     import Memory_FS
@@ -40,10 +41,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
         self.test_data                 = "test content"
         self.path_now                  = Path__Handler__Temporal().path_now()
-        self.file_id__latest__content  = Safe_Str__File__Path('latest/an-file.json'                  )
-        self.file_id__latest__metadata = Safe_Str__File__Path('latest/an-file.json.fs.json'          )
-        self.file_id__now__content     = Safe_Str__File__Path(f'{self.path_now}/an-file.json'        )
-        self.file_id__now__metadata    = Safe_Str__File__Path(f'{self.path_now}/an-file.json.fs.json')
+        self.file_id__latest__content  = Safe_Str__File__Path( 'latest/an-file.json'                  )
+        self.file_id__latest__metadata = Safe_Str__File__Path(f'latest/an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'          )
+        self.file_id__now__content     = Safe_Str__File__Path(f'{self.path_now}/an-file.json'         )
+        self.file_id__now__metadata    = Safe_Str__File__Path(f'{self.path_now}/an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')
 
     def test_save_string_data_as_json(self):                                                    # Tests saving string data with JSON file type
         saved_paths               = self.memory_fs__save.save(self.test_data, self.test_config)
@@ -81,10 +82,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
         markdown_content = "# Test Header\n\nThis is a test."
         saved_paths      = self.memory_fs__save.save(markdown_content, config_markdown)
-        assert saved_paths == sorted([ 'latest/an-file.md.fs.json'          ,
+        assert saved_paths == sorted([ f'latest/an-file.md.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'          ,
                                         'latest/an-file.md'                  ,
-                                        f'{self.path_now}/an-file.md.fs.json',
-                                        f'{self.path_now}/an-file.md'        ])
+                                       f'{self.path_now}/an-file.md.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}',
+                                       f'{self.path_now}/an-file.md'        ])
 
         # Verify content is saved as plain string (not JSON)
         loaded_data = self.memory_fs__load.load_data(config_markdown)
@@ -97,10 +98,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
         html_content = "<html><body><h1>Test</h1></body></html>"
         saved_paths = self.memory_fs__save.save(html_content, config_html)
-        assert saved_paths == sorted([ 'latest/index.html.fs.json'          ,
+        assert saved_paths == sorted([ f'latest/index.html.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'          ,
                                         'latest/index.html'                  ,
-                                        f'{self.path_now}/index.html.fs.json',
-                                        f'{self.path_now}/index.html'        ])
+                                       f'{self.path_now}/index.html.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}',
+                                       f'{self.path_now}/index.html'        ])
 
         loaded_data = self.memory_fs__load.load_data(config_html)
         assert loaded_data == html_content
@@ -113,10 +114,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
         # Simulate PNG data (just bytes for testing)
         png_data    = b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR"
         saved_paths = self.memory_fs__save.save(png_data, config_png, )
-        assert saved_paths == sorted([ 'latest/image.png.fs.json'          ,
+        assert saved_paths == sorted([ f'latest/image.png.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'          ,
                                         'latest/image.png'                  ,
-                                        f'{self.path_now}/image.png.fs.json',
-                                        f'{self.path_now}/image.png'        ])
+                                       f'{self.path_now}/image.png.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}',
+                                       f'{self.path_now}/image.png'        ])
 
 
         # Verify binary data is preserved
@@ -167,8 +168,8 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert self.memory_fs__data.exists(self.test_config) is True
 
         # Delete one file - should now return False
-        assert self.memory_fs__edit.delete  (self.test_config ) == ['latest/an-file.json.fs.json',
-                                                                    f'{self.path_now}/an-file.json.fs.json']
+        assert self.memory_fs__edit.delete  (self.test_config ) == [f'latest/an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}',
+                                                                    f'{self.path_now}/an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}']
         assert self.memory_fs__data.exists(self.test_config) is False
 
     def test_delete(self):                                                                       # Tests deleting files
@@ -191,7 +192,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
         saved_paths  = self.memory_fs__save.save(self.test_data, empty_config)
         file_id    = empty_config.file_id
         assert len(saved_paths) == 2
-        assert saved_paths      == [f'{file_id}.json', f'{file_id}.json.fs.json']
+        assert saved_paths      == [f'{file_id}.json', f'{file_id}.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}']
 
         assert self.memory_fs__data.exists(empty_config  ) is True                            # confirm file was created
         assert type(self.memory_fs__load.load(empty_config)) is Schema__Memory_FS__File         # and we can get it
@@ -209,13 +210,13 @@ class test_Memory_FS__Memory__Storage(TestCase):
         self.memory_fs__save.save("content_1", config_1)
         self.memory_fs__save.save("content_2", config_2)
 
-        all_files = self.memory_fs__data.list_files()           # todo figure out a better way to name this since these are the fs.json files (i.e. this all files doesn't include the content files, which could be an expectation)
+        all_files = self.memory_fs__data.list_files()           # todo figure out a better way to name this since these are the {FILE_EXTENSION__MEMORY_FS__FILE__CONFIG} files (i.e. this all files doesn't include the content files, which could be an expectation)
 
         assert len(all_files) == 4
-        assert sorted(all_files) == sorted([Safe_Str__File__Path('latest/file_1.json.fs.json'          ),
-                                            Safe_Str__File__Path('latest/file_2.md.fs.json'            ),
-                                            Safe_Str__File__Path(f'{self.path_now}/file_1.json.fs.json'),
-                                            Safe_Str__File__Path(f'{self.path_now}/file_2.md.fs.json'  )])
+        assert sorted(all_files) == sorted([Safe_Str__File__Path(f'latest/file_1.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'          ),
+                                            Safe_Str__File__Path(f'latest/file_2.md.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'            ),
+                                            Safe_Str__File__Path(f'{self.path_now}/file_1.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'),
+                                            Safe_Str__File__Path(f'{self.path_now}/file_2.md.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'  )])
 
 
     def test_clear(self):                                                                        # Tests clearing storage

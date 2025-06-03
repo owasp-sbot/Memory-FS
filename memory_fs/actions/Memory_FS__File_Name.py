@@ -1,9 +1,9 @@
-from osbot_utils.helpers.safe_str.Safe_Str__File__Name import Safe_Str__File__Name
+from osbot_utils.helpers.safe_str.Safe_Str__File__Name  import Safe_Str__File__Name
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
-FILE_EXTENSION__MEMORY_FS__FILE__CONFIG   = "fs.json" #'config'            # BUG: we should be using config
+FILE_EXTENSION__MEMORY_FS__FILE__CONFIG   = 'config'
 FILE_EXTENSION__MEMORY_FS__FILE__METADATA = 'metadata'
 
 class Memory_FS__File_Name(Type_Safe):
@@ -23,13 +23,17 @@ class Memory_FS__File_Name(Type_Safe):
     def for_path(self, file_path: Safe_Str__File__Path,
                        file_name: Safe_Str__File__Name
                   ) -> Safe_Str__File__Path:
-        if file_path:                                                       # check if a file_path was provided
+        if file_path:                                                                               # check if a file_path was provided
             elements = [file_path, file_name]
             return Safe_Str__File__Path('/'.join(elements))
         else:
-            return Safe_Str__File__Path(file_name)                          # if not file_path then just return the file_name as a path
+            return Safe_Str__File__Path(file_name)                                                  # if not file_path then just return the file_name as a path
 
 
     def content(self) -> Safe_Str__File__Path:
         elements = [self.file__config.file_id, str(self.file__config.file_type.file_extension)]     # BUG: need to handle null values in file_extension
         return self.build(elements)
+
+    def content__for_path(self, file_path: Safe_Str__File__Path=None                                # support empty or non paths (which usually indicates that we are in the root folder)
+                          ) -> Safe_Str__File__Path:                                                # return a strongly typed path
+        return self.for_path(file_path=file_path, file_name=self.content())

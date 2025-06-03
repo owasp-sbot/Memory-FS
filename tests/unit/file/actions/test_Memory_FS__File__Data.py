@@ -1,5 +1,5 @@
-from unittest                       import TestCase
-
+from unittest                                          import TestCase
+from memory_fs.actions.Memory_FS__File_Name            import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
 
 from osbot_utils.utils.Dev import pprint
@@ -26,4 +26,4 @@ class test_Memory_FS__File__Data(TestCase):
     def test_load__paths(self):
         with self.file_data as _:
             paths = _.paths()
-            assert paths == [Safe_Str__File__Path(f'{self.file_config.file_id}.None.fs.json')]  # BUG: this should be
+            assert paths == [Safe_Str__File__Path(f'{self.file_config.file_id}.None.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]  # BUG: this should be

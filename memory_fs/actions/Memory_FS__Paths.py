@@ -20,12 +20,8 @@ class Memory_FS__Paths(Type_Safe):
     @type_safe
     def paths(self):
         full_file_paths = []
-        #full_file_name = self.file_name().content()
-        #config__file_name = self.file_name().config ()
         if self.file__config.file_paths:                                  # if we have file_paths define mapp them all
             for file_path in self.file__config.file_paths:
-                # content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")
-                # full_file_path = Safe_Str__File__Path(content_path + ".fs.json")         # todo: refactor this into a better location
                 full_file_path = self.file_name().config__for_path(file_path)
                 full_file_paths.append(full_file_path)
         else:
@@ -39,7 +35,7 @@ class Memory_FS__Paths(Type_Safe):
         full_file_name = self.file_name().content()
         if self.file__config.file_paths:                                  # if we have file_paths define mapp them all
             for file_path in self.file__config.file_paths:
-                content_path   = Safe_Str__File__Path(f"{file_path}/{full_file_name}")
+                content_path = self.file_name().content__for_path(file_path)
                 full_file_paths.append(content_path)
         else:
             full_file_paths.append(Safe_Str__File__Path(full_file_name))
