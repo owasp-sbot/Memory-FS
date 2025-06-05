@@ -10,9 +10,8 @@ Methods:
 - `path_now`
 
 ```mermaid
-classDiagram
-    class Path__Handler__Temporal {
-        generate_path()
-        path_now()
-    }
+flowchart TD
+    A[path_now()] --> B[format current time]
+    C[generate_path()] --> A
+    C --> D[append areas if provided]
 ```

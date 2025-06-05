@@ -9,8 +9,6 @@ Methods:
 - `generate_path`
 
 ```mermaid
-classDiagram
-    class Path__Handler__Versioned {
-        generate_path()
-    }
+flowchart TD
+    A[generate_path(file_id,ext,version)] --> B[format "v{version}/{file_id}{ext}"]
 ```
