@@ -7,16 +7,16 @@ High level save routine that serializes data and writes both metadata and conten
 ### Memory_FS__Save
 Methods:
 - `memory_fs__edit`
-- `memory__fs_paths`
 - `memory_fs__serialize`
 - `save`
 
 ```mermaid
-classDiagram
-    class Memory_FS__Save {
-        memory_fs__edit()
-        memory__fs_paths()
-        memory_fs__serialize()
-        save()
-    }
+flowchart TD
+    A[save(data, config)] --> B[_serialize_data]
+    B --> C[build metadata]
+    C --> D[edit.save(file)]
+    C --> E[edit.save_content(bytes)]
+    D --> F[paths]
+    E --> F
+    F --> G[sorted list of paths]
 ```

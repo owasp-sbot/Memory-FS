@@ -9,8 +9,6 @@ Methods:
 - `generate_path`
 
 ```mermaid
-classDiagram
-    class Path__Handler__Latest {
-        generate_path()
-    }
+flowchart TD
+    A[generate_path()] --> B[return 'latest']
 ```

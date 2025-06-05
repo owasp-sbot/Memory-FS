@@ -2,7 +2,8 @@
 
 
 ## Description
-Action modules implement the behaviour of the memory file system. Each file exposes a dedicated class.
+Action modules implement the behaviour of the memory file system. Each file exposes
+a dedicated class and the diagrams illustrate how data flows through the methods.
 ## Files
 - [Memory_FS__Data.md](Memory_FS__Data.md)
 - [Memory_FS__Delete.md](Memory_FS__Delete.md)

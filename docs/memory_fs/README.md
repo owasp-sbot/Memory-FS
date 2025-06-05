@@ -2,7 +2,15 @@
 
 
 ## Description
-Documentation for the `memory_fs` package mirrored from source. Each subfolder documents a portion of the codebase.
+Documentation for the `memory_fs` package mirrored from source. Each subfolder
+captures notes and Mermaid visualisations for the corresponding part of the
+codebase.  The goal is for these files to stay close to the latest source so
+that newcomers can understand the responsibilities of every module.
+
+## Updating documentation
+There is no automated generation step.  When the code changes, update the
+markdown file under the matching path.  After making changes run the test suite
+with `pytest -q` to ensure nothing broke.
 ## Files
 - [Memory_FS.md](Memory_FS.md)
 - [__init__.md](__init__.md)
