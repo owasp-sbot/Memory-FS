@@ -32,7 +32,7 @@ class test_Memory_FS__File__Create(TestCase):
 
         with self.file__create as _:
             assert type(_) is Memory_FS__File__Create
-            files_created = _.create()
+            files_created = _.create__config()
             assert files_created == [f"{self.file.file_id()}.config"]
 
             for file_created in files_created:

@@ -36,7 +36,7 @@ class File_FS(Type_Safe):
     # helper methods that are very common in files
 
     def create(self):
-        return self.file__create().create()                                                         # todo: fix, since .create() doesn't exist
+        return self.file__create().create__config()
 
     @cache_on_self
     def config(self) -> Memory_FS__File__Config:

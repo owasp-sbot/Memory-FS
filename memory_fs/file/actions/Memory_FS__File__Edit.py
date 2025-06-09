@@ -24,11 +24,20 @@ class Memory_FS__File__Edit(Type_Safe):
     def storage_paths(self):                # todo: remove since this is covered by file__paths
         return Memory_FS__File__Paths(file__config=self.file__config)
 
-    def load__content(self):
+    def load__content(self) -> bytes:
         paths = self.storage_paths().paths__content()
-        if paths:
-            path  = paths[0]                    # todo: this logic should be inside the storage_data
-            return self.storage_data().load_content(path)
+        for path in paths:
+            content = self.storage.storage_fs.file__bytes(path)                 # todo: refactor, since this logic already exists in the current codebase (and it should only exist once)
+            if content:
+                return content
+
+    def save__content(self, content: bytes):
+        files_saved = []
+        paths = self.storage_paths().paths__content()
+        for path in paths:
+            if self.storage.storage_fs.file__save(path, content):
+                files_saved.append(path)
+        return files_saved
 
     # def save__content(self, content: bytes):
     #     files_to_save = self.file__paths().paths__content()

@@ -1,10 +1,13 @@
 from unittest                                                import TestCase
+
+from memory_fs.file.File_FS import File_FS
 from memory_fs.file.actions.Memory_FS__File__Name            import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding       import Enum__Memory_FS__File__Encoding
 from memory_fs.schemas.Schema__Memory_FS__File               import Schema__Memory_FS__File
 from memory_fs.Memory_FS                                     import Memory_FS
 from memory_fs.path_handlers.Path__Handler__Latest           import Path__Handler__Latest
 from memory_fs.path_handlers.Path__Handler__Temporal         import Path__Handler__Temporal
+from memory_fs.storage_fs.providers.Storage_FS__Memory import Storage_FS__Memory
 from osbot_utils.helpers.Safe_Id                             import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path       import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Config       import Schema__Memory_FS__File__Config
@@ -16,8 +19,13 @@ from memory_fs.file_types.Memory_FS__File__Type__Png         import Memory_FS__F
 
 class test_Memory_FS__Memory__Storage(TestCase):
 
+    # todo: refactor this to use @classmethod and only create one instance of storage_fs
     def setUp(self):                                                                             # Initialize test data
-        self.memory_fs          = Memory_FS()
+        self.storage_fs                   = Storage_FS__Memory()
+        self.memory_fs                    = Memory_FS()
+        self.memory_fs.storage.storage_fs = self.storage_fs          # todo: find a way to do this assigment better
+
+
         self.memory_fs__data    = self.memory_fs.data   ()
         self.memory_fs__delete  = self.memory_fs.delete ()
         self.memory_fs__edit    = self.memory_fs.edit   ()
@@ -62,9 +70,9 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert self.memory_fs__data.exists_content(self.test_config) is True
 
         #  Verify content was saved and is JSON formatted
-        loaded_file   = self.memory_fs__data.load        (self.file_id__latest__metadata)
-        content_bytes = self.memory_fs__data.load_content(self.file_id__latest__content)
-        assert type(loaded_file) is Schema__Memory_FS__File
+        file_fs       = self.memory_fs__data.load        (self.file_id__latest__metadata)
+        content_bytes = file_fs.content()
+        assert type(file_fs) is File_FS
         assert content_bytes     == b'"test content"'       # JSON serialization should wrap string in quotes
 
     def test_save_dict_data_as_json(self):                                                      # Tests saving dict data with JSON file type

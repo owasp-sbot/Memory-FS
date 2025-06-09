@@ -39,4 +39,4 @@ class test_Memory_FS__File(TestCase):
 
     def test_exists(self):
         with self.file as _:
-            assert _.exists() is False
+            assert _.exists() is True
