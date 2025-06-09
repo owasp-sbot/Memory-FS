@@ -9,9 +9,20 @@ from memory_fs.storage_fs.Storage_FS                    import Storage_FS
 class Storage_FS__Memory(Storage_FS):
     content_data: Dict[Safe_Str__File__Path, bytes]
 
+    def clear(self):
+        self.content_data.clear()
+        return True
+
     @type_safe
     def file__bytes(self, path: Safe_Str__File__Path):
         return self.content_data.get(path)
+
+    @type_safe
+    def file__delete(self, path: Safe_Str__File__Path) -> bool:
+        if path in self.content_data:
+            del self.content_data[path]
+            return True
+        return False
 
     @type_safe
     def file__exists(self, path: Safe_Str__File__Path):
@@ -34,3 +45,6 @@ class Storage_FS__Memory(Storage_FS):
         if file_bytes:
             return file_bytes.decode()                  # todo: add content type to this decode
 
+
+    def files__paths(self):
+        return self.content_data.keys()

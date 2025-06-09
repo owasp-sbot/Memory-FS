@@ -1,7 +1,8 @@
 from unittest                                          import TestCase
+
+from memory_fs.file.File_FS                            import File_FS
 from osbot_utils.utils.Json                            import json_to_bytes, json_to_str
 from memory_fs.storage_fs.providers.Storage_FS__Memory import Storage_FS__Memory
-from memory_fs.file.Memory_FS__File                    import Memory_FS__File
 from memory_fs.file.actions.Memory_FS__File__Create    import Memory_FS__File__Create
 
 class test_Memory_FS__File__Create(TestCase):
@@ -9,7 +10,7 @@ class test_Memory_FS__File__Create(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.storage_fs              = Storage_FS__Memory()
-        cls.file                    = Memory_FS__File()
+        cls.file                    = File_FS()
         cls.file.storage.storage_fs = cls.storage_fs            # todo: find a better way to use the Storage_FS__Memory as default in these tests
         cls.file_config             = cls.file.file_config
         cls.file_id                 = cls.file_config.file_id
@@ -40,11 +41,12 @@ class test_Memory_FS__File__Create(TestCase):
                 assert _.storage.storage_fs.file__str   (file_created) == content__str
                 assert _.storage.storage_fs.file__json  (file_created) == content__json
 
-        assert content__json == {'file_id'   : self.file_id               ,
-                                 'file_paths': []                         ,
-                                 'file_type' : { 'content_type'  : None  ,
-                                                 'encoding'      : None  ,
-                                                 'file_extension': None  ,
-                                                 'name'          : None  ,
-                                                 'serialization' : None  }}
+        assert content__json == { 'exists_strategy': 'FIRST'                    ,
+                                  'file_id'        : self.file_id               ,
+                                  'file_paths'     : []                         ,
+                                  'file_type'      : { 'content_type'  : None  ,
+                                                       'encoding'      : None  ,
+                                                       'file_extension': None  ,
+                                                       'name'          : None  ,
+                                                       'serialization' : None  }}
 

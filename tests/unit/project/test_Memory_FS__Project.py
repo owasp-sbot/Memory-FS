@@ -1,6 +1,6 @@
 from unittest                                               import TestCase
 from osbot_utils.utils.Objects                              import __
-from memory_fs.file.Memory_FS__File                         import Memory_FS__File
+from memory_fs.file.File_FS                                 import File_FS
 from memory_fs.file_types.Memory_FS__File__Type__Text       import Memory_FS__File__Type__Text
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from memory_fs.path_handlers.Path__Handler__Latest          import Path__Handler__Latest
@@ -42,7 +42,7 @@ class test_Memory_FS__Project(TestCase):
                           path_strategy = _.path_strategy(self.path_strategy_name),
                           file_type     = Memory_FS__File__Type__Text()          )
             file = _.file(**kwargs)
-            assert type(file) is Memory_FS__File
+            assert type(file) is File_FS
             assert file.obj() == __(file_config = __(file_id   = 'an-file',
                                                      file_paths  = ['latest', self.path_now],
                                                      file_type   = __(name           = 'text'   ,

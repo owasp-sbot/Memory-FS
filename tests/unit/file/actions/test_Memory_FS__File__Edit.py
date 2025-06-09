@@ -1,13 +1,13 @@
 from unittest                                       import TestCase
 from memory_fs.actions.Memory_FS__Edit              import Memory_FS__Edit
-from memory_fs.file.Memory_FS__File                 import Memory_FS__File
+from memory_fs.file.File_FS                         import File_FS
 from memory_fs.file.actions.Memory_FS__File__Edit   import Memory_FS__File__Edit
 
 class test_Memory_FS__File__Edit(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.file        = Memory_FS__File()
+        cls.file        = File_FS()
         cls.file_config = cls.file.file_config
         cls.file_id   = cls.file_config.file_id
         cls.file_edit   = cls.file.file__edit()

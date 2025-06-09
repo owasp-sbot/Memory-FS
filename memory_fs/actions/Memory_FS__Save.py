@@ -52,7 +52,7 @@ class Memory_FS__Save(Type_Safe):
                                       metadata = metadata )
 
         saved_pages__file    = self.memory_fs__edit().save        (file_config = file_config, file    = file         )
-        saved_pages__content = self.memory_fs__edit().save_content(file_config = file_config, content = content_bytes)
+        saved_pages__content = self.memory_fs__edit().save__content(file_config = file_config, content = content_bytes)
 
         saved_paths.extend(saved_pages__file   )
         saved_paths.extend(saved_pages__content)
