@@ -2,7 +2,8 @@
 
 
 ## Description
-Handlers that build file paths dynamically based on different strategies.
+Handlers that build file paths dynamically based on different strategies. The
+Mermaid flowcharts in each file show how the path strings are produced.
 ## Files
 - [Path__Handler.md](Path__Handler.md)
 - [Path__Handler__Custom.md](Path__Handler__Custom.md)

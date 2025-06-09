@@ -13,12 +13,11 @@ Methods:
 - `save`
 
 ```mermaid
-classDiagram
-    class Memory_FS {
-        data()
-        delete()
-        edit()
-        load()
-        save()
-    }
+flowchart TD
+    A[Memory_FS instance]
+    A --> B[data()]
+    A --> C[delete()]
+    A --> D[edit()]
+    A --> E[load()]
+    A --> F[save()]
 ```

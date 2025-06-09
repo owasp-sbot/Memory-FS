@@ -9,8 +9,6 @@ Methods:
 - `generate_path`
 
 ```mermaid
-classDiagram
-    class Path__Handler__Custom {
-        generate_path()
-    }
+flowchart TD
+    A[generate_path()] --> B[return custom_path]
 ```
