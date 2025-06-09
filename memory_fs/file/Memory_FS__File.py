@@ -1,3 +1,4 @@
+from memory_fs.file.actions.Memory_FS__File__Config import Memory_FS__File__Config
 from memory_fs.file.actions.Memory_FS__File__Create     import Memory_FS__File__Create
 from memory_fs.file.actions.Memory_FS__File__Data       import Memory_FS__File__Data
 from memory_fs.file.actions.Memory_FS__File__Edit       import Memory_FS__File__Edit
@@ -24,10 +25,14 @@ class Memory_FS__File(Type_Safe):
         return Memory_FS__File__Edit(file__config=self.file_config, storage= self.storage)
 
 
-    # helper methods that are very common in files          # todo: see if we need them (i.e. are they really useful and make it easy for dev's experience)
+    # helper methods that are very common in files
 
     def create(self):
         return self.file__create().create()
+
+    @cache_on_self
+    def config(self) -> Memory_FS__File__Config:
+        return Memory_FS__File__Config(file__config=self.file_config, storage= self.storage)        # todo: wrap the file__config and storage in another class since there are tons of methods that always need these two objects
 
     def exists(self):
         return self.file__data().exists()

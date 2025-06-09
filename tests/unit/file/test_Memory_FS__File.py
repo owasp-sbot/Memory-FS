@@ -1,8 +1,8 @@
-from unittest                                     import TestCase
-from memory_fs.file.storage_fs.Storage_FS__Memory import Storage_FS__Memory
-from osbot_utils.utils.Objects                    import __
-from memory_fs.file.Memory_FS__File               import Memory_FS__File
-
+from unittest                                           import TestCase
+from memory_fs.file.actions.Memory_FS__File__Config     import Memory_FS__File__Config
+from memory_fs.storage_fs.providers.Storage_FS__Memory  import Storage_FS__Memory
+from osbot_utils.utils.Objects                          import __
+from memory_fs.file.Memory_FS__File                     import Memory_FS__File
 
 class test_Memory_FS__File(TestCase):
 
@@ -10,7 +10,7 @@ class test_Memory_FS__File(TestCase):
     def setUpClass(cls):
         cls.storage_fs              = Storage_FS__Memory()
         cls.file                    = Memory_FS__File()
-        cls.file.storage.storage_fs = cls.storage_fs
+        cls.file.storage.storage_fs = cls.storage_fs                                            # todo: find a better way to do this assigment
 
     def test__init__(self):
         with self.file as _:
@@ -29,8 +29,11 @@ class test_Memory_FS__File(TestCase):
 
     def test_create(self):
         with self.file as _:
-            assert _.create() is not True                    # BUG: Should be true
-            assert _.exists() is     False                   # BUG: Should be false
+            assert _.create()          == [f"{self.file.file_id()}.config"]
+            assert type(_.config())    is Memory_FS__File__Config
+            assert _.config().exists() is True
+            #assert _.exists() is True                    # BUG: Should be false
+
 
     def test_exists(self):
         with self.file as _:

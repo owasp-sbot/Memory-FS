@@ -2,7 +2,7 @@ from typing                                             import Dict
 from osbot_utils.utils.Json                             import bytes_to_json
 from osbot_utils.type_safe.decorators.type_safe         import type_safe
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
-from memory_fs.file.storage_fs.Storage_FS               import Storage_FS
+from memory_fs.storage_fs.Storage_FS                    import Storage_FS
 
 # todo: see if this class shouldn't be leveraging the Serialisation and DeSerialisation classes/logic
 

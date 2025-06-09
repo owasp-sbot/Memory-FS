@@ -1,8 +1,8 @@
-from unittest                                       import TestCase
-from osbot_utils.utils.Json                         import json_to_bytes, json_to_str
-from memory_fs.file.storage_fs.Storage_FS__Memory   import Storage_FS__Memory
-from memory_fs.file.Memory_FS__File                 import Memory_FS__File
-from memory_fs.file.actions.Memory_FS__File__Create import Memory_FS__File__Create
+from unittest                                          import TestCase
+from osbot_utils.utils.Json                            import json_to_bytes, json_to_str
+from memory_fs.storage_fs.providers.Storage_FS__Memory import Storage_FS__Memory
+from memory_fs.file.Memory_FS__File                    import Memory_FS__File
+from memory_fs.file.actions.Memory_FS__File__Create    import Memory_FS__File__Create
 
 class test_Memory_FS__File__Create(TestCase):
 

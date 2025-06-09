@@ -1,4 +1,4 @@
-from memory_fs.file.storage_fs.Storage_FS import Storage_FS
+from memory_fs.storage_fs.Storage_FS import Storage_FS
 
 
 # todo: need implementation
