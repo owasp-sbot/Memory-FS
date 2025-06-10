@@ -12,11 +12,10 @@ Methods:
 - `delete`
 
 ```mermaid
-classDiagram
-    class Memory_FS__Delete {
-        memory_fs__edit()
-        memory_fs__load()
-        memory__fs_storage()
-        delete()
-    }
+flowchart TD
+    A[delete(config)] --> B[edit.delete(config)]
+    A --> C[edit.delete_content(config)]
+    B --> D[result list]
+    C --> D
+    D --> E[return summary]
 ```

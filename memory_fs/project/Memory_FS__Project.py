@@ -1,4 +1,4 @@
-from memory_fs.file.Memory_FS__File                         import Memory_FS__File
+from memory_fs.file.File_FS                                 import File_FS
 from memory_fs.schemas.Schema__Memory_FS__File__Type        import Schema__Memory_FS__File__Type
 from osbot_utils.type_safe.decorators.type_safe             import type_safe
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
@@ -13,14 +13,14 @@ class Memory_FS__Project(Type_Safe):
     def file(self, file_id     : Safe_Id,
                    path_strategy: Schema__Memory_FS__Project__Path_Strategy,
                    file_type    : Schema__Memory_FS__File__Type
-              ) -> Memory_FS__File:
+              ) -> File_FS:
 
         file_paths = []
         for path_handler in path_strategy.path_handlers:
             file_path = path_handler().generate_path()
             file_paths.append(file_path)
 
-        with Memory_FS__File() as file:
+        with File_FS() as file:
             with file.file_config as _:
                 _.file_type  = file_type
                 _.file_paths = file_paths

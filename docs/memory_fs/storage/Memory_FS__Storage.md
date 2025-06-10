@@ -14,13 +14,14 @@ Methods:
 - `files__names`
 
 ```mermaid
-classDiagram
-    class Memory_FS__Storage {
-        content_data()
-        file()
-        file__content()
-        files()
-        files__contents()
-        files__names()
-    }
+flowchart TD
+    A[Memory_FS__Storage]
+    A --> B[files dict]
+    A --> C[content_data dict]
+    subgraph Access
+        D[files()] --> B
+        E[file(path)] --> B
+        F[file__content(path)] --> C
+        G[files__names()] --> B
+    end
 ```

@@ -1,10 +1,13 @@
 from unittest                                                import TestCase
-from memory_fs.actions.Memory_FS__File_Name                  import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
+
+from memory_fs.file.File_FS import File_FS
+from memory_fs.file.actions.Memory_FS__File__Name            import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding       import Enum__Memory_FS__File__Encoding
 from memory_fs.schemas.Schema__Memory_FS__File               import Schema__Memory_FS__File
 from memory_fs.Memory_FS                                     import Memory_FS
 from memory_fs.path_handlers.Path__Handler__Latest           import Path__Handler__Latest
 from memory_fs.path_handlers.Path__Handler__Temporal         import Path__Handler__Temporal
+from memory_fs.storage_fs.providers.Storage_FS__Memory import Storage_FS__Memory
 from osbot_utils.helpers.Safe_Id                             import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path       import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Config       import Schema__Memory_FS__File__Config
@@ -16,8 +19,13 @@ from memory_fs.file_types.Memory_FS__File__Type__Png         import Memory_FS__F
 
 class test_Memory_FS__Memory__Storage(TestCase):
 
+    # todo: refactor this to use @classmethod and only create one instance of storage_fs
     def setUp(self):                                                                             # Initialize test data
-        self.memory_fs          = Memory_FS()
+        self.storage_fs                   = Storage_FS__Memory()
+        self.memory_fs                    = Memory_FS()
+        self.memory_fs.storage.storage_fs = self.storage_fs          # todo: find a way to do this assigment better
+
+
         self.memory_fs__data    = self.memory_fs.data   ()
         self.memory_fs__delete  = self.memory_fs.delete ()
         self.memory_fs__edit    = self.memory_fs.edit   ()
@@ -62,18 +70,19 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert self.memory_fs__data.exists_content(self.test_config) is True
 
         #  Verify content was saved and is JSON formatted
-        loaded_file   = self.memory_fs__data.load        (self.file_id__latest__metadata)
-        content_bytes = self.memory_fs__data.load_content(self.file_id__latest__content)
-        assert type(loaded_file) is Schema__Memory_FS__File
+        file_fs       = self.memory_fs__data.load        (self.file_id__latest__metadata)
+        content_bytes = file_fs.content()
+        assert type(file_fs) is File_FS
         assert content_bytes     == b'"test content"'       # JSON serialization should wrap string in quotes
 
     def test_save_dict_data_as_json(self):                                                      # Tests saving dict data with JSON file type
         test_dict = {"key": "value", "number": 42}
         saved_paths = self.memory_fs__save.save(test_dict, self.test_config)
+        assert len(saved_paths) == 4
 
         loaded_data = self.memory_fs__load.load_data(self.test_config)
         assert loaded_data      == test_dict
-        assert len(saved_paths) == 4
+
 
     def test_save_string_data_as_markdown(self):                                               # Tests saving string data with Markdown file type
         config_markdown = Schema__Memory_FS__File__Config(file_id     = self.file_id         ,
@@ -152,10 +161,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
     def test_file_type_properties_in_saved_file(self):                                         # Tests that file type properties are correctly saved
         saved_paths = self.memory_fs__save.save(self.test_data, self.test_config)
         loaded_file = self.memory_fs__load.load(self.test_config)
-        assert type(loaded_file) is Schema__Memory_FS__File
+        assert type(loaded_file) is File_FS
 
         # Verify file info matches file type
-        with loaded_file.config.file_type as _:
+        with loaded_file.file_config.file_type as _:
             assert _.file_extension == self.file_type_json.file_extension
             assert _.content_type   == self.file_type_json.content_type
             assert _.encoding       == self.file_type_json.encoding
@@ -178,7 +187,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert len(files_created) == 4
 
         file          = self.memory_fs__load.load(self.test_config)
-        assert type(file) is Schema__Memory_FS__File
+        assert type(file) is File_FS
 
         files_deleted = self.memory_fs__delete.delete(self.test_config)
 
@@ -195,7 +204,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
         assert saved_paths      == [f'{file_id}.json', f'{file_id}.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}']
 
         assert self.memory_fs__data.exists(empty_config  ) is True                            # confirm file was created
-        assert type(self.memory_fs__load.load(empty_config)) is Schema__Memory_FS__File         # and we can get it
+        assert type(self.memory_fs__load.load(empty_config)) is File_FS                       # and we can get it
 
     def test_list_files(self):                                                                  # Tests listing files
         # Create configs with different file_types to avoid path collisions
@@ -212,10 +221,14 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
         all_files = self.memory_fs__data.list_files()           # todo figure out a better way to name this since these are the {FILE_EXTENSION__MEMORY_FS__FILE__CONFIG} files (i.e. this all files doesn't include the content files, which could be an expectation)
 
-        assert len(all_files) == 4
-        assert sorted(all_files) == sorted([Safe_Str__File__Path(f'latest/file_1.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'          ),
-                                            Safe_Str__File__Path(f'latest/file_2.md.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'            ),
+        assert len(all_files) == 8
+        assert sorted(all_files) == sorted([Safe_Str__File__Path(f'latest/file_1.json'                                                                                  ),
+                                            Safe_Str__File__Path(f'latest/file_1.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'         ),
+                                            Safe_Str__File__Path(f'latest/file_2.md'                                                     ),
+                                            Safe_Str__File__Path(f'latest/file_2.md.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'           ),
+                                            Safe_Str__File__Path(f'{self.path_now}/file_1.json'                                          ),
                                             Safe_Str__File__Path(f'{self.path_now}/file_1.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'),
+                                            Safe_Str__File__Path(f'{self.path_now}/file_2.md'                                            ),
                                             Safe_Str__File__Path(f'{self.path_now}/file_2.md.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'  )])
 
 
@@ -223,12 +236,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
         self.memory_fs__save.save("content1", self.test_config)
 
         assert len(self.memory_fs__data.list_files())     > 0
-        assert len(self.file_system.content_data) > 0
 
         self.memory_fs__edit.clear()
 
         assert len(self.memory_fs__data.list_files())     == 0
-        assert len(self.file_system.content_data) == 0
 
     def test_stats(self):                                                                        # Tests storage statistics
         config_1 = Schema__Memory_FS__File__Config(file_id  = "file_1"              ,
@@ -245,7 +256,6 @@ class test_Memory_FS__Memory__Storage(TestCase):
         stats = self.memory_fs__data.stats()
 
         assert stats[Safe_Id("type")] == Safe_Id("memory")
-        assert stats[Safe_Id("file_count"   )] == 4                                             # 4 = 2x metadata files * 2x file_paths
-        assert stats[Safe_Id("content_count")] == 4                                             # 4 = 2x content files  * 2x file_paths
+        assert stats[Safe_Id("file_count"   )] == 8
         # JSON serialization adds quotes, so sizes will be larger
         assert stats[Safe_Id("total_size")] > len("short") + len("much longer content")         # todo: double check this value

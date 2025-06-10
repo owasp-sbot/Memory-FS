@@ -14,13 +14,9 @@ Methods:
 - `load_data`
 
 ```mermaid
-classDiagram
-    class Memory_FS__Load {
-        memory_fs__data()
-        memory_fs__deserialize()
-        memory_fs__paths()
-        load()
-        load_content()
-        load_data()
-    }
+flowchart TD
+    A[load_data(config)] --> B[paths(config)]
+    B --> C[load_content(path)]
+    C --> D[_deserialize_data]
+    D --> E[return object]
 ```

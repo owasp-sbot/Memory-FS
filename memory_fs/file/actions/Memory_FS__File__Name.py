@@ -6,7 +6,7 @@ from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 FILE_EXTENSION__MEMORY_FS__FILE__CONFIG   = 'config'
 FILE_EXTENSION__MEMORY_FS__FILE__METADATA = 'metadata'
 
-class Memory_FS__File_Name(Type_Safe):
+class Memory_FS__File__Name(Type_Safe):
     file__config: Schema__Memory_FS__File__Config
 
     def build(self, elements) -> Safe_Str__File__Name:

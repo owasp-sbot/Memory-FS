@@ -1,16 +1,20 @@
-from unittest                                       import TestCase
-from memory_fs.actions.Memory_FS__Edit              import Memory_FS__Edit
-from memory_fs.file.Memory_FS__File                 import Memory_FS__File
-from memory_fs.file.actions.Memory_FS__File__Edit   import Memory_FS__File__Edit
+from unittest                                           import TestCase
+from memory_fs.actions.Memory_FS__Edit                  import Memory_FS__Edit
+from memory_fs.file.File_FS                             import File_FS
+from memory_fs.file.actions.Memory_FS__File__Edit       import Memory_FS__File__Edit
+from memory_fs.storage_fs.providers.Storage_FS__Memory  import Storage_FS__Memory
+
 
 class test_Memory_FS__File__Edit(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.file        = Memory_FS__File()
-        cls.file_config = cls.file.file_config
-        cls.file_id   = cls.file_config.file_id
-        cls.file_edit   = cls.file.edit()
+        cls.storage_fs              = Storage_FS__Memory()
+        cls.file                    = File_FS()
+        cls.file.storage.storage_fs = cls.file.storage.storage_fs = cls.storage_fs          # todo: find a way to do this assigment better
+        cls.file_config             = cls.file.file_config
+        cls.file_id                 = cls.file_config.file_id
+        cls.file_edit               = cls.file.file__edit()
 
     def test__init__(self):
         with self.file_edit as _:

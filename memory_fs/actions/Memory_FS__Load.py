@@ -1,7 +1,8 @@
 from typing                                             import Optional, Any
 from memory_fs.actions.Memory_FS__Data                  import Memory_FS__Data
 from memory_fs.actions.Memory_FS__Deserialize           import Memory_FS__Deserialize
-from memory_fs.actions.Memory_FS__Paths                 import Memory_FS__Paths
+from memory_fs.file.actions.File_FS__Content import File_FS__Content
+from memory_fs.file.actions.Memory_FS__File__Paths   import Memory_FS__File__Paths
 from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
 from memory_fs.schemas.Schema__Memory_FS__File          import Schema__Memory_FS__File
@@ -21,7 +22,7 @@ class Memory_FS__Load(Type_Safe):
         return Memory_FS__Deserialize(storage=self.storage)
 
     def memory_fs__paths(self, file_config : Schema__Memory_FS__File__Config):
-        return Memory_FS__Paths(file__config=file_config)
+        return Memory_FS__File__Paths(file__config=file_config)
 
 
     def load(self, file_config : Schema__Memory_FS__File__Config  # Load file from the appropriate path based on config
@@ -35,17 +36,21 @@ class Memory_FS__Load(Type_Safe):
 
     def load_content(self, file_config : Schema__Memory_FS__File__Config  # Load content for a file
                       ) -> Optional[bytes]:
-        full_file_paths = self.memory_fs__paths(file_config=file_config).paths__content()
-        for full_file_path in full_file_paths:
-            content_bytes  = self.memory_fs__data().load_content(full_file_path)
-            if content_bytes:
-                return content_bytes
-        return None
+        file_content = File_FS__Content(file__config=file_config, storage=self.storage)
+        return file_content.bytes()
+
+        # full_file_paths = self.memory_fs__paths(file_config=file_config).paths__content()
+        # for full_file_path in full_file_paths:
+        #     content_bytes  = self.memory_fs__data().load_content(full_file_path)
+        #     if content_bytes:
+        #         return content_bytes
+        # return None
 
     def load_data(self, file_config : Schema__Memory_FS__File__Config  # Load and deserialize file data
                   ) -> Optional[Any]:
         # Load raw content
         content_bytes = self.load_content(file_config)
+
         if not content_bytes:
             return None
 

@@ -32,6 +32,12 @@ Memory-FS is a type-safe, in-memory filesystem abstraction that provides a unifi
 - **Type Safety**: Enhanced with `@type_safe` decorators
 - **API Consistency**: All methods now use configuration objects
 
+### [June 2, 2025 - File Naming System](./on-02-june-2025.md)
+- **Major Addition**: New `Memory_FS__File_Name` class for centralized naming logic
+- **File Extensions**: Moved from hardcoded `.fs.json` to configurable constants
+- **Bug Fixes**: Proper handling of null file extensions
+- **Testing**: Added comprehensive test coverage with `test_Memory_FS__Paths.py`
+
 ## Key Architectural Concepts
 
 ### Action-Based Architecture
@@ -41,6 +47,7 @@ The project uses a decomposed architecture where each operation type has its own
 - `Memory_FS__Data`: Read-only data operations and queries
 - `Memory_FS__Edit`: File manipulation (copy, move, delete)
 - `Memory_FS__Paths`: Centralized path generation logic
+- `Memory_FS__File_Name`: File naming conventions and path building
 
 ### Type Safety
 Every component leverages OSBot-Utils' Type_Safe base class for:
@@ -48,10 +55,11 @@ Every component leverages OSBot-Utils' Type_Safe base class for:
 - Consistent error handling
 - Self-documenting code through type annotations
 
-### Two-File Pattern
-Each stored file consists of:
-1. **Content File**: The actual file data in its native format
-2. **Metadata File**: JSON file with `.fs.json` extension containing file metadata
+### File Naming Conventions
+The system now supports three types of files with clear naming patterns:
+1. **Content File**: `{file_id}.{extension}`
+2. **Config File**: `{file_id}.{extension}.config`
+3. **Metadata File**: `{file_id}.{extension}.metadata`
 
 ### Project-Based Path Management
 Path strategies are managed at the project level, allowing files to focus solely on storage concerns while projects handle path generation and organization strategies.
@@ -63,7 +71,8 @@ For those new to the project, we recommend reading the debriefs in chronological
 1. **May 26**: Understand the original vision and design principles
 2. **May 27**: See how the monolithic design was decomposed into actions
 3. **May 28**: Learn about the project abstraction and simplified path handling
-4. **May 30**: Review the latest consolidations and API improvements
+4. **May 30**: Review the consolidations and API improvements
+5. **June 2**: Understand the new file naming system and testing approach
 
 ## Contributing
 
@@ -83,6 +92,8 @@ When adding new debriefs:
 ## Future Debriefs
 
 Upcoming topics likely to be covered:
+- Complete file creation implementation
+- Metadata file support and usage
 - Storage adapter implementations (S3-FS, SQLite-FS)
 - Performance optimizations and benchmarking
 - Advanced features (versioning, compression, encryption)

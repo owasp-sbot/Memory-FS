@@ -23,7 +23,7 @@ class Memory_FS__Save(Type_Safe):
 
     @cache_on_self
     def memory_fs__serialize(self):
-        return Memory_FS__Serialize(storage=self.storage)
+        return Memory_FS__Serialize()
 
     def save(self, file_data   : Any,  # Save file data using all configured path handlers
                    file_config : Schema__Memory_FS__File__Config
@@ -52,7 +52,7 @@ class Memory_FS__Save(Type_Safe):
                                       metadata = metadata )
 
         saved_pages__file    = self.memory_fs__edit().save        (file_config = file_config, file    = file         )
-        saved_pages__content = self.memory_fs__edit().save_content(file_config = file_config, content = content_bytes)
+        saved_pages__content = self.memory_fs__edit().save__content(file_config = file_config, content = content_bytes)
 
         saved_paths.extend(saved_pages__file   )
         saved_paths.extend(saved_pages__content)
