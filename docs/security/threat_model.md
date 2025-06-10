@@ -1,35 +1,69 @@
 # Threat Model for Memory-FS
 
-Memory-FS is an in-memory file system that stores file metadata and content entirely in memory. The library exposes a facade (`Memory_FS`) and a set of action classes to manipulate files. This document outlines potential threats to the system and recommended mitigations.
+This threat model was prepared using ChatGPT via Codex following the guidance from [Jim Manico's Threat Modeling Assistant](https://chatgpt.com/g/g-683a14e4b0488191b55072f3539f2834-threat-modeling-assistant).
+
+## System Overview
+Memory-FS is a Python library that implements a type-safe, in-memory file system. It exposes a `Memory_FS` facade composed of action classes for saving, loading, editing and querying files. All file content and metadata reside in memory inside `Memory_FS__File_System`.
+
+## Context
+- **Purpose**: Provide a fast and flexible storage layer for applications that only need temporary file persistence.
+- **Architecture**: Modular action-based classes over an in-memory storage backend with pluggable path handlers and file types.
+- **Users**: Developers embedding Memory-FS in their applications.
+- **Data**: Arbitrary file content and associated metadata stored as dictionaries.
+- **Integrations**: Future adapters may connect to S3, SQLite or local disk, but current implementation is memory only.
 
 ## Assets
-- In-memory file metadata and content
-- File configuration schemas and path handlers
-- Interface for saving, loading and editing files
+- In-memory file data and metadata
+- Configuration schemas, path handlers and file type definitions
+- Public API for file operations
 
-## Attack Surfaces
-1. **API Usage** – Any consumer can interact with `Memory_FS` and the underlying action classes.
-2. **Path Handlers** – Custom path handlers influence how and where files are stored in memory.
-3. **File Types** – Serialization and deserialization logic for each file type may process untrusted data.
-4. **In-Memory Storage** – The `Memory_FS__File_System` keeps all data in dictionaries within the running process.
+## Threat Actors
+- Malicious consumers of the library
+- Attackers providing custom path handlers or file type implementations
+- Insiders misconfiguring the system
+
+## Attack Vectors
+- Untrusted input sent to Memory-FS APIs
+- Execution of unreviewed path handler or file type code
+- Excessive use of in-memory storage leading to resource exhaustion
+
+## Misconfigurations
+- Exposing Memory-FS APIs without authentication or authorization
+- Allowing unsafe serialization formats (e.g., pickle)
+- No limits on file size, count or overall memory usage
+
+## Trust Boundaries
+- Boundary between application code and untrusted user input
+- Interaction with external storage backends when implemented
+- Extension mechanisms for path handlers and file types
 
 ## Threats
 | ID | Threat | Description |
 |----|--------|-------------|
-| T1 | Unauthorized Access | If the application exposes `Memory_FS` to untrusted callers, files could be read or modified without permission. |
-| T2 | Memory Exhaustion | Attackers might store numerous large files, exhausting available memory and causing denial of service. |
-| T3 | Path Collisions | Malicious path handlers could overwrite existing files or bypass expected organization. |
-| T4 | Malicious Serialization | File types that rely on unsafe serialization formats (e.g., pickle) could lead to code execution. |
-| T5 | Data Leakage | Since data resides only in memory, crashes or debug dumps may expose sensitive content. |
-| T6 | Inconsistent State | Unexpected termination (e.g., process crash) can leave callers assuming data is persisted when it is not. |
+| T1 | Unauthorized Access | Untrusted callers could read or modify files when the API lacks proper access control. |
+| T2 | Memory Exhaustion | Storing many or large files may exhaust memory and cause denial of service. |
+| T3 | Path Manipulation | Malicious path handlers might overwrite existing files or escape expected namespaces. |
+| T4 | Unsafe Serialization | Dangerous formats could lead to code execution when loading untrusted data. |
+| T5 | Data Leakage | Debug logs or core dumps may expose sensitive in-memory data. |
+| T6 | Volatility Assumptions | Crashes or restarts cause data loss that callers might not expect. |
+| T7 | Malicious Extensions | File type or path handler plugins could run malicious code. |
+| T8 | Concurrency Issues | Race conditions in multi-threaded use could corrupt data. |
 
-## Mitigations
-- **Access Control**: Ensure that only authorized components create or manipulate `Memory_FS` instances. Limit exposure of internal dictionaries.
-- **Input Validation**: Use the existing type-safe models to validate all external input, particularly for file names, path handler parameters and data passed to serialization routines.
-- **Resource Limits**: Enforce size limits for individual files and the total number of files stored. Consider periodic cleanup or memory quotas.
-- **Safe Serialization**: Avoid unsafe formats like pickle. Prefer formats with strict parsers (JSON, YAML with safe loader, etc.).
-- **Crash Handling**: Document that Memory-FS is volatile. If persistence is required, ensure data is saved to a durable backend before shutdown.
-- **Testing and Review**: Regularly run the provided unit tests (`pytest`) and perform security reviews of custom path handlers and file types.
+## Risk Analysis
+Threats are assessed with common-sense impact and likelihood:
+- **High Impact**: T1, T2, T4
+- **Medium Impact**: T3, T5, T6, T7, T8
+Likelihood increases if Memory-FS is exposed to untrusted input or third-party extensions.
+
+## Recommended Mitigations
+- Enforce authentication and authorization around Memory-FS usage.
+- Validate all input through type-safe models and restrict custom extensions.
+- Use safe serialization formats (JSON, YAML safe loader) only.
+- Configure limits for file sizes and total memory usage.
+- Clearly document that data is volatile and implement persistence if needed.
+- Review and test custom path handlers and file types before use.
+- Avoid running untrusted code within the same trust boundary.
 
 ## Conclusion
-Memory-FS is designed for flexibility and speed, but its in-memory nature introduces unique risks. By applying strict input validation, safe serialization practices, and controlling access to the API, most common threats can be mitigated. Future persistent storage adapters (S3, SQLite, local filesystem) should include similar threat modeling with emphasis on their specific attack surfaces.
+Memory-FS offers speed and flexibility but relies entirely on volatile in-memory storage. By restricting access, validating input, controlling resources and scrutinizing extensions, the major threats identified above can be mitigated. This document was generated by ChatGPT via Codex using the methodology from Jim Manico's Threat Modeling Assistant.
+
