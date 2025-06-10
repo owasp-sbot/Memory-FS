@@ -1,14 +1,13 @@
-from osbot_utils.helpers.safe_str.Safe_Str__Hash import safe_str_hash
-
-from memory_fs.file.actions.Memory_FS__File__Config     import Memory_FS__File__Config
-from memory_fs.file.actions.Memory_FS__File__Create     import Memory_FS__File__Create
-from memory_fs.file.actions.Memory_FS__File__Data       import Memory_FS__File__Data
-from memory_fs.file.actions.Memory_FS__File__Edit       import Memory_FS__File__Edit
-from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
+from osbot_utils.helpers.safe_str.Safe_Str__Hash         import safe_str_hash
+from memory_fs.file.actions.File_FS__Config              import File_FS__Config
+from memory_fs.file.actions.File_FS__Create              import File_FS__Create
+from memory_fs.file.actions.File_FS__Data                import File_FS__Data
+from memory_fs.file.actions.File_FS__Edit                import File_FS__Edit
+from memory_fs.schemas.Schema__Memory_FS__File__Config   import Schema__Memory_FS__File__Config
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata import Schema__Memory_FS__File__Metadata
-from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
-from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
-from osbot_utils.type_safe.Type_Safe                    import Type_Safe
+from memory_fs.storage.Memory_FS__Storage                import Memory_FS__Storage
+from osbot_utils.decorators.methods.cache_on_self        import cache_on_self
+from osbot_utils.type_safe.Type_Safe                     import Type_Safe
 
 
 
@@ -18,15 +17,15 @@ class File_FS(Type_Safe):
 
     @cache_on_self
     def file__create(self):                                                                     # todo: rename these methods to file_fs__*
-        return Memory_FS__File__Create(file__config=self.file_config, storage=self.storage)
+        return File_FS__Create(file__config=self.file_config, storage=self.storage)
 
     @cache_on_self
     def file__data(self):
-        return Memory_FS__File__Data(file__config=self.file_config, storage= self.storage)
+        return File_FS__Data(file__config=self.file_config, storage= self.storage)
 
     @cache_on_self
     def file__edit(self):
-        return Memory_FS__File__Edit(file__config=self.file_config, storage= self.storage)
+        return File_FS__Edit(file__config=self.file_config, storage= self.storage)
 
     @cache_on_self
     def file_fs__content(self):
@@ -39,8 +38,8 @@ class File_FS(Type_Safe):
         return self.file__create().create__config()
 
     @cache_on_self
-    def config(self) -> Memory_FS__File__Config:
-        return Memory_FS__File__Config(file__config=self.file_config, storage= self.storage)        # todo: wrap the file__config and storage in another class since there are tons of methods that always need these two objects
+    def config(self) -> File_FS__Config:
+        return File_FS__Config(file__config=self.file_config, storage= self.storage)        # todo: wrap the file__config and storage in another class since there are tons of methods that always need these two objects
 
     def content(self) -> bytes:
         return self.file_fs__content().bytes()

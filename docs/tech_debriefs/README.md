@@ -38,6 +38,13 @@ Memory-FS is a type-safe, in-memory filesystem abstraction that provides a unifi
 - **Bug Fixes**: Proper handling of null file extensions
 - **Testing**: Added comprehensive test coverage with `test_Memory_FS__Paths.py`
 
+### [June 9, 2025 - Storage Abstraction Layer](./on-09-jun-2025.md)
+- **Major Transformation**: Complete storage abstraction with new `Storage_FS` interface
+- **File Class Rename**: `Memory_FS__File` → `File_FS` for broader applicability
+- **Storage Backends**: Framework for multiple storage implementations (Memory, Local Disk, SQLite, Zip)
+- **Enhanced Operations**: New file action classes and existence strategy patterns
+- **Technical Debt**: Extensive TODO documentation for GenAI-assisted development
+
 ## Key Architectural Concepts
 
 ### Action-Based Architecture
@@ -49,6 +56,13 @@ The project uses a decomposed architecture where each operation type has its own
 - `Memory_FS__Paths`: Centralized path generation logic
 - `Memory_FS__File_Name`: File naming conventions and path building
 
+### Storage Abstraction Layer
+A clean separation between file system interface and implementation:
+- `Storage_FS`: Base interface for all storage backends
+- `Storage_FS__Memory`: In-memory implementation (reference)
+- Provider pattern for pluggable storage backends
+- Consistent API across storage types
+
 ### Type Safety
 Every component leverages OSBot-Utils' Type_Safe base class for:
 - Runtime parameter validation
@@ -56,7 +70,7 @@ Every component leverages OSBot-Utils' Type_Safe base class for:
 - Self-documenting code through type annotations
 
 ### File Naming Conventions
-The system now supports three types of files with clear naming patterns:
+The system supports three types of files with clear naming patterns:
 1. **Content File**: `{file_id}.{extension}`
 2. **Config File**: `{file_id}.{extension}.config`
 3. **Metadata File**: `{file_id}.{extension}.metadata`
@@ -73,6 +87,7 @@ For those new to the project, we recommend reading the debriefs in chronological
 3. **May 28**: Learn about the project abstraction and simplified path handling
 4. **May 30**: Review the consolidations and API improvements
 5. **June 2**: Understand the new file naming system and testing approach
+6. **June 9**: Learn about the storage abstraction layer and backend framework
 
 ## Contributing
 
@@ -82,6 +97,15 @@ When adding new debriefs:
 3. Document both the "what" and the "why" of changes
 4. Provide before/after code examples for major changes
 5. Include a conclusion that looks forward to next steps
+6. Document technical debt and TODO notes for GenAI context
+
+## GenAI-Assisted Development
+
+Starting with the June 9th debrief, the project has embraced GenAI-assisted development patterns:
+- **TODO-Driven Development**: Extensive inline documentation of technical debt and future work
+- **Context Preservation**: Using TODO comments and markdown files to maintain development context
+- **Living Documentation**: TODOs serve as evolving documentation for AI models
+- **Knowledge Management**: Capturing insights and decisions inline for future reference
 
 ## Related Resources
 
@@ -92,9 +116,9 @@ When adding new debriefs:
 ## Future Debriefs
 
 Upcoming topics likely to be covered:
-- Complete file creation implementation
-- Metadata file support and usage
-- Storage adapter implementations (S3-FS, SQLite-FS)
+- Storage backend implementations (S3-FS, SQLite-FS, Local-FS)
 - Performance optimizations and benchmarking
-- Advanced features (versioning, compression, encryption)
-- Migration strategies from existing storage systems
+- Advanced file operations (copy, move with multi-path support)
+- Metadata file system implementation
+- TODO-driven development methodology
+- GenAI integration patterns and best practices

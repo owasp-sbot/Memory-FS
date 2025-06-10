@@ -1,13 +1,11 @@
 from unittest                                                import TestCase
-
-from memory_fs.file.File_FS import File_FS
-from memory_fs.file.actions.Memory_FS__File__Name            import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
+from memory_fs.file.File_FS                                  import File_FS
+from memory_fs.file.actions.File_FS__Name                    import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding       import Enum__Memory_FS__File__Encoding
-from memory_fs.schemas.Schema__Memory_FS__File               import Schema__Memory_FS__File
 from memory_fs.Memory_FS                                     import Memory_FS
 from memory_fs.path_handlers.Path__Handler__Latest           import Path__Handler__Latest
 from memory_fs.path_handlers.Path__Handler__Temporal         import Path__Handler__Temporal
-from memory_fs.storage_fs.providers.Storage_FS__Memory import Storage_FS__Memory
+from memory_fs.storage_fs.providers.Storage_FS__Memory       import Storage_FS__Memory
 from osbot_utils.helpers.Safe_Id                             import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path       import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Config       import Schema__Memory_FS__File__Config

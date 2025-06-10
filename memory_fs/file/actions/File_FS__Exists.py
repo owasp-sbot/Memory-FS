@@ -1,11 +1,8 @@
-from osbot_utils.utils.Dev import pprint
-
-from osbot_utils.decorators.methods.cache_on_self import cache_on_self
-
-from memory_fs.file.actions.Memory_FS__File__Paths import Memory_FS__File__Paths
-from memory_fs.schemas.Schema__Memory_FS__File__Config import Schema__Memory_FS__File__Config
-from memory_fs.storage.Memory_FS__Storage import Memory_FS__Storage
-from osbot_utils.type_safe.Type_Safe                   import Type_Safe
+from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
+from memory_fs.file.actions.File_FS__Paths              import File_FS__Paths
+from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
+from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
+from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 
 class File_FS__Exists(Type_Safe):
@@ -14,7 +11,7 @@ class File_FS__Exists(Type_Safe):
 
     @cache_on_self
     def file_fs__paths(self):
-        return Memory_FS__File__Paths(file__config=self.file__config)
+        return File_FS__Paths(file__config=self.file__config)
 
     def config(self) -> bool:
         config_paths = self.file_fs__paths().paths__config()

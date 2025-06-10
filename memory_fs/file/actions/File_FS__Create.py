@@ -1,6 +1,6 @@
 from osbot_utils.utils.Json                             import json_to_bytes
 from memory_fs.file.actions.File_FS__Exists             import File_FS__Exists
-from memory_fs.file.actions.Memory_FS__File__Paths      import Memory_FS__File__Paths
+from memory_fs.file.actions.File_FS__Paths              import File_FS__Paths
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
@@ -11,7 +11,7 @@ from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 # note: config file can only be created or deleted (it cannot be edited)
 
-class Memory_FS__File__Create(Type_Safe):                                                       # todo: refactor to file_fs__create
+class File_FS__Create(Type_Safe):                                                       # todo: refactor to file_fs__create
     file__config : Schema__Memory_FS__File__Config
     storage      : Memory_FS__Storage
 
@@ -20,13 +20,13 @@ class Memory_FS__File__Create(Type_Safe):                                       
         return File_FS__Exists(file__config=self.file__config, storage=self.storage)
 
     @cache_on_self
-    def file__paths(self):                                                                      # todo: refactor to file_fs__paths
-        return Memory_FS__File__Paths(file__config=self.file__config)
+    def file_fs__paths(self):                                                                      # todo: refactor to file_fs__paths
+        return File_FS__Paths(file__config=self.file__config)
 
     # todo: we will need a top level create(content, metadata) method
     def create__config(self):
         if self.exists() is False:
-            files_to_save = self.file__paths().paths__config()
+            files_to_save = self.file_fs__paths().paths__config()
             files_saved   = []
             for file_to_save in files_to_save:
                 content__data  = self.file__config.json()
@@ -39,7 +39,7 @@ class Memory_FS__File__Create(Type_Safe):                                       
 
     def create__content(self, content: bytes):
         #return self.file__edit().save__content(content=content)
-        files_to_save = self.file__paths().paths__content()
+        files_to_save = self.file_fs__paths().paths__content()
         files_saved   = []
         for file_to_save in files_to_save:
             if self.storage.file__save(file_to_save, content):
@@ -48,14 +48,14 @@ class Memory_FS__File__Create(Type_Safe):                                       
 
     def delete__config(self):                                   # todo: # refactor to File_FS__Delete
         files_deleted = []                                      # todo: refactor with delete__content since the code is just about the same
-        for file_path in self.file__paths().paths__config():
+        for file_path in self.file_fs__paths().paths__config():
             if self.storage.file__delete(path=file_path):
                 files_deleted.append(file_path)
         return files_deleted
 
     def delete__content(self):                                  # todo: refactor to File_FS__Delete
         files_deleted = []
-        for file_path in self.file__paths().paths__content():
+        for file_path in self.file_fs__paths().paths__content():
             if self.storage.file__delete(path=file_path):
                 files_deleted.append(file_path)
         return files_deleted

@@ -1,7 +1,7 @@
 from unittest                                           import TestCase
 from memory_fs.actions.Memory_FS__Edit                  import Memory_FS__Edit
 from memory_fs.file.File_FS                             import File_FS
-from memory_fs.file.actions.Memory_FS__File__Edit       import Memory_FS__File__Edit
+from memory_fs.file.actions.File_FS__Edit               import File_FS__Edit
 from memory_fs.storage_fs.providers.Storage_FS__Memory  import Storage_FS__Memory
 
 
@@ -18,8 +18,8 @@ class test_Memory_FS__File__Edit(TestCase):
 
     def test__init__(self):
         with self.file_edit as _:
-            assert type(_               ) is Memory_FS__File__Edit
-            assert type(_.storage_edit()) is Memory_FS__Edit
+            assert type(_               ) is File_FS__Edit
+            assert type(_.storage_fs__edit()) is Memory_FS__Edit
 
     def test_save__content(self):
         with self.file_edit as _:

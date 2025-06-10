@@ -1,15 +1,11 @@
 from typing                                                 import List, Optional, Dict, Any
-
-from memory_fs.file.actions.Memory_FS__File__Name import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
-from memory_fs.schemas.Schema__Memory_FS__File__Metadata import Schema__Memory_FS__File__Metadata
-from osbot_utils.utils.Json import bytes_to_json
-
-from memory_fs.file.File_FS import File_FS
-from memory_fs.file.actions.File_FS__Exists import File_FS__Exists
+from memory_fs.file.actions.File_FS__Name                   import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
+from osbot_utils.utils.Json                                 import bytes_to_json
+from memory_fs.file.File_FS                                 import File_FS
+from memory_fs.file.actions.File_FS__Exists                 import File_FS__Exists
 from osbot_utils.type_safe.decorators.type_safe             import type_safe
-from memory_fs.file.actions.Memory_FS__File__Paths          import Memory_FS__File__Paths
+from memory_fs.file.actions.File_FS__Paths                  import File_FS__Paths
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
-from memory_fs.schemas.Schema__Memory_FS__File              import Schema__Memory_FS__File
 from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
@@ -20,7 +16,7 @@ class Memory_FS__Data(Type_Safe):
     storage     : Memory_FS__Storage
 
     def paths(self, file_config : Schema__Memory_FS__File__Config):
-        return Memory_FS__File__Paths(file__config=file_config)
+        return File_FS__Paths(file__config=file_config)
 
     def file_fs__exists(self, file_config : Schema__Memory_FS__File__Config):
         return File_FS__Exists(file__config=file_config, storage=self.storage)

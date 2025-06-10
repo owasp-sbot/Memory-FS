@@ -1,9 +1,8 @@
 from unittest                                          import TestCase
-
 from memory_fs.file.File_FS                            import File_FS
 from osbot_utils.utils.Json                            import json_to_bytes, json_to_str
 from memory_fs.storage_fs.providers.Storage_FS__Memory import Storage_FS__Memory
-from memory_fs.file.actions.Memory_FS__File__Create    import Memory_FS__File__Create
+from memory_fs.file.actions.File_FS__Create            import File_FS__Create
 
 class test_Memory_FS__File__Create(TestCase):
 
@@ -31,7 +30,7 @@ class test_Memory_FS__File__Create(TestCase):
         content__bytes = json_to_bytes(content__json)
 
         with self.file__create as _:
-            assert type(_) is Memory_FS__File__Create
+            assert type(_) is File_FS__Create
             files_created = _.create__config()
             assert files_created == [f"{self.file.file_id()}.config"]
 

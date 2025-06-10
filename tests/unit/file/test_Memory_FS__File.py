@@ -1,5 +1,5 @@
 from unittest                                           import TestCase
-from memory_fs.file.actions.Memory_FS__File__Config     import Memory_FS__File__Config
+from memory_fs.file.actions.File_FS__Config             import File_FS__Config
 from memory_fs.storage_fs.providers.Storage_FS__Memory  import Storage_FS__Memory
 from osbot_utils.utils.Objects                          import __
 from memory_fs.file.File_FS                             import File_FS
@@ -15,7 +15,7 @@ class test_Memory_FS__File(TestCase):
     def test__init__(self):
         with self.file as _:
             assert type(_) is File_FS
-            assert type(_.config()) is Memory_FS__File__Config
+            assert type(_.config()) is File_FS__Config
             assert _.obj()           == __(file_config =__(exists_strategy ='FIRST'                ,
                                                            file_id         = _.file_config.file_id,
                                                            file_paths      = [],
