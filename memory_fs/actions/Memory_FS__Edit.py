@@ -32,6 +32,7 @@ class Memory_FS__Edit(Type_Safe):
 
 
     # todo: this file needs to be removed from here, since we should be using the file_fs__* files here
+    @type_safe
     def save(self, file_config: Schema__Memory_FS__File__Config,
                    file       : Schema__Memory_FS__File             # todo: remove this, and add a new method/workflow to add the metadata
               ) -> List[Safe_Str__File__Path]:

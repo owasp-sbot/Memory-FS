@@ -23,7 +23,7 @@ class Memory_FS__Save(Type_Safe):
 
     @cache_on_self
     def memory_fs__serialize(self):
-        return Memory_FS__Serialize(storage=self.storage)
+        return Memory_FS__Serialize()
 
     def save(self, file_data   : Any,  # Save file data using all configured path handlers
                    file_config : Schema__Memory_FS__File__Config

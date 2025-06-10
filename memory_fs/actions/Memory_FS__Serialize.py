@@ -1,11 +1,11 @@
 from typing                                             import Any
 from memory_fs.schemas.Enum__Memory_FS__Serialization   import Enum__Memory_FS__Serialization
-from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
+# todo: refactor this into a new file utils area , since this class has nothing to do with storage (which only sees bytes)
 class Memory_FS__Serialize(Type_Safe):
-    storage     : Memory_FS__Storage
 
+    # todo: change name to not have '_'
     def _serialize_data(self, data: Any, file_type) -> bytes:                                   # Serialize data based on file type's serialization method
         serialization = file_type.serialization
 

@@ -36,7 +36,7 @@ class Memory_FS__Load(Type_Safe):
 
     def load_content(self, file_config : Schema__Memory_FS__File__Config  # Load content for a file
                       ) -> Optional[bytes]:
-        file_content = File_FS__Content(file_config=file_config, storage=self.storage)
+        file_content = File_FS__Content(file__config=file_config, storage=self.storage)
         return file_content.bytes()
 
         # full_file_paths = self.memory_fs__paths(file_config=file_config).paths__content()
@@ -50,6 +50,7 @@ class Memory_FS__Load(Type_Safe):
                   ) -> Optional[Any]:
         # Load raw content
         content_bytes = self.load_content(file_config)
+
         if not content_bytes:
             return None
 
