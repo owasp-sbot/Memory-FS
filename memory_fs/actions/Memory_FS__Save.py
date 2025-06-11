@@ -29,6 +29,7 @@ class Memory_FS__Save(Type_Safe):
                    file_config : Schema__Memory_FS__File__Config
               ) -> Dict[Safe_Id, Safe_Str__File__Path]:
 
+        raise NotImplementedError
         # Get file type from config
         file_type = file_config.file_type
         if type(file_type) is Schema__Memory_FS__File__Type:            # means that is it the default class (which should be abstracted)

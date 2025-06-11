@@ -13,9 +13,9 @@ class test_Memory_FS__File__Create(TestCase):
         cls.file.storage.storage_fs = cls.storage_fs            # todo: find a better way to use the Storage_FS__Memory as default in these tests
         cls.file_config             = cls.file.file_config
         cls.file_id                 = cls.file_config.file_id
-        cls.file__edit              = cls.file.file__edit()
-        cls.file__data              = cls.file.file__data()
-        cls.file__create            = cls.file.file__create()
+        cls.file__edit              = cls.file.file_fs__edit()
+        cls.file__data              = cls.file.file_fs__data()
+        cls.file__create            = cls.file.file_fs__create()
 
     def test_load__content(self):
         with self.file__edit as _:

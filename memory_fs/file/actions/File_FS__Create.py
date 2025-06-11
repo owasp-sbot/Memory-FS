@@ -1,3 +1,5 @@
+from osbot_utils.type_safe.decorators.type_safe import type_safe
+
 from osbot_utils.utils.Json                             import json_to_bytes
 from memory_fs.file.actions.File_FS__Exists             import File_FS__Exists
 from memory_fs.file.actions.File_FS__Paths              import File_FS__Paths
@@ -24,6 +26,7 @@ class File_FS__Create(Type_Safe):                                               
         return File_FS__Paths(file__config=self.file__config)
 
     # todo: we will need a top level create(content, metadata) method
+
     def create__config(self):
         if self.exists() is False:
             files_to_save = self.file_fs__paths().paths__config()
@@ -34,11 +37,11 @@ class File_FS__Create(Type_Safe):                                               
                 if self.storage.file__save(file_to_save, content__bytes):
                     files_saved.append(file_to_save)
             return files_saved
-            #return self.file__edit().create__config()       # todo: see if the exists check should not be inside create__config
+            #return self.file__edit().create__config()              # todo: see if the exists check should not be inside create__config
         return []
 
-    def create__content(self, content: bytes):
-        #return self.file__edit().save__content(content=content)
+    @type_safe
+    def create__content(self, content: bytes):                      # todo: need to updated the metadata file (with for example to save the length of the file, and update timestamp)
         files_to_save = self.file_fs__paths().paths__content()
         files_saved   = []
         for file_to_save in files_to_save:

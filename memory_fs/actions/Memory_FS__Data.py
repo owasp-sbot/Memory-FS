@@ -15,15 +15,13 @@ from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 class Memory_FS__Data(Type_Safe):
     storage     : Memory_FS__Storage
 
-    def paths(self, file_config : Schema__Memory_FS__File__Config):
-        return File_FS__Paths(file__config=file_config)
 
     def file_fs__exists(self, file_config : Schema__Memory_FS__File__Config):
         return File_FS__Exists(file__config=file_config, storage=self.storage)
 
-    @type_safe
-    def exists(self, file_config : Schema__Memory_FS__File__Config) -> bool:
-        return self.file_fs__exists(file_config).config()
+    # @type_safe
+    # def exists(self, file_config : Schema__Memory_FS__File__Config) -> bool:
+    #     return self.file_fs__exists(file_config).config()
 
     # @type_safe
     # def exists(self, file_config : Schema__Memory_FS__File__Config

@@ -6,7 +6,7 @@ from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 
 class File_FS__Exists(Type_Safe):
-    file__config: Schema__Memory_FS__File__Config
+    file__config: Schema__Memory_FS__File__Config                   # todo: capture idea that one way to group these two vars together (file__config and storage) is to use the concept of 'targets' (i.e. a File_FS__Target would be a object with references to the file config and the way to store it)
     storage     : Memory_FS__Storage
 
     @cache_on_self

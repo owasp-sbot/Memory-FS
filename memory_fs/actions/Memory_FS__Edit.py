@@ -22,11 +22,15 @@ class Memory_FS__Edit(Type_Safe):
 
     @type_safe
     def delete(self, file_config: Schema__Memory_FS__File__Config):          # todo: refactor with logic in delete_content since 90% of the code is the same
+
+        raise NotImplementedError  # todo: detect when this is being used, and remove when no exception is thrown
+
         file_fs__create = File_FS__Create(file__config=file_config, storage=self.storage)
         return file_fs__create.delete__config()
 
     @type_safe
     def delete_content(self, file_config: Schema__Memory_FS__File__Config):
+        raise NotImplementedError  # todo: detect when this is being used, and remove when no exception is thrown
         file_fs__create = File_FS__Create(file__config=file_config, storage=self.storage)
         return file_fs__create.delete__content()
 
@@ -36,6 +40,9 @@ class Memory_FS__Edit(Type_Safe):
     def save(self, file_config: Schema__Memory_FS__File__Config,
                    file       : Schema__Memory_FS__File             # todo: remove this, and add a new method/workflow to add the metadata
               ) -> List[Safe_Str__File__Path]:
+
+        raise NotImplementedError                                   # todo: detect when this is being used, and remove when no exception is thrown
+
         file_fs__create = File_FS__Create(file__config=file_config, storage=self.storage)
         return file_fs__create.create__config()
 
@@ -46,10 +53,11 @@ class Memory_FS__Edit(Type_Safe):
         #
         # return files_to_save
 
-    # todo: need to updated the metadata file save the length in the metadata
     def save__content(self, file_config: Schema__Memory_FS__File__Config,
                       content : bytes
                       ) -> List[Safe_Str__File__Path]:
+        raise NotImplementedError  # todo: detect when this is being used, and remove when no exception is thrown
+
         from memory_fs.file.actions.File_FS__Create import File_FS__Create      # due to circular imports
         file_fs__create = File_FS__Create(file__config=file_config, storage=self.storage)
         return file_fs__create.create__content(content)                                         # todo: fix the inconsistency between save and create
