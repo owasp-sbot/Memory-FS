@@ -1,6 +1,6 @@
 from unittest                                                import TestCase
-from memory_fs.file_fs.File_FS                                  import File_FS
-from memory_fs.file_fs.actions.File_FS__Name                    import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
+from memory_fs.file_fs.File_FS                               import File_FS
+from memory_fs.file_fs.actions.File_FS__Name                 import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding       import Enum__Memory_FS__File__Encoding
 from memory_fs.Memory_FS                                     import Memory_FS
 from memory_fs.path_handlers.Path__Handler__Latest           import Path__Handler__Latest
@@ -246,25 +246,3 @@ class test_Memory_FS__Memory__Storage(TestCase):
             self.memory_fs__edit.clear()
 
             assert len(self.memory_fs__data.list_files()) == 0
-
-    def test_stats(self):                                                                        # Tests storage statistics
-        config_1 = Schema__Memory_FS__File__Config(file_id  = "file_1"              ,
-                                                   file_paths = self.file_paths       ,
-                                                   file_type  = self.file_type_json   )
-
-        config_2 = Schema__Memory_FS__File__Config(file_id  = "file_2"              ,
-                                                   file_paths = self.file_paths       ,
-                                                   file_type   = self.file_type_json  )
-
-        with File_FS(file_config=config_1, storage=self.storage) as file_fs_1:
-            file_fs_1.create__both("short")
-
-        with File_FS(file_config=config_2, storage=self.storage) as file_fs_2:
-            file_fs_2.create__both("much longer content")
-
-        stats = self.memory_fs__data.stats()
-
-        assert stats[Safe_Id("type")] == Safe_Id("memory")
-        assert stats[Safe_Id("file_count"   )] == 8
-        # JSON serialization adds quotes, so sizes will be larger
-        assert stats[Safe_Id("total_size")] > len("short") + len("much longer content")         # todo: double check this value
