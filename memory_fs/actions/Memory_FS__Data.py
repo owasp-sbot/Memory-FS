@@ -1,10 +1,7 @@
-from typing                                                 import List, Optional, Dict, Any
+from typing                                                 import List, Dict, Any
 from memory_fs.file.actions.File_FS__Name                   import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from osbot_utils.utils.Json                                 import bytes_to_json
 from memory_fs.file.File_FS                                 import File_FS
-from memory_fs.file.actions.File_FS__Exists                 import File_FS__Exists
-from osbot_utils.type_safe.decorators.type_safe             import type_safe
-from memory_fs.file.actions.File_FS__Paths                  import File_FS__Paths
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
 from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
@@ -16,53 +13,8 @@ class Memory_FS__Data(Type_Safe):
     storage     : Memory_FS__Storage
 
 
-    def file_fs__exists(self, file_config : Schema__Memory_FS__File__Config):
-        return File_FS__Exists(file__config=file_config, storage=self.storage)
 
-    # @type_safe
-    # def exists(self, file_config : Schema__Memory_FS__File__Config) -> bool:
-    #     return self.file_fs__exists(file_config).config()
 
-    # @type_safe
-    # def exists(self, file_config : Schema__Memory_FS__File__Config
-    #             ) -> bool:                                                          # todo: see if we need to add the default path (or to have a separate "exists strategy")
-    #     files = self.storage.files()
-    #     for full_file_path in self.paths(file_config).paths():
-    #         if full_file_path in files:                                             # todo: refactor since this is going to be platform specific (specially since we shouldn't circle through all files to see if the file exists)
-    #             return True                                                         # we only check if we found one of them
-    #     return False                                                                # if none were found, return False
-
-    def exists_content(self, file_config : Schema__Memory_FS__File__Config) -> bool:
-        return self.file_fs__exists(file_config).content()
-
-    # @type_safe
-    # def exists_content(self, file_config : Schema__Memory_FS__File__Config
-    #              ) -> bool:
-    #     content_files =  self.storage.content_data()
-    #     for full_file_path in self.paths(file_config).paths__content():
-    #         if full_file_path in content_files:
-    #             return True
-    #     return False
-
-    # todo: this method should return a strongly typed class (ideally one from the file)
-    def get_file_info(self, path : Safe_Str__File__Path                                        # Get file information (size, hash, etc.)
-                       ) -> Optional[Dict[Safe_Id, Any]]:
-        # file = self.storage.file(path)
-        # if not file:
-        #     return None
-
-        file_fs = self.load(path)
-        if not file_fs:
-            return None
-        config   = file_fs.config().file_config()
-        metadata = file_fs.metadata()
-
-        content_size = int(metadata.content__size)                                # Get size from metadata
-        return {Safe_Id("exists")       : True                                          ,
-                Safe_Id("size")         : content_size                                  ,
-                Safe_Id("content_hash") : metadata.content__hash                   ,
-                Safe_Id("timestamp")    : metadata.timestamp                       ,
-                Safe_Id("content_type") : config.file_type.content_type.value      }
 
     def list_files(self, prefix : Safe_Str__File__Path = None                                  # List all files, optionally filtered by prefix
                     ) -> List[Safe_Str__File__Path]:                                           # todo: see if we need this method

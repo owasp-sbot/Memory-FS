@@ -68,7 +68,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
             assert _.exists__content()  is True                 # Verify content files were saved
 
             assert _.content()     == b'"test content"'     # raw content (via JSON serialization) should wrap string in quotes
-            assert _.load()        == 'test content'        # data when loaded should have the correct type (in this case a string)
+            assert _.data()        == 'test content'        # data when loaded should have the correct type (in this case a string)
 
     def test_save_dict_data_as_json(self):                                                      # Tests saving dict data with JSON file type
         test_dict = {"key": "value", "number": 42}
@@ -79,7 +79,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
                                    Safe_Str__File__Path(f'{self.path_now}/an-file.json')]       # BUG: the metadata files should also have been updated
             assert len(saved_paths) == 2
 
-            loaded_data = _.load()
+            loaded_data = _.data()
             assert loaded_data      == test_dict
 
     def test_save_string_data_as_markdown(self):                                               # Tests saving string data with Markdown file type
@@ -94,7 +94,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
                                    f'{self.path_now}/an-file.md']
 
             assert _.content() == markdown_content.encode('utf-8')      # Verify content is saved as plain string (not JSON)
-            assert _.load   () == markdown_content                      # and that round trip works
+            assert _.data   () == markdown_content                      # and that round trip works
 
     def test_save_html_content(self):                                                           # Tests saving HTML content
         config_html = Schema__Memory_FS__File__Config(file_id     = "index"     ,
@@ -109,7 +109,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
                                            f'{self.path_now}/index.html.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}',
                                            f'{self.path_now}/index.html'        ])
 
-            loaded_data = _.load()
+            loaded_data = _.data()
             assert loaded_data == html_content
 
     def test_save_binary_data_as_png(self):                                                     # Tests saving binary data with PNG file type
@@ -127,7 +127,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
                                            f'{self.path_now}/image.png'        ])
 
             # Verify binary data is preserved
-            loaded_data = _.load()
+            loaded_data = _.data()
             assert loaded_data == png_data
 
             # Verify encoding is BINARY
@@ -142,7 +142,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
 
             assert "Unknown serialization method: None" in str(context.exception)
 
-    def test_load_data_method(self):                                                            # Tests the new load_data method
+    def test_data(self):                                                            # Tests the new load_data method
         # Save different types of data
         test_data = {
             "string": "hello",
@@ -154,7 +154,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
             _.save(test_data)
 
             # Load using load
-            loaded_data = _.load()
+            loaded_data = _.data()
             assert loaded_data == test_data
 
     def test_file_type_properties_in_saved_file(self):                                         # Tests that file type properties are correctly saved

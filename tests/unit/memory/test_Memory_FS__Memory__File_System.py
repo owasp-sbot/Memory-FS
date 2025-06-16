@@ -1,7 +1,4 @@
 from unittest                                               import TestCase
-
-from osbot_utils.utils.Dev import pprint
-
 from osbot_utils.utils.Objects                              import __
 from memory_fs.file.File_FS                                 import File_FS
 from memory_fs.Memory_FS                                    import Memory_FS
@@ -146,13 +143,14 @@ class test_Memory_FS__Memory__File_System(TestCase):
         assert f"{path_2}/{full_file_name}"     in folder1_files
         assert f"{path_3}/{full_file_name}" not in folder1_files
 
+    # todo: refactor to test_File_FS__Info
     def test_get_file_info(self):                                                                # Tests getting file information
-        assert self.memory_fs__data.get_file_info(self.test_path) is None
+        assert self.file_fs.info              ()                                is None
         assert self.file_fs.create            (                               ) == [self.test_path        ]
         assert self.file_fs.create__content   (content=self.test_content_bytes) == [self.test_content_path]
 
-        info = self.memory_fs__data.get_file_info(self.test_path)
-
+        info = self.file_fs.info()
+        assert type(info)                   is dict                                         # BUG: this should be a strongly typed class
         assert info[Safe_Id("exists"      )] is True
         assert info[Safe_Id("size"        )] != len(self.test_content_bytes)
         assert info[Safe_Id("content_hash")] == safe_str_hash('"test content"')               # todo: review if '"test content"' is correct instead of just 'test content'

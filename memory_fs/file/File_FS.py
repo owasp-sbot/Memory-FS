@@ -1,24 +1,25 @@
-from typing import Any
-
-from memory_fs.actions.Memory_FS__Deserialize import Memory_FS__Deserialize
-from memory_fs.actions.Memory_FS__Serialize import Memory_FS__Serialize
-from memory_fs.file.actions.File_FS__Exists import File_FS__Exists
-from osbot_utils.helpers.safe_str.Safe_Str__Hash         import safe_str_hash
-from memory_fs.file.actions.File_FS__Config              import File_FS__Config
-from memory_fs.file.actions.File_FS__Create              import File_FS__Create
-from memory_fs.file.actions.File_FS__Data                import File_FS__Data
-from memory_fs.file.actions.File_FS__Edit                import File_FS__Edit
-from memory_fs.schemas.Schema__Memory_FS__File__Config   import Schema__Memory_FS__File__Config
-from memory_fs.schemas.Schema__Memory_FS__File__Metadata import Schema__Memory_FS__File__Metadata
-from memory_fs.storage.Memory_FS__Storage                import Memory_FS__Storage
-from osbot_utils.decorators.methods.cache_on_self        import cache_on_self
-from osbot_utils.type_safe.Type_Safe                     import Type_Safe
+from typing                                                 import Any
+from memory_fs.actions.Memory_FS__Deserialize               import Memory_FS__Deserialize
+from memory_fs.actions.Memory_FS__Serialize                 import Memory_FS__Serialize
+from memory_fs.file.actions.File_FS__Exists                 import File_FS__Exists
+from memory_fs.file.actions.File_FS__Info                   import File_FS__Info
+from memory_fs.file.data.File_FS__Data                      import File_FS__Data
+from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
+from memory_fs.file.actions.File_FS__Create                 import File_FS__Create
+from memory_fs.file.actions.File_FS__Edit                   import File_FS__Edit
+from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
+from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata
+from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
+from osbot_utils.decorators.methods.cache_on_self           import cache_on_self
+from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 
 
 
 class File_FS(Type_Safe):
     file_config : Schema__Memory_FS__File__Config                   # todo: rename to file__config (for consistency with other classes)
     storage     : Memory_FS__Storage
+
+    ###### File_FS__* methods #######
 
     @cache_on_self
     def file_fs__create(self):                                                                     # todo: rename these methods to file_fs__*
@@ -37,9 +38,9 @@ class File_FS(Type_Safe):
         return File_FS__Exists(file__config=self.file_config, storage=self.storage)
 
     @cache_on_self
-    def file_fs__content(self):
-        from memory_fs.file.actions.File_FS__Content import File_FS__Content                        # todo: fix this circular import
-        return File_FS__Content(file__config=self.file_config, storage= self.storage)
+    def file_fs__info(self):
+        return File_FS__Info(file__config=self.file_config, storage=self.storage)
+
 
     @cache_on_self
     def memory_fs__serialize(self):
@@ -50,7 +51,7 @@ class File_FS(Type_Safe):
         return Memory_FS__Deserialize()               # todo: this should be File_FS__Deserialize(file__config=self.file_config)
 
 
-    # helper methods that are very common in files
+    ###### Class methods #######
 
     def create(self):
         return self.file_fs__create().create__config()
@@ -61,16 +62,14 @@ class File_FS(Type_Safe):
     def create__both(self, file_data: Any):                                                     # todo: this is a temporary method, to simulate the creation of both files
         return sorted(self.create() + self.save(file_data=file_data))                           # todo: see if implications of doing this sort here
 
-    # def create__content(self, content: bytes):
-    #     return self.file_fs__create().create__content(content=content)
+    def config(self) -> Schema__Memory_FS__File__Config:
+        return self.file_fs__data().config()
 
-    @cache_on_self
-    def config(self) -> File_FS__Config:
-        return File_FS__Config(file__config=self.file_config, storage= self.storage)                    # todo: wrap the file__config and storage in another class since there are tons of methods that always need these two objects
+    def content(self) -> bytes:                         # this is the raw content (i.e. bytes)
+        return self.file_fs__data().content()           # todo: see if 'bytes' or 'raw_content' is a better name for this method
 
-    def content(self) -> bytes:
-        return self.file_fs__content().bytes()
-
+    def data(self) -> Any:
+        return self.file_fs__data().data()                # this is the serialised data
 
     def delete(self):                                                                                   # BUG: the delete should delete all files not just the config
         return self.file_fs__create().delete__config()                                                  # todo: this should be in a .delete__config() method
@@ -84,14 +83,12 @@ class File_FS(Type_Safe):
     def exists__content(self):
         return self.file_fs__exists().content()                                                         # todo: see if (apart from unit tests) we need this method
 
+    def info(self):
+        return self.file_fs__info().info()
+
     def file_id(self):
         return self.file_config.file_id
 
-    def load(self) -> Any:                                                                              # todo: see if .load() is the best name here, or if we should have .data() instead
-        file_type     = self.file_config.file_type
-        content_bytes = self.content()
-        file_data     = self.memory_fs__deserialize()._deserialize_data(content_bytes, file_type)
-        return file_data
 
     def metadata(self):
         content      = self.content()
