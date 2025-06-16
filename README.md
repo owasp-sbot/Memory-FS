@@ -78,3 +78,11 @@ print(f"Data loaded from {file_name}.{file_config.file_type.file_extension}: {lo
 ```
 
 **Note:** The project currently uses `Memory_FS__File__System` for in-memory storage. The path handlers like `Path__Handler__Latest` are defined, but their specific `generate_path` logic might be simulated in some actions (as seen in `Memory_FS__Save`). The example above reflects a functional case based on the current codebase.
+
+## Documentation
+
+Additional project notes are available under the `docs` folder. Key pages include:
+
+- [Developer Documentation](docs/dev/README.md)
+  - [Known Bugs](docs/dev/bugs/README.md)
+  - [TODO Lists](docs/dev/todos/README.md)
