@@ -1,5 +1,5 @@
 from unittest                                           import TestCase
-from memory_fs.file.data.File_FS__Config                import File_FS__Config
+from memory_fs.file_fs.data.File_FS__Config                import File_FS__Config
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
 

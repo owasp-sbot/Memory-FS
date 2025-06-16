@@ -1,4 +1,4 @@
-from memory_fs.file.File_FS                                 import File_FS
+from memory_fs.file_fs.File_FS                                 import File_FS
 from memory_fs.schemas.Schema__Memory_FS__File__Type        import Schema__Memory_FS__File__Type
 from osbot_utils.type_safe.decorators.type_safe             import type_safe
 from osbot_utils.helpers.Safe_Id                            import Safe_Id

@@ -1,8 +1,8 @@
 from unittest                                          import TestCase
-from memory_fs.file.File_FS                            import File_FS
+from memory_fs.file_fs.File_FS                            import File_FS
 from osbot_utils.utils.Json                            import json_to_bytes, json_to_str
 from memory_fs.storage_fs.providers.Storage_FS__Memory import Storage_FS__Memory
-from memory_fs.file.actions.File_FS__Create            import File_FS__Create
+from memory_fs.file_fs.actions.File_FS__Create            import File_FS__Create
 
 class test_Memory_FS__File__Create(TestCase):
 

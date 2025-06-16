@@ -1,6 +1,6 @@
 from unittest                                           import TestCase
-from memory_fs.file.actions.File_FS__Name               import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
-from memory_fs.file.actions.File_FS__Paths              import File_FS__Paths
+from memory_fs.file_fs.actions.File_FS__Name               import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
+from memory_fs.file_fs.actions.File_FS__Paths              import File_FS__Paths
 from memory_fs.file_types.Memory_FS__File__Type__Json   import Memory_FS__File__Type__Json
 from memory_fs.file_types.Memory_FS__File__Type__Text   import Memory_FS__File__Type__Text
 from memory_fs.file_types.Memory_FS__File__Type__Png    import Memory_FS__File__Type__Png

@@ -2,7 +2,7 @@ from unittest                                           import TestCase
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 from memory_fs.storage_fs.providers.Storage_FS__Memory  import Storage_FS__Memory
 from osbot_utils.utils.Objects                          import __
-from memory_fs.file.File_FS                             import File_FS
+from memory_fs.file_fs.File_FS                             import File_FS
 
 class test_Memory_FS__File(TestCase):
 

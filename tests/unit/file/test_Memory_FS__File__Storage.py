@@ -6,7 +6,7 @@ from memory_fs.path_handlers.Path__Handler__Latest      import Path__Handler__La
 from memory_fs.path_handlers.Path__Handler__Temporal    import Path__Handler__Temporal
 from osbot_utils.type_safe.Type_Safe__List              import Type_Safe__List
 from osbot_utils.utils.Objects                          import __, type_full_name
-from memory_fs.file.Memory_FS__File__Storage            import Memory_FS__File__Storage, Schema__Memory_FS__File__Storage__Config
+from memory_fs.file_fs.Memory_FS__File__Storage            import Memory_FS__File__Storage, Schema__Memory_FS__File__Storage__Config
 
 class test_Memory_FS__File__Storage(TestCase):
 

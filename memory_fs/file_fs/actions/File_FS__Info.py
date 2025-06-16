@@ -1,5 +1,5 @@
 from typing                                                 import Optional, Dict, Any
-from memory_fs.file.data.File_FS__Data                      import File_FS__Data
+from memory_fs.file_fs.data.File_FS__Data                      import File_FS__Data
 from osbot_utils.decorators.methods.cache_on_self           import cache_on_self
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config

@@ -1,7 +1,7 @@
 from typing                                             import List
-from memory_fs.file.actions.File_FS__Create             import File_FS__Create
+from memory_fs.file_fs.actions.File_FS__Create             import File_FS__Create
 from osbot_utils.type_safe.decorators.type_safe         import type_safe
-from memory_fs.file.actions.File_FS__Paths              import File_FS__Paths
+from memory_fs.file_fs.actions.File_FS__Paths              import File_FS__Paths
 from memory_fs.schemas.Schema__Memory_FS__File          import Schema__Memory_FS__File
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
@@ -58,7 +58,7 @@ class Memory_FS__Edit(Type_Safe):
                       ) -> List[Safe_Str__File__Path]:
         raise NotImplementedError  # todo: detect when this is being used, and remove when no exception is thrown
 
-        from memory_fs.file.actions.File_FS__Create import File_FS__Create      # due to circular imports
+        from memory_fs.file_fs.actions.File_FS__Create import File_FS__Create      # due to circular imports
         file_fs__create = File_FS__Create(file__config=file_config, storage=self.storage)
         return file_fs__create.create__content(content)                                         # todo: fix the inconsistency between save and create
 

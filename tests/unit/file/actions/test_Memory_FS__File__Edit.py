@@ -1,7 +1,7 @@
 from unittest                                           import TestCase
 from memory_fs.actions.Memory_FS__Edit                  import Memory_FS__Edit
-from memory_fs.file.File_FS                             import File_FS
-from memory_fs.file.actions.File_FS__Edit               import File_FS__Edit
+from memory_fs.file_fs.File_FS                             import File_FS
+from memory_fs.file_fs.actions.File_FS__Edit               import File_FS__Edit
 from memory_fs.storage_fs.providers.Storage_FS__Memory  import Storage_FS__Memory
 
 

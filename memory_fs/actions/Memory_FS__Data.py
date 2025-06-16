@@ -1,7 +1,7 @@
 from typing                                                 import List, Dict, Any
-from memory_fs.file.actions.File_FS__Name                   import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
+from memory_fs.file_fs.actions.File_FS__Name                import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from osbot_utils.utils.Json                                 import bytes_to_json
-from memory_fs.file.File_FS                                 import File_FS
+from memory_fs.file_fs.File_FS                              import File_FS
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
 from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
@@ -11,9 +11,6 @@ from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 # todo: I think most of these Memory_FS__* classes should be refactored to the Storage_FS__* classes
 class Memory_FS__Data(Type_Safe):
     storage     : Memory_FS__Storage
-
-
-
 
 
     def list_files(self, prefix : Safe_Str__File__Path = None                                  # List all files, optionally filtered by prefix

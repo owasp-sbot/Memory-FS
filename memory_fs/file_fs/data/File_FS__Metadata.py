@@ -3,7 +3,7 @@ from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memor
 from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
 from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
 from osbot_utils.decorators.methods.cache_on_self           import cache_on_self
-from memory_fs.file.data.File_FS__Content                   import File_FS__Content
+from memory_fs.file_fs.data.File_FS__Content                   import File_FS__Content
 from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 
 # todo: implement the logic to create, load and save the metadata file
