@@ -1,5 +1,6 @@
 from typing                                                 import List, Dict, Any
 from memory_fs.file_fs.actions.File_FS__Name                import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
+from memory_fs.target_fs.Target_FS__Create import Target_FS__Create
 from osbot_utils.utils.Json                                 import bytes_to_json
 from memory_fs.file_fs.File_FS                              import File_FS
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
@@ -29,18 +30,12 @@ class Memory_FS__Data(Type_Safe):
         return self.load__from_path__config(path)          #for now assume the path is Safe_Str__File__Path
 
     def load__from_path__config(self, path : Safe_Str__File__Path) -> File_FS:                 # Load a File_Fs object from a config path
-        with self.storage.storage_fs as _:
-            if _.file__exists(path):                                                # todo add a check if path is indeed a .config file
-                file_bytes = _.file__bytes(path)
-                file_json  = bytes_to_json(file_bytes)
-                file_config = Schema__Memory_FS__File__Config.from_json(file_json)  # todo: add error handling and the cases when file_json is not Schema__Memory_FS__File__Config
-                file_fs     = File_FS(file_config=file_config, storage=self.storage)
-                return file_fs
+        target_fs_create = Target_FS__Create(storage=self.storage)
+        target_fs        = target_fs_create.from_path__config(path)
+        if target_fs:
+            return target_fs.file_fs()
 
 
-    # def load_content(self, path : Safe_Str__File__Path                                         # Load raw content from the given path
-    #                   ) -> Optional[bytes]:
-    #     return self.storage.file__content(path)
 
 
     # todo: see if we need this method (this was originally developed during one of the first architectures, but we will probably be better with an Storage_FS__Stats class (which can then take into account limitations of the current storage)
