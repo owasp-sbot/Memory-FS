@@ -1,8 +1,8 @@
 from typing                                             import Optional, Any
 from memory_fs.actions.Memory_FS__Data                  import Memory_FS__Data
 from memory_fs.actions.Memory_FS__Deserialize           import Memory_FS__Deserialize
-from memory_fs.file.actions.File_FS__Content import File_FS__Content
-from memory_fs.file.actions.Memory_FS__File__Paths   import Memory_FS__File__Paths
+from memory_fs.file_fs.actions.File_FS__Paths           import File_FS__Paths
+from memory_fs.file_fs.data.File_FS__Content            import File_FS__Content
 from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
 from memory_fs.schemas.Schema__Memory_FS__File          import Schema__Memory_FS__File
@@ -22,7 +22,7 @@ class Memory_FS__Load(Type_Safe):
         return Memory_FS__Deserialize(storage=self.storage)
 
     def memory_fs__paths(self, file_config : Schema__Memory_FS__File__Config):
-        return Memory_FS__File__Paths(file__config=file_config)
+        return File_FS__Paths(file__config=file_config)
 
 
     def load(self, file_config : Schema__Memory_FS__File__Config  # Load file from the appropriate path based on config

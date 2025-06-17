@@ -1,6 +1,6 @@
 from unittest                                               import TestCase
 from osbot_utils.utils.Objects                              import __
-from memory_fs.file.File_FS                                 import File_FS
+from memory_fs.file_fs.File_FS                                 import File_FS
 from memory_fs.file_types.Memory_FS__File__Type__Text       import Memory_FS__File__Type__Text
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from memory_fs.path_handlers.Path__Handler__Latest          import Path__Handler__Latest
