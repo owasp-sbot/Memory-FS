@@ -7,6 +7,7 @@ class Path__Handler__Custom(Schema__Memory_FS__Path__Handler):       # Handler t
     name        : Safe_Id               = Safe_Id("custom")
     custom_path : Safe_Str__File__Path
 
+    # todo: file_id and file_ext should use Safe_Str helpers instead of raw str
     def generate_path(self, file_id: str, file_ext: str, is_metadata: bool = True) -> Safe_Str__File__Path:
         # Return the custom path as-is
         return self.custom_path

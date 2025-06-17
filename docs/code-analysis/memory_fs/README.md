@@ -15,6 +15,7 @@ with `pytest -q` to ensure nothing broke.
 - [Memory_FS.md](Memory_FS.md)
 - [__init__.md](__init__.md)
 - [version.md](version.md)
+- [str_usages.md](str_usages.md)
 
 ## Subfolders
 - [actions](actions/README.md)
