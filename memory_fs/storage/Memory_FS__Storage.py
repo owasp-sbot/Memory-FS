@@ -11,10 +11,6 @@ class Memory_FS__Storage(Type_Safe):
     #file_system  : Memory_FS__File_System                   # todo: we need to refactor this into class that has all the methods below, but has no access to the memory object (since each provider will have it's own version of it)
     storage_fs   : Storage_FS                               # todo: to implement this class and wire it below
 
-
-    def file(self, path):
-        return self.files().get(path)
-
     def file__content(self, path):
         return self.storage_fs.file__bytes(path)
 
