@@ -30,7 +30,6 @@ class test_Memory_FS__Memory__Storage(TestCase):
         self.memory_fs__edit    = self.memory_fs.edit   ()
         self.memory_fs__load    = self.memory_fs.load   ()
         self.memory_fs__save    = self.memory_fs.save   ()
-        self.file_system        = self.memory_fs.storage.file_system
 
         # Create file types
         self.file_type_json     = Memory_FS__File__Type__Json    ()

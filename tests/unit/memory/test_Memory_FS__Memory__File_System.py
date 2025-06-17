@@ -10,7 +10,6 @@ from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
 from osbot_utils.helpers.safe_int.Safe_UInt__FileSize       import Safe_UInt__FileSize
-from memory_fs.core.Memory_FS__File_System                  import Memory_FS__File_System
 from memory_fs.schemas.Schema__Memory_FS__File              import Schema__Memory_FS__File
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
 
@@ -22,7 +21,6 @@ class test_Memory_FS__Memory__File_System(TestCase):
         self.memory_fs__data    = self.memory_fs.data()
         self.memory_fs__edit    = self.memory_fs.edit()
         self.storage            = self.memory_fs.storage
-        self.file_system        = self.storage.file_system
         self.test_path          = Safe_Str__File__Path(f"an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}")
         self.test_content_path  = Safe_Str__File__Path("an-file.json")
         self.test_content_bytes = b"test content"
@@ -41,13 +39,6 @@ class test_Memory_FS__Memory__File_System(TestCase):
         self.storage_fs         = Storage_FS__Memory()          # todo: find a better way to have this in-memory setup
         self.storage.storage_fs = self.storage_fs
         self.file_fs            = File_FS(file_config=self.test_config, storage=self.storage)
-
-    def test_init(self):                                                                         # Tests basic initialization
-        assert type(self.file_system             ) is Memory_FS__File_System
-        assert type(self.file_system.files       ) is Type_Safe__Dict
-        assert type(self.file_system.content_data) is Type_Safe__Dict
-        assert len(self.file_system.files        ) == 0
-        assert len(self.file_system.content_data ) == 0
 
     def test_save_and_exists(self):                                                             # Tests saving files and checking existence
         assert self.file_fs.exists         () is False

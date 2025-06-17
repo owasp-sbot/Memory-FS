@@ -26,7 +26,6 @@ class test_Memory_FS__File(TestCase):
                                                                                serialization  = None)),
 
                                            storage     =  __(storage_type = 'memory'                         ,
-                                                             file_system  = __(files=__(), content_data=__()),
                                                              storage_fs   =  __(content_data=__())                            ))
 
     def test_create(self):

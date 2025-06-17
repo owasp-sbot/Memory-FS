@@ -18,10 +18,6 @@ class Memory_FS__Delete(Type_Safe):
     def memory_fs__load(self):
         return Memory_FS__Load(storage=self.storage)
 
-    @cache_on_self
-    def memory__fs_storage(self):
-        return Memory_FS__Storage(file_system=self.storage.file_system)
-
     def delete(self, file_config : Schema__Memory_FS__File__Config                  # Delete file from all configured paths
                 ) -> Dict[Safe_Id, bool]:
 

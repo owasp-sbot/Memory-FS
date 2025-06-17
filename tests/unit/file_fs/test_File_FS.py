@@ -21,8 +21,6 @@ class test_File_FS(Base_Test__File_FS):                                         
                                                                     encoding       = 'UTF_8'   ,
                                                                     serialization  = 'JSON'    )),
                               storage    = __(storage_type = 'memory'                         ,
-                                               file_system  = __(files        = __()           ,
-                                                                 content_data = __()           ),
                                                storage_fs   = __(content_data = __()           )))
             assert _.obj() == expected_obj
 
