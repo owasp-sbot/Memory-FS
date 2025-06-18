@@ -46,11 +46,6 @@ class File_FS(Type_Safe):
     def memory_fs__serialize(self):
         return Memory_FS__Serialize()                 # todo: this should be File_FS__Serialize(file__config=self.file_config)
 
-    @cache_on_self
-    def memory_fs__deserialize(self):
-        return Memory_FS__Deserialize()               # todo: this should be File_FS__Deserialize(file__config=self.file_config)
-
-
     ###### Class methods #######
 
     def create(self):

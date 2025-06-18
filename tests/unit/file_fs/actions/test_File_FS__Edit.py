@@ -1,7 +1,6 @@
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from tests.unit.Base_Test__File_FS                      import Base_Test__File_FS
 from memory_fs.file_fs.actions.File_FS__Edit            import File_FS__Edit
-from memory_fs.actions.Memory_FS__Edit                  import Memory_FS__Edit
 
 
 class test_File_FS__Edit(Base_Test__File_FS):                                           # Test file editing operations
@@ -13,7 +12,6 @@ class test_File_FS__Edit(Base_Test__File_FS):                                   
     def test__init__(self):                                                             # Test initialization
         with self.file_edit as _:
             assert type(_)                    is File_FS__Edit
-            assert type(_.storage_fs__edit()) is Memory_FS__Edit
             assert _.file__config             == self.file_config
             assert _.storage                  == self.storage
 

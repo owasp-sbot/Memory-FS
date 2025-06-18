@@ -1,6 +1,6 @@
 from unittest                                           import TestCase
-from memory_fs.file_fs.actions.File_FS__Name               import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
-from memory_fs.file_fs.actions.File_FS__Paths              import File_FS__Paths
+from memory_fs.file_fs.actions.File_FS__Name            import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
+from memory_fs.file_fs.actions.File_FS__Paths           import File_FS__Paths
 from memory_fs.file_types.Memory_FS__File__Type__Json   import Memory_FS__File__Type__Json
 from memory_fs.file_types.Memory_FS__File__Type__Text   import Memory_FS__File__Type__Text
 from memory_fs.file_types.Memory_FS__File__Type__Png    import Memory_FS__File__Type__Png
@@ -8,7 +8,7 @@ from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS
 from osbot_utils.helpers.Safe_Id                        import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 
-
+# todo: see if we still need these tests, or if they are already covered by the File_FS__Paths tests
 class test_Memory_FS__Paths(TestCase):
 
     def setUp(self):                                                                             # Initialize test data for each test
@@ -119,6 +119,7 @@ class test_Memory_FS__Paths(TestCase):
         paths = File_FS__Paths(file__config=self.file_config).paths()
         assert paths == [Safe_Str__File__Path(f'data/my-file_2024_v1.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
+    # todo fix test since the assumption is correct Safe_Id doesn't allow empty strings
     def test_paths_empty_file_id(self):                                                        # Test behavior with empty file_id
         # Note: Safe_Id might not allow empty strings, but testing the edge case
         try:

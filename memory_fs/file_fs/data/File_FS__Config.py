@@ -20,10 +20,6 @@ class File_FS__Config(Type_Safe):               # todo: refactor the methods fro
     def file_fs__name(self):
         return File_FS__Name(file__config=self.file__config)
 
-    @cache_on_self
-    def file_fs__paths(self):
-        return File_FS__Paths(file__config=self.file__config)
-
     ###### Main methods #######
 
     def config(self) -> Schema__Memory_FS__File__Config:

@@ -2,9 +2,9 @@ from unittest                                                import TestCase
 from memory_fs.file_fs.File_FS                               import File_FS
 from memory_fs.file_fs.actions.File_FS__Name                 import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding       import Enum__Memory_FS__File__Encoding
-from memory_fs.Memory_FS                                     import Memory_FS
 from memory_fs.path_handlers.Path__Handler__Latest           import Path__Handler__Latest
 from memory_fs.path_handlers.Path__Handler__Temporal         import Path__Handler__Temporal
+from memory_fs.storage.Memory_FS__Storage                    import Memory_FS__Storage
 from memory_fs.storage_fs.providers.Storage_FS__Memory       import Storage_FS__Memory
 from osbot_utils.helpers.Safe_Id                             import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path       import Safe_Str__File__Path
@@ -20,16 +20,9 @@ class test_Memory_FS__Memory__Storage(TestCase):
     # todo: refactor this to use @classmethod and only create one instance of storage_fs
     def setUp(self):                                                                             # Initialize test data
         self.storage_fs         = Storage_FS__Memory()
-        self.memory_fs          = Memory_FS()
-        self.storage            = self.memory_fs.storage
+        self.storage            = Memory_FS__Storage()
         self.storage.storage_fs = self.storage_fs          # todo: find a way to do this assigment better
 
-
-        self.memory_fs__data    = self.memory_fs.data   ()
-        self.memory_fs__delete  = self.memory_fs.delete ()
-        self.memory_fs__edit    = self.memory_fs.edit   ()
-        self.memory_fs__load    = self.memory_fs.load   ()
-        self.memory_fs__save    = self.memory_fs.save   ()
 
         # Create file types
         self.file_type_json     = Memory_FS__File__Type__Json    ()
@@ -224,7 +217,7 @@ class test_Memory_FS__Memory__Storage(TestCase):
         with File_FS(file_config=config_2, storage=self.storage) as file_fs_2:
             file_fs_2.create__both("content_2")
 
-        all_files = self.memory_fs__data.list_files()           # todo figure out a better way to name this since these are the {FILE_EXTENSION__MEMORY_FS__FILE__CONFIG} files (i.e. this all files doesn't include the content files, which could be an expectation)
+        all_files = self.storage.list_files()           # todo figure out a better way to name this since these are the {FILE_EXTENSION__MEMORY_FS__FILE__CONFIG} files (i.e. this all files doesn't include the content files, which could be an expectation)
 
         assert len(all_files) == 8
         assert sorted(all_files) == sorted([Safe_Str__File__Path(f'latest/file_1.json'                                                                                  ),
@@ -235,13 +228,3 @@ class test_Memory_FS__Memory__Storage(TestCase):
                                             Safe_Str__File__Path(f'{self.path_now}/file_1.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'),
                                             Safe_Str__File__Path(f'{self.path_now}/file_2.md'                                            ),
                                             Safe_Str__File__Path(f'{self.path_now}/file_2.md.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'  )])
-
-    def test_clear(self):                                                                        # Tests clearing storage
-        with self.file_fs as _:
-            _.save("content1")
-
-            assert len(self.memory_fs__data.list_files()) > 0
-
-            self.memory_fs__edit.clear()
-
-            assert len(self.memory_fs__data.list_files()) == 0

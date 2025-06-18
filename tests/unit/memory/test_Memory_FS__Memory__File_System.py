@@ -1,11 +1,10 @@
 from unittest                                               import TestCase
 from memory_fs.file_fs.File_FS                              import File_FS
-from memory_fs.Memory_FS                                    import Memory_FS
 from memory_fs.file_fs.actions.File_FS__Exists              import File_FS__Exists
 from memory_fs.file_fs.actions.File_FS__Name                import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
 from memory_fs.file_types.Memory_FS__File__Type__Json       import Memory_FS__File__Type__Json
+from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
 from memory_fs.storage_fs.providers.Storage_FS__Memory      import Storage_FS__Memory
-from osbot_utils.type_safe.Type_Safe__Dict                  import Type_Safe__Dict
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
@@ -17,10 +16,7 @@ from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memor
 class test_Memory_FS__Memory__File_System(TestCase):
 
     def setUp(self):                                                                             # Initialize test data
-        self.memory_fs          = Memory_FS()
-        self.memory_fs__data    = self.memory_fs.data()
-        self.memory_fs__edit    = self.memory_fs.edit()
-        self.storage            = self.memory_fs.storage
+        self.storage            = Memory_FS__Storage()
         self.test_path          = Safe_Str__File__Path(f"an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}")
         self.test_content_path  = Safe_Str__File__Path("an-file.json")
         self.test_content_bytes = b"test content"
@@ -93,8 +89,8 @@ class test_Memory_FS__Memory__File_System(TestCase):
             assert self.test_config.file_paths == _.file_config.file_paths
 
 
-        all_files     = self.memory_fs__data.list_files()
-        folder1_files = self.memory_fs__data.list_files(Safe_Str__File__Path("folder1"))
+        all_files     = self.storage.list_files()
+        folder1_files = self.storage.list_files(Safe_Str__File__Path("folder1"))
 
 
         assert len(all_files)                == 3
@@ -124,49 +120,12 @@ class test_Memory_FS__Memory__File_System(TestCase):
         #assert info[Safe_Id("timestamp"   )] == self.test_metadata.timestamp               # todo: add check for metadata.timestamp
         assert info[Safe_Id("content_type")] == "application/json; charset=utf-8"
 
-    # todo: see if we need this, since now that we have multiple paths support, the logic in the move is more complicated
-    # def test_move(self):                                                                         # Tests moving files
-    #     source_path         = Safe_Str__File__Path("source/file.json")
-    #     source_content_path = Safe_Str__File__Path("source/file.html")
-    #     dest_path           = Safe_Str__File__Path("destination/file.json")
-    #     dest_content_path   = Safe_Str__File__Path("destination/file.html")
-    #
-    #     self.memory_fs__edit.save        (source_path, self.test_file)
-    #     self.memory_fs__edit.save_content(source_content_path, self.test_content_bytes)
-    #
-    #     assert self.memory_fs__edit.move    (source_path, dest_path) is True
-    #     assert self.memory_fs__data.exists  (source_path           ) is False
-    #     assert self.memory_fs__data.exists  (dest_path             ) is True
-    #     assert self.memory_fs__data.load    (dest_path             ) == self.test_file
-    #     assert self.memory_fs__data.load    (dest_path      ).json() == self.test_file.json()
-    #
-    #     # Content should not be moved automatically in this test since paths don't match
-    #     assert self.memory_fs__edit.move(source_path, dest_path) is False                          # Move non-existent file
-
-    # todo: see if we need this, since now that we have multiple paths support, the logic in the copy is more complicated
-
-    # def test_copy(self):                                                                         # Tests copying files
-    #     source_path         = Safe_Str__File__Path("source/file.json")
-    #     source_content_path = Safe_Str__File__Path("source/file.html")
-    #     dest_path           = Safe_Str__File__Path("destination/file.json")
-    #
-    #     self.memory_fs__edit.save(source_path, self.test_file)
-    #     self.memory_fs__edit.save_content(source_content_path, self.test_content_bytes)
-    #
-    #     assert self.memory_fs__edit.copy(source_path, dest_path) is True
-    #     assert self.memory_fs__data.exists  (source_path           ) is True
-    #     assert self.memory_fs__data.exists  (dest_path             ) is True
-    #     assert self.memory_fs__data.load    (source_path           ) is self.test_file
-    #     assert self.memory_fs__data.load    (dest_path             ) is self.test_file
-    #
-    #     assert self.memory_fs__edit.copy(Safe_Str__File__Path("missing"), dest_path) is False      # Copy non-existent file
-
     def test_clear(self):                                                                        # Tests clearing all files and directories
         assert self.file_fs.create            (                               ) == [self.test_path        ]
         assert self.file_fs.create__content   (content=self.test_content_bytes) == [self.test_content_path]
 
         assert len(self.storage_fs.content_data ) == 2              # one for config and one for content
 
-        self.memory_fs__edit.clear()                                # delete the entire db
+        self.storage_fs.clear()                                # delete the entire db
 
         assert len(self.storage_fs.content_data) == 0

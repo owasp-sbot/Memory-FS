@@ -6,7 +6,6 @@ from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from memory_fs.path_handlers.Path__Handler__Latest          import Path__Handler__Latest
 from memory_fs.path_handlers.Path__Handler__Temporal        import Path__Handler__Temporal
 from memory_fs.project.Schema__Memory_FS__Project__Config   import Schema__Memory_FS__Project__Path_Strategy, Schema__Memory_FS__Project__Config
-from memory_fs.Memory_FS                                    import Memory_FS
 from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
 from memory_fs.project.Memory_FS__Project                   import Memory_FS__Project
 
@@ -34,7 +33,8 @@ class test_Memory_FS__Project(TestCase):                                        
                                        'path_strategies': {Safe_Id('latest-temporal'): {'name'         : 'latest-temporal'                                                         ,
                                                                                         'path_handlers': ['memory_fs.path_handlers.Path__Handler__Latest.Path__Handler__Latest'    ,
                                                                                                           'memory_fs.path_handlers.Path__Handler__Temporal.Path__Handler__Temporal']}},
-                                       'storage'        : 'memory_fs.storage.Memory_FS__Storage.Memory_FS__Storage'}}
+                                       'storage'        : 'memory_fs.storage.Memory_FS__Storage.Memory_FS__Storage'},
+                             'storage': {'storage_fs': {}, 'storage_type': 'memory'}}
             assert _.json() == expected_json
 
     def test_file(self):                                                                # Test file creation
@@ -55,10 +55,6 @@ class test_Memory_FS__Project(TestCase):                                        
                                     storage    = __(storage_type = 'memory'                       ,
                                                     storage_fs   = __()                            ))
 
-    def test_memory_fs(self):                                                           # Test memory_fs property
-        with self.project.memory_fs() as _:
-            assert type(_)         is Memory_FS
-            assert type(_.storage) == Memory_FS__Storage
 
     def test_path_strategy(self):                                                       # Test path strategy retrieval
         with self.project as _:
