@@ -1,7 +1,8 @@
+from typing import List
+
 from memory_fs.storage_fs.Storage_FS                    import Storage_FS
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from osbot_utils.helpers.Safe_Id                        import Safe_Id
-from memory_fs.core.Memory_FS__File_System              import Memory_FS__File_System
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 # todo: this class needs to be refactored with the code that is now on storage_fs
@@ -9,14 +10,7 @@ from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 class Memory_FS__Storage(Type_Safe):
     storage_type : Safe_Id = Safe_Id('memory')              # todo: see if we still need this storage_type
-    file_system  : Memory_FS__File_System                   # todo: we need to refactor this into class that has all the methods below, but has no access to the memory object (since each provider will have it's own version of it)
     storage_fs   : Storage_FS                               # todo: to implement this class and wire it below
-
-    # def content_data(self):
-    #     return self.file_system.content_data
-
-    def file(self, path):
-        return self.files().get(path)
 
     def file__content(self, path):
         return self.storage_fs.file__bytes(path)
@@ -33,15 +27,20 @@ class Memory_FS__Storage(Type_Safe):
         return self.storage_fs.file__save(path=path, data=data)
 
 
-    # def files(self):
-    #     return self.storage_fs.files__names()
-    #     return self.file_system.files
-
-    # def files__contents(self):                              # todo: see if we need this, this could be lots of data
-    #     return self.files().values()
-
     def files__paths(self):                                 # todo: see if we need this method
         return self.storage_fs.files__paths()
-        #return list(self.file_system.files.keys())
 
+
+    # todo
+    def list_files(self, prefix : Safe_Str__File__Path = None                                  # List all files, optionally filtered by prefix
+                    ) -> List[Safe_Str__File__Path]:                                           # todo: see if we need this method
+        if prefix is None:
+            return list(self.storage_fs.files__paths())
+
+        prefix_str = str(prefix)
+        if not prefix_str.endswith('/'):
+            prefix_str += '/'
+
+        return [path for path in self.files__paths()
+                if str(path).startswith(prefix_str)]
 

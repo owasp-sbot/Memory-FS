@@ -1,9 +1,9 @@
 from unittest                                           import TestCase
 from osbot_utils.helpers.safe_str.Safe_Str__File__Name  import Safe_Str__File__Name
-from memory_fs.file_fs.actions.File_FS__Name               import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__CONFIG, FILE_EXTENSION__MEMORY_FS__FILE__METADATA
+from memory_fs.file_fs.actions.File_FS__Name            import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__CONFIG, FILE_EXTENSION__MEMORY_FS__FILE__METADATA
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 
-
+# todo: see if we still need these tests, or if they are already covered by the File_FS__Name tests
 class test_Memory_FS__File_Name(TestCase):
 
     @classmethod

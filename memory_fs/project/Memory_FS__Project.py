@@ -1,14 +1,14 @@
-from memory_fs.file_fs.File_FS                                 import File_FS
+from memory_fs.file_fs.File_FS                              import File_FS
 from memory_fs.schemas.Schema__Memory_FS__File__Type        import Schema__Memory_FS__File__Type
+from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
 from osbot_utils.type_safe.decorators.type_safe             import type_safe
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
-from osbot_utils.decorators.methods.cache_on_self           import cache_on_self
-from memory_fs.Memory_FS                                    import Memory_FS
 from memory_fs.project.Schema__Memory_FS__Project__Config   import Schema__Memory_FS__Project__Config, Schema__Memory_FS__Project__Path_Strategy
 from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 
 class Memory_FS__Project(Type_Safe):
-    config: Schema__Memory_FS__Project__Config
+    config  : Schema__Memory_FS__Project__Config
+    storage : Memory_FS__Storage
 
     def file(self, file_id     : Safe_Id,
                    path_strategy: Schema__Memory_FS__Project__Path_Strategy,
@@ -26,12 +26,6 @@ class Memory_FS__Project(Type_Safe):
                 _.file_paths = file_paths
                 _.file_id  = file_id
             return file
-
-    @cache_on_self
-    def memory_fs(self):
-        storage   = self.config.storage()
-        memory_fs = Memory_FS(storage=storage)
-        return memory_fs
 
     @type_safe
     def path_strategy(self, path_strategy_name:Safe_Id) -> Schema__Memory_FS__Project__Path_Strategy:

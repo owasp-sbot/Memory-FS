@@ -14,15 +14,11 @@ class File_FS__Config(Type_Safe):               # todo: refactor the methods fro
 
     @cache_on_self
     def file_fs__exists(self):
-        return File_FS__Exists(file__config=self.file__config)
+        return File_FS__Exists(file__config=self.file__config, storage=self.storage)
 
     @cache_on_self
     def file_fs__name(self):
         return File_FS__Name(file__config=self.file__config)
-
-    @cache_on_self
-    def file_fs__paths(self):
-        return File_FS__Paths(file__config=self.file__config)
 
     ###### Main methods #######
 
