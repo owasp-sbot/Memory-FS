@@ -70,6 +70,6 @@ class File_FS__Create(Type_Safe):                                               
         #         del content_files[file_path]                         # todo: this needs to be abstracted out in the storage class
         #         files_deleted.append(file_path)
         # return files_deleted
-    def exists(self):
+    def exists(self) -> bool:
         return self.file_fs__exists().config()
         #return self.file__data().exists()
