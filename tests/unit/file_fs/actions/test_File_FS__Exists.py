@@ -1,6 +1,9 @@
-from tests.unit.Base_Test__File_FS                          import Base_Test__File_FS
-from memory_fs.file_fs.actions.File_FS__Exists              import File_FS__Exists
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
+import pytest
+from osbot_utils.utils.Env                                      import not_in_github_action
+from osbot_utils.helpers.duration.decorators.capture_duration   import capture_duration
+from tests.unit.Base_Test__File_FS                              import Base_Test__File_FS
+from memory_fs.file_fs.actions.File_FS__Exists                  import File_FS__Exists
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path          import Safe_Str__File__Path
 
 class test_File_FS__Exists(Base_Test__File_FS):                                         # Test file existence checking
 
@@ -62,3 +65,22 @@ class test_File_FS__Exists(Base_Test__File_FS):                                 
             # Create file in first path
             self.storage.storage_fs.file__save(Safe_Str__File__Path('dir1/test-file.json.config'), b'{}')
             assert _.config() is True                                                   # ANY strategy - one exists
+
+
+    def test__performance__config(self):
+        if not_in_github_action:
+            pytest.skip("Only run in GH actions (significant % of test execution)")
+        items_to_create = 1000
+        with capture_duration(precision=4) as duration:
+            with self.file_exists as _:
+                for i in range(0, items_to_create):
+                    _.config()
+
+        # with capture_duration(precision=5) as duration:
+        #     with self.file as _:
+        #         for i in range(0, items_to_create):
+        #             _.create()
+        #pprint(duration.seconds)
+        #assert duration.seconds < 0.002                    # should be low like this
+        assert duration.seconds < 0.03                      # but at the moment is realy big
+

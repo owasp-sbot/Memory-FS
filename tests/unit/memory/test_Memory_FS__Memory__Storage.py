@@ -15,6 +15,7 @@ from memory_fs.file_types.Memory_FS__File__Type__Html        import Memory_FS__F
 from memory_fs.file_types.Memory_FS__File__Type__Png         import Memory_FS__File__Type__Png
 
 
+# todo: review performance impact of these tests (and methods used), since they are taking ~30ms to ~40ms to execute (which is a significant % of the current test suite)
 class test_Memory_FS__Memory__Storage(TestCase):
 
     # todo: refactor this to use @classmethod and only create one instance of storage_fs

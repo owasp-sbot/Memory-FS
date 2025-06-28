@@ -4,6 +4,8 @@ from memory_fs.file_fs.actions.File_FS__Info                import File_FS__Info
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
 
+# todo: review performance impact of these tests (and methods used), since they are taking ~10ms to ~15ms to execute (which is a significant % of the current test suite)
+
 class test_File_FS__Info(Base_Test__File_FS):                                          # Test file info operations
 
     def setUp(self):                                                                    # Initialize test data

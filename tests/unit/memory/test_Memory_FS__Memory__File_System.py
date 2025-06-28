@@ -6,6 +6,8 @@ from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
 from osbot_utils.helpers.safe_int.Safe_UInt__FileSize       import Safe_UInt__FileSize
 
 
+# todo: review performance impact of these tests (and methods used), since they are taking ~10ms to ~15ms to execute (which is a significant % of the current test suite)
+
 class test_Memory_FS__Memory__File_System(Base_Test__File_FS):                          # Using base class for optimization
 
     @classmethod

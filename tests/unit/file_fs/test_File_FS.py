@@ -1,8 +1,11 @@
-from osbot_utils.helpers.Safe_Id                            import Safe_Id
-from tests.unit.Base_Test__File_FS                          import Base_Test__File_FS
-from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
-from osbot_utils.utils.Objects                              import __
-from memory_fs.file_fs.File_FS                              import File_FS
+import pytest
+from osbot_utils.utils.Env                                      import not_in_github_action
+from osbot_utils.helpers.duration.decorators.capture_duration   import capture_duration
+from osbot_utils.helpers.Safe_Id                                import Safe_Id
+from tests.unit.Base_Test__File_FS                              import Base_Test__File_FS
+from memory_fs.schemas.Schema__Memory_FS__File__Config          import Schema__Memory_FS__File__Config
+from osbot_utils.utils.Objects                                  import __
+from memory_fs.file_fs.File_FS                                  import File_FS
 
 
 class test_File_FS(Base_Test__File_FS):                                                # Tests for File_FS class
@@ -109,3 +112,44 @@ class test_File_FS(Base_Test__File_FS):                                         
             saved_files = _.save(test_data)
             assert saved_files == [f'{_.file_id()}.json']
             assert _.data()    == test_data
+
+
+    def test__performance__create(self):
+        if not_in_github_action:
+            pytest.skip("Only run in GH actions (significant % of test execution)")
+        items_to_create = 1000
+        with capture_duration(precision=5) as duration:
+            with self.file as _:
+                for i in range(0, items_to_create):
+                    _.create()
+
+                    # full .create()           is ~0.01624      # the prob seems to be inside the self.file_fs__exists().config() method
+                    # just .file_fs__create()  is ~0.00105
+
+        #pprint(duration.seconds)
+        #assert duration.seconds < 0.002                    # should be low like this
+        assert duration.seconds < 0.03                      # but at the moment is big
+
+    def test__performance__file_fs__exists__config(self):
+        if not_in_github_action:
+            pytest.skip("Only run in GH actions (significant % of test execution)")
+        items_to_create = 1000
+        file_fs_exists__config = self.file.file_fs__exists().config
+        with capture_duration(precision=5) as duration:
+            with self.file as _:
+                for i in range(0, items_to_create):
+                    file_fs_exists__config()                # still quite expensive
+
+        #pprint(duration.seconds)
+        #assert duration.seconds < 0.002                    # should be low like this
+        assert duration.seconds < 0.03                      # but at the moment is big
+
+    def test__performance__file_fs__create(self):
+        if not_in_github_action:
+            pytest.skip("Only run in GH actions (significant % of test execution)")
+        items_to_create = 100
+        with capture_duration(precision=4) as duration:
+            with self.file as _:
+                for i in range(0, items_to_create):
+                    _.file_fs__create()
+        assert duration.seconds < 0.001                                             # confirms the minium performance impact of @cache_on_self
