@@ -9,13 +9,13 @@ class test_File_FS__Metadata(Base_Test__File_FS):                               
     def setUp(self):                                                                    # Initialize test data
         super().setUp()
         self.file_metadata = File_FS__Metadata(file__config = self.file_config ,
-                                               storage      = self.storage      )
+                                               storage_fs   = self.storage_fs      )
 
     def test__init__(self):                                                             # Test initialization
         with self.file_metadata as _:
             assert type(_)         is File_FS__Metadata
             assert _.file__config  == self.file_config
-            assert _.storage       == self.storage
+            assert _.storage_fs       == self.storage_fs
 
     def test_metadata_no_content(self):                                                # Test metadata when no content exists
         with self.file_metadata as _:

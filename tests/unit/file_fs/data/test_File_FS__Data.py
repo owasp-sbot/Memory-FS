@@ -9,13 +9,13 @@ class test_File_FS__Data(Base_Test__File_FS):                                   
     def setUp(self):                                                                    # Initialize test data
         super().setUp()
         self.file_data = File_FS__Data(file__config = self.file_config ,
-                                       storage      = self.storage      )
+                                       storage_fs   = self.storage_fs      )
 
     def test__init__(self):                                                             # Test initialization
         with self.file_data as _:
             assert type(_)         is File_FS__Data
             assert _.file__config  == self.file_config
-            assert _.storage       == self.storage
+            assert _.storage_fs    == self.storage_fs
 
     def test_config(self):                                                              # Test config method
         with self.file_data as _:

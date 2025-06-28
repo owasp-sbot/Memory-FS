@@ -1,5 +1,4 @@
-from osbot_utils.utils.Json import json_to_str
-
+from osbot_utils.utils.Json                                 import json_to_str
 from tests.unit.Base_Test__File_FS                          import Base_Test__File_FS
 from memory_fs.target_fs.Target_FS__Create                  import Target_FS__Create
 from memory_fs.target_fs.Target_FS                          import Target_FS
@@ -12,13 +11,13 @@ class test_Target_FS__Create(Base_Test__File_FS):                               
 
     def setUp(self):                                                                    # Initialize test data
         super().setUp()
-        self.target_fs_create = Target_FS__Create(storage=self.storage)
+        self.target_fs_create = Target_FS__Create   (storage_fs=self.storage_fs)
         self.test_path        = Safe_Str__File__Path(f"{self.file_config.file_id}.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}")
 
     def test__init__(self):                                                             # Test initialization
         with self.target_fs_create as _:
             assert type(_)    is Target_FS__Create
-            assert _.storage  == self.storage
+            assert _.storage_fs  == self.storage_fs
 
     def test_from_path__config_no_file(self):                                          # Test loading from path when file doesn't exist
         with self.target_fs_create as _:
@@ -31,9 +30,9 @@ class test_Target_FS__Create(Base_Test__File_FS):                               
 
         with self.target_fs_create as _:
             target_fs = _.from_path__config(self.test_path)
-            assert type(target_fs)              is Target_FS
+            assert type(target_fs)               is Target_FS
             assert target_fs.file_config.file_id == self.file_config.file_id
-            assert target_fs.storage            == self.storage
+            assert target_fs.storage_fs          == self.storage_fs
 
             # Verify we can use the loaded target_fs
             file_fs = target_fs.file_fs()
@@ -42,7 +41,7 @@ class test_Target_FS__Create(Base_Test__File_FS):                               
 
     def test_from_path__config_invalid_json(self):                                     # Test loading from path with invalid JSON
         # Save invalid JSON to the path
-        self.storage.storage_fs.file__save(self.test_path, b"invalid json")
+        self.storage_fs.file__save(self.test_path, b"invalid json")
 
         with self.target_fs_create as _:
             try:
@@ -61,8 +60,8 @@ class test_Target_FS__Create(Base_Test__File_FS):                               
 
         file_1_bytes = json_to_str(config1.json()).encode()
         file_2_bytes = json_to_str(config2.json()).encode()
-        self.storage.storage_fs.file__save(path1, file_1_bytes)
-        self.storage.storage_fs.file__save(path2, file_2_bytes)
+        self.storage_fs.file__save(path1, file_1_bytes)
+        self.storage_fs.file__save(path2, file_2_bytes)
 
         with self.target_fs_create as _:
             target_fs_1 = _.from_path__config(path1)

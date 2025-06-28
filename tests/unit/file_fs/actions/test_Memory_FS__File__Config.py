@@ -1,7 +1,7 @@
 from unittest                                           import TestCase
-from memory_fs.file_fs.data.File_FS__Config                import File_FS__Config
+from memory_fs.file_fs.data.File_FS__Config             import File_FS__Config
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
-from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
+from memory_fs.storage_fs.Storage_FS                    import Storage_FS
 
 
 class test_Memory_FS__File__Config(TestCase):
@@ -16,7 +16,7 @@ class test_Memory_FS__File__Config(TestCase):
         with self.file_config as _:
             assert type(_             ) is File_FS__Config
             assert type(_.file__config)  is Schema__Memory_FS__File__Config
-            assert type(_.storage     ) is Memory_FS__Storage
+            assert type(_.storage_fs  ) is Storage_FS
 
     def test_exists(self):
         with self.file_config as _:

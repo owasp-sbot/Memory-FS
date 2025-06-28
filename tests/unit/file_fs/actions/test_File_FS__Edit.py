@@ -13,7 +13,7 @@ class test_File_FS__Edit(Base_Test__File_FS):                                   
         with self.file_edit as _:
             assert type(_)                    is File_FS__Edit
             assert _.file__config             == self.file_config
-            assert _.storage                  == self.storage
+            assert _.storage_fs               == self.storage_fs
 
     def test_save__content(self):                                                       # Test saving content
         with self.file_edit as _:
@@ -26,7 +26,7 @@ class test_File_FS__Edit(Base_Test__File_FS):                                   
         self.file_config.file_paths = ['path1', 'path2']
 
         with File_FS__Edit(file__config = self.file_config ,
-                           storage      = self.storage      ) as _:
+                           storage_fs   = self.storage_fs  ) as _:
             content = b'multi-path content'
             result  = _.save__content(content)
 
@@ -34,8 +34,8 @@ class test_File_FS__Edit(Base_Test__File_FS):                                   
                                              'path2/test-file.json' ])
 
             # Verify content saved to both paths
-            assert self.storage.storage_fs.file__bytes(Safe_Str__File__Path('path1/test-file.json')) == content
-            assert self.storage.storage_fs.file__bytes(Safe_Str__File__Path('path2/test-file.json')) == content
+            assert self.storage_fs.file__bytes(Safe_Str__File__Path('path1/test-file.json')) == content
+            assert self.storage_fs.file__bytes(Safe_Str__File__Path('path2/test-file.json')) == content
 
     def test_load__content(self):                                                       # Test loading content
         with self.file_edit as _:

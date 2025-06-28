@@ -11,13 +11,13 @@ class test_File_FS__Info(Base_Test__File_FS):                                   
     def setUp(self):                                                                    # Initialize test data
         super().setUp()
         self.file_info = File_FS__Info(file__config = self.file_config ,
-                                       storage      = self.storage      )
+                                       storage_fs   = self.storage_fs      )
 
     def test__init__(self):                                                             # Test initialization
         with self.file_info as _:
             assert type(_)         is File_FS__Info
             assert _.file__config  == self.file_config
-            assert _.storage       == self.storage
+            assert _.storage_fs    == self.storage_fs
 
     def test_info_no_file(self):                                                       # Test info when file doesn't exist
         with self.file_info as _:
@@ -46,7 +46,7 @@ class test_File_FS__Info(Base_Test__File_FS):                                   
                                               file_type = self.file_type_text)
         text_file   = self.create_test_file_from_config(text_config)
         text_info   = File_FS__Info(file__config = text_config ,
-                                    storage      = self.storage )
+                                    storage_fs   = self.storage_fs )
 
         text_file.create()
         text_file.create__content(b'plain text')
@@ -58,4 +58,4 @@ class test_File_FS__Info(Base_Test__File_FS):                                   
     #   todo: see if we really need this, or if we should have this in Base_Test__File_FS
     def create_test_file_from_config(self, config):                                     # Create a File_FS from config
         return File_FS(file_config = config       ,
-                       storage     = self.storage )
+                       storage_fs  = self.storage_fs )

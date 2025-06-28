@@ -10,13 +10,13 @@ class test_File_FS__Exists(Base_Test__File_FS):                                 
     def setUp(self):                                                                    # Initialize test data
         super().setUp()
         self.file_exists = File_FS__Exists(file__config = self.file_config ,
-                                           storage      = self.storage      )
+                                           storage_fs   = self.storage_fs      )
 
     def test__init__(self):                                                             # Test initialization
         with self.file_exists as _:
             assert type(_)         is File_FS__Exists
             assert _.file__config  == self.file_config
-            assert _.storage       == self.storage
+            assert _.storage_fs    == self.storage_fs
 
     def test_config(self):                                                              # Test config file existence
         with self.file_exists as _:
@@ -46,10 +46,10 @@ class test_File_FS__Exists(Base_Test__File_FS):                                 
         with self.file_exists as _:
             assert _.check_using_strategy(paths) is False                              # None exist
 
-            self.storage.storage_fs.file__save(paths[0], b'content')
+            self.storage_fs.file__save(paths[0], b'content')
             assert _.check_using_strategy(paths) is True                               # At least one exists (ANY strategy)
 
-            self.storage.storage_fs.file__delete(paths[0])
+            self.storage_fs.file__delete(paths[0])
             assert _.check_using_strategy(paths) is False                              # None exist again
 
     def test_with_multiple_paths(self):                                                # Test with multiple file paths
@@ -57,13 +57,13 @@ class test_File_FS__Exists(Base_Test__File_FS):                                 
                                        Safe_Str__File__Path('dir2') ]
 
         new_file_exists = File_FS__Exists(file__config = self.file_config ,
-                                          storage      = self.storage      )
+                                          storage_fs   = self.storage_fs  )
 
         with new_file_exists as _:
             assert _.config() is False
 
             # Create file in first path
-            self.storage.storage_fs.file__save(Safe_Str__File__Path('dir1/test-file.json.config'), b'{}')
+            self.storage_fs.file__save(Safe_Str__File__Path('dir1/test-file.json.config'), b'{}')
             assert _.config() is True                                                   # ANY strategy - one exists
 
 

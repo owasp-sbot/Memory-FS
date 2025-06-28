@@ -1,15 +1,14 @@
 from typing                                                 import Any
-from memory_fs.actions.Memory_FS__Deserialize               import Memory_FS__Deserialize
 from memory_fs.actions.Memory_FS__Serialize                 import Memory_FS__Serialize
 from memory_fs.file_fs.actions.File_FS__Exists              import File_FS__Exists
 from memory_fs.file_fs.actions.File_FS__Info                import File_FS__Info
 from memory_fs.file_fs.data.File_FS__Data                   import File_FS__Data
+from memory_fs.storage_fs.Storage_FS                        import Storage_FS
 from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
 from memory_fs.file_fs.actions.File_FS__Create              import File_FS__Create
 from memory_fs.file_fs.actions.File_FS__Edit                import File_FS__Edit
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata
-from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
 from osbot_utils.decorators.methods.cache_on_self           import cache_on_self
 from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 
@@ -17,29 +16,30 @@ from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 
 class File_FS(Type_Safe):
     file_config : Schema__Memory_FS__File__Config                   # todo: rename to file__config (for consistency with other classes)
-    storage     : Memory_FS__Storage
+    #storage     : Memory_FS__Storage
+    storage_fs  : Storage_FS
 
     ###### File_FS__* methods #######
 
     @cache_on_self
     def file_fs__create(self):                                                                     # todo: rename these methods to file_fs__*
-        return File_FS__Create(file__config=self.file_config, storage=self.storage)
+        return File_FS__Create(file__config=self.file_config, storage_fs=self.storage_fs)
 
     @cache_on_self
     def file_fs__data(self):
-        return File_FS__Data(file__config=self.file_config, storage= self.storage)
+        return File_FS__Data(file__config=self.file_config, storage_fs= self.storage_fs)
 
     @cache_on_self
     def file_fs__edit(self):
-        return File_FS__Edit(file__config=self.file_config, storage= self.storage)
+        return File_FS__Edit(file__config=self.file_config, storage_fs= self.storage_fs)
 
     @cache_on_self
     def file_fs__exists(self):
-        return File_FS__Exists(file__config=self.file_config, storage=self.storage)
+        return File_FS__Exists(file__config=self.file_config, storage_fs= self.storage_fs)
 
     @cache_on_self
     def file_fs__info(self):
-        return File_FS__Info(file__config=self.file_config, storage=self.storage)
+        return File_FS__Info(file__config=self.file_config, storage_fs= self.storage_fs)
 
 
     @cache_on_self

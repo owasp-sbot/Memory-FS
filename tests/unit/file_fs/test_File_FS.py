@@ -23,8 +23,7 @@ class test_File_FS(Base_Test__File_FS):                                         
                                                                     file_extension = 'json'    ,
                                                                     encoding       = 'UTF_8'   ,
                                                                     serialization  = 'JSON'    )),
-                              storage    = __(storage_type = 'memory'                         ,
-                                               storage_fs   = __(content_data = __()           )))
+                              storage_fs   = __(content_data = __()           ))
             assert _.obj() == expected_obj
 
     def test_create(self):                                                              # Test file creation

@@ -8,9 +8,8 @@ class test_Memory_FS__File(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.storage_fs              = Storage_FS__Memory()
-        cls.file                    = File_FS()
-        cls.file.storage.storage_fs = cls.storage_fs                                            # todo: find a better way to do this assigment
+        cls.storage_fs       = Storage_FS__Memory()
+        cls.file             = File_FS(storage_fs=cls.storage_fs)
 
     def test__init__(self):
         with self.file as _:
@@ -25,8 +24,7 @@ class test_Memory_FS__File(TestCase):
                                                                                encoding       = None,
                                                                                serialization  = None)),
 
-                                           storage     =  __(storage_type = 'memory'                         ,
-                                                             storage_fs   =  __(content_data=__())                            ))
+                                            storage_fs   =  __(content_data=__())                     )
 
     def test_create(self):
         with self.file as _:

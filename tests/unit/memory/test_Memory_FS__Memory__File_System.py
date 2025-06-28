@@ -70,7 +70,7 @@ class test_Memory_FS__Memory__File_System(Base_Test__File_FS):                  
         assert self.file.create() == [f'folder2/{full_file_name}']
 
         # Verify files list
-        all_files = sorted(list(self.storage.files__paths()))
+        all_files = sorted(list(self.storage_fs.files__paths()))
         assert len(all_files) == 3
         assert all_files == [Safe_Str__File__Path('folder1/an-file.json.config'             ),
                              Safe_Str__File__Path('folder1/sub-folder-1/an-file.json.config'),

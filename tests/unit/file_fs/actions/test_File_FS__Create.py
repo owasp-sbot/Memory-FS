@@ -14,7 +14,7 @@ class test_File_FS__Create(Base_Test__File_FS):  # Test file creation operations
         with self.file_create as _:
             assert type(_) is File_FS__Create
             assert _.file__config   == self.file_config
-            assert _.storage        == self.storage
+            assert _.storage_fs     == self.storage_fs
 
     def test_create__config(self):                                          # Test config file creation
         content__json   = self.file_config.json()
@@ -27,10 +27,10 @@ class test_File_FS__Create(Base_Test__File_FS):  # Test file creation operations
             assert files_created == [f"{self.file.file_id()}.json.config"]
 
             for file_created in files_created:
-                assert self.storage.storage_fs.file__exists (file_created) is True
-                assert self.storage.storage_fs.file__bytes  (file_created) == content__bytes
-                assert self.storage.storage_fs.file__str    (file_created) == content__str
-                assert self.storage.storage_fs.file__json   (file_created) == content__json
+                assert self.storage_fs.file__exists (file_created) is True
+                assert self.storage_fs.file__bytes  (file_created) == content__bytes
+                assert self.storage_fs.file__str    (file_created) == content__str
+                assert self.storage_fs.file__json   (file_created) == content__json
 
             assert _.exists() is True
 
@@ -50,8 +50,8 @@ class test_File_FS__Create(Base_Test__File_FS):  # Test file creation operations
             assert files_created == [f'{self.file_config.file_id}.json']
 
             for file_created in files_created:
-                assert self.storage.storage_fs.file__exists(file_created) is True
-                assert self.storage.storage_fs.file__bytes(file_created) == content
+                assert self.storage_fs.file__exists(file_created) is True
+                assert self.storage_fs.file__bytes(file_created) == content
 
     def test_delete__config(self):                                          # Test config file deletion
         with self.file_create as _:
@@ -67,8 +67,8 @@ class test_File_FS__Create(Base_Test__File_FS):  # Test file creation operations
 
         with self.file_create as _:
             _.create__content(content)
-            assert self.storage.storage_fs.file__exists(Safe_Str__File__Path(f'{self.file_config.file_id}.json')) is True
+            assert self.storage_fs.file__exists(Safe_Str__File__Path(f'{self.file_config.file_id}.json')) is True
 
             files_deleted = _.delete__content()
             assert files_deleted == [f'{self.file_config.file_id}.json']
-            assert self.storage.storage_fs.file__exists(Safe_Str__File__Path(f'{self.file_config.file_id}.json')) is False
+            assert self.storage_fs.file__exists(Safe_Str__File__Path(f'{self.file_config.file_id}.json')) is False

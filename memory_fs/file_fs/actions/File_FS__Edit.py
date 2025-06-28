@@ -1,12 +1,12 @@
 from memory_fs.file_fs.actions.File_FS__Paths           import File_FS__Paths
+from memory_fs.storage_fs.Storage_FS                    import Storage_FS
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
-from memory_fs.storage.Memory_FS__Storage               import Memory_FS__Storage
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 class File_FS__Edit(Type_Safe):
     file__config : Schema__Memory_FS__File__Config
-    storage      : Memory_FS__Storage
+    storage_fs  : Storage_FS
 
     @cache_on_self
     def file_fs__paths(self):
@@ -15,7 +15,7 @@ class File_FS__Edit(Type_Safe):
     def load__content(self) -> bytes:
         paths = self.file_fs__paths().paths__content()
         for path in paths:
-            content = self.storage.storage_fs.file__bytes(path)                 # todo: refactor, since this logic already exists in the current codebase (and it should only exist once)
+            content = self.storage_fs.file__bytes(path)                 # todo: refactor, since this logic already exists in the current codebase (and it should only exist once)
             if content:
                 return content
 
@@ -23,7 +23,7 @@ class File_FS__Edit(Type_Safe):
         files_saved = []
         paths = self.file_fs__paths().paths__content()
         for path in paths:
-            if self.storage.storage_fs.file__save(path, content):
+            if self.storage_fs.file__save(path, content):
                 files_saved.append(path)
         return files_saved
 

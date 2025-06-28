@@ -8,13 +8,13 @@ class test_File_FS__Content(Base_Test__File_FS):                                
     def setUp(self):                                                                    # Initialize test data
         super().setUp()
         self.file_content = File_FS__Content(file__config = self.file_config ,
-                                             storage      = self.storage      )
+                                             storage_fs   = self.storage_fs      )
 
     def test__init__(self):                                                             # Test initialization
         with self.file_content as _:
             assert type(_)         is File_FS__Content
             assert _.file__config  == self.file_config
-            assert _.storage       == self.storage
+            assert _.storage_fs    == self.storage_fs
 
     def test_bytes(self):                                                               # Test bytes method
         with self.file_content as _:
@@ -38,7 +38,7 @@ class test_File_FS__Content(Base_Test__File_FS):                                
                                               file_type = self.file_type_text)
         text_file   = self.create_test_file_from_config(text_config)
         text_content = File_FS__Content(file__config = text_config ,
-                                        storage      = self.storage )
+                                        storage_fs   = self.storage_fs )
 
         plain_text = "This is plain text"
         text_file.save(plain_text)
@@ -56,4 +56,4 @@ class test_File_FS__Content(Base_Test__File_FS):                                
     def create_test_file_from_config(self, config):                                    # Create a File_FS from config
         from memory_fs.file_fs.File_FS import File_FS
         return File_FS(file_config = config       ,
-                       storage     = self.storage )
+                       storage_fs  = self.storage_fs )

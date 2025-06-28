@@ -1,7 +1,5 @@
 from unittest import TestCase
 import memory_fs
-from osbot_utils.utils.Files import parent_folder
-
 
 class test_Memory_FS(TestCase):  # Test memory FS utils
 

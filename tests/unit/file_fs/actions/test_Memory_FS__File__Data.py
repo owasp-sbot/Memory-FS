@@ -8,13 +8,12 @@ class test_Memory_FS__File__Data(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.storage_fs              = Storage_FS__Memory()
-        cls.file                    = File_FS()
-        cls.file.storage.storage_fs = cls.file.storage.storage_fs = cls.storage_fs          # todo: find a way to do this assigment better
-        cls.file_config             = cls.file.file_config
-        cls.file_id                 = cls.file_config.file_id
-        cls.file_edit               = cls.file.file_fs__edit()
-        cls.file_data               = cls.file.file_fs__data()
+        cls.storage_fs      = Storage_FS__Memory()
+        cls.file            = File_FS(storage_fs=cls.storage_fs)
+        cls.file_config     = cls.file.file_config
+        cls.file_id         = cls.file_config.file_id
+        cls.file_edit       = cls.file.file_fs__edit()
+        cls.file_data       = cls.file.file_fs__data()
 
     def test_load__content(self):
         with self.file_edit as _:
