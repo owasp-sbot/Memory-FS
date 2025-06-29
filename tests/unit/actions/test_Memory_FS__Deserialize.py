@@ -1,7 +1,7 @@
 import base64
 import json
 from unittest                                               import TestCase
-from memory_fs.actions.Memory_FS__Deserialize               import Memory_FS__Deserialize
+from memory_fs.file_fs.actions.File_FS__Deserialize         import File_FS__Deserialize
 from memory_fs.schemas.Enum__Memory_FS__Serialization       import Enum__Memory_FS__Serialization
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding      import Enum__Memory_FS__File__Encoding
 
@@ -13,14 +13,14 @@ class MockFileType:                                                             
         self.encoding      = encoding
 
 
-class test_Memory_FS__Deserialize(TestCase):                                           # Test deserialization functionality
+class test_File_FS__Deserialize(TestCase):                                           # Test deserialization functionality
 
     def setUp(self):                                                                    # Initialize test data
-        self.deserializer = Memory_FS__Deserialize()
+        self.deserializer = File_FS__Deserialize()
 
     def test__init__(self):                                                             # Test initialization
         with self.deserializer as _:
-            assert type(_) is Memory_FS__Deserialize
+            assert type(_) is File_FS__Deserialize
 
     def test_deserialize_string(self):                                                  # Test STRING deserialization
         file_type = MockFileType(Enum__Memory_FS__Serialization.STRING)
@@ -135,8 +135,8 @@ class test_Memory_FS__Deserialize(TestCase):                                    
         assert result == "Hello World"
 
     def test_roundtrip_serialization(self):                                             # Test serialize -> deserialize roundtrip
-        from memory_fs.actions.Memory_FS__Serialize import Memory_FS__Serialize
-        serializer = Memory_FS__Serialize()
+        from memory_fs.file_fs.actions.File_FS__Serialize import File_FS__Serialize
+        serializer = File_FS__Serialize()
 
         # Test various data types and serialization methods
         test_cases = [

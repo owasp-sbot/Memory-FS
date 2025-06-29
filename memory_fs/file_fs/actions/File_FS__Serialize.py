@@ -5,7 +5,7 @@ from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 # todo: refactor this into a new file utils area , since this class has nothing to do with storage (which only sees bytes)
 #       this should have the file__config object and be called File__FS__Serialize
-class Memory_FS__Serialize(Type_Safe):
+class File_FS__Serialize(Type_Safe):
 
     # todo: change name to not have '_'
     def _serialize_data(self, data: Any, file_type) -> bytes:                                   # Serialize data based on file type's serialization method

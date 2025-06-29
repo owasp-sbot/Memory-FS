@@ -1,5 +1,5 @@
 from typing                                                 import Any
-from memory_fs.actions.Memory_FS__Serialize                 import Memory_FS__Serialize
+from memory_fs.file_fs.actions.File_FS__Serialize           import File_FS__Serialize
 from memory_fs.file_fs.actions.File_FS__Exists              import File_FS__Exists
 from memory_fs.file_fs.actions.File_FS__Info                import File_FS__Info
 from memory_fs.file_fs.data.File_FS__Data                   import File_FS__Data
@@ -43,8 +43,8 @@ class File_FS(Type_Safe):
 
 
     @cache_on_self
-    def memory_fs__serialize(self):
-        return Memory_FS__Serialize()                 # todo: this should be File_FS__Serialize(file__config=self.file_config)
+    def file_fs__serialize(self):
+        return File_FS__Serialize()                 # todo: this should be File_FS__Serialize(file__config=self.file_config)
 
     ###### Class methods #######
 
@@ -94,6 +94,6 @@ class File_FS(Type_Safe):
 
     def save(self, file_data: Any):
         file_type     = self.file_config.file_type
-        content_bytes = self.memory_fs__serialize()._serialize_data(file_data, file_type)
+        content_bytes = self.file_fs__serialize()._serialize_data(file_data, file_type)
         saved_files   = self.file_fs__create().create__content(content=content_bytes)
         return saved_files

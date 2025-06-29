@@ -3,7 +3,7 @@ from memory_fs.schemas.Enum__Memory_FS__Serialization   import Enum__Memory_FS__
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 #  this should have the file__config object and be called File__FS__Deserialize
-class Memory_FS__Deserialize(Type_Safe):
+class File_FS__Deserialize(Type_Safe):
 
     # todo: refactor name to not use _ (and see if 'deserialize_data' is the best name)
     def _deserialize_data(self, content_bytes: bytes, file_type) -> Any:                        # Deserialize data based on file type's serialization method

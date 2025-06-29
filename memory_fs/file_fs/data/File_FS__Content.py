@@ -1,5 +1,5 @@
 from typing                                             import Any
-from memory_fs.actions.Memory_FS__Deserialize           import Memory_FS__Deserialize
+from memory_fs.file_fs.actions.File_FS__Deserialize     import File_FS__Deserialize
 from memory_fs.file_fs.actions.File_FS__Exists          import File_FS__Exists
 from memory_fs.storage_fs.Storage_FS                    import Storage_FS
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
@@ -23,8 +23,8 @@ class File_FS__Content(Type_Safe):
         return File_FS__Paths(file__config=self.file__config)
 
     @cache_on_self
-    def memory_fs__deserialize(self):
-        return Memory_FS__Deserialize()
+    def file_fs__deserialize(self):
+        return File_FS__Deserialize()
 
     ###### File_FS__Content Methods #######
 
@@ -37,7 +37,7 @@ class File_FS__Content(Type_Safe):
     def data(self) -> Any:
         file_type     = self.file__config.file_type
         content_bytes = self.bytes()
-        file_data     = self.memory_fs__deserialize()._deserialize_data(content_bytes, file_type)       # todo: see if we shouldn't be using File_FS__Load here
+        file_data     = self.file_fs__deserialize()._deserialize_data(content_bytes, file_type)       # todo: see if we shouldn't be using File_FS__Load here
         return file_data
 
     def exists(self) -> bool:

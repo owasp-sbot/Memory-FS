@@ -1,7 +1,7 @@
 import base64
 from unittest                                               import TestCase
 from typing                                                 import Any
-from memory_fs.actions.Memory_FS__Serialize                 import Memory_FS__Serialize
+from memory_fs.file_fs.actions.File_FS__Serialize           import File_FS__Serialize
 from memory_fs.schemas.Enum__Memory_FS__Serialization       import Enum__Memory_FS__Serialization
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding      import Enum__Memory_FS__File__Encoding
 from osbot_utils.type_safe.Type_Safe                        import Type_Safe
@@ -21,14 +21,14 @@ class MockTypeSafeObject(Type_Safe):                                            
         return f'{{"data": "{self.data}"}}'
 
 
-class test_Memory_FS__Serialize(TestCase):                                              # Test serialization functionality
+class test_File_FS__Serialize(TestCase):                                              # Test serialization functionality
 
     def setUp(self):                                                                    # Initialize test data
-        self.serializer = Memory_FS__Serialize()
+        self.serializer = File_FS__Serialize()
 
     def test__init__(self):                                                             # Test initialization
         with self.serializer as _:
-            assert type(_) is Memory_FS__Serialize
+            assert type(_) is File_FS__Serialize
 
     def test_serialize_string(self):                                                    # Test STRING serialization
         file_type = MockFileType(Enum__Memory_FS__Serialization.STRING)
