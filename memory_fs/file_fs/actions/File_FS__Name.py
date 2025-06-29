@@ -1,3 +1,5 @@
+from os import path
+
 from osbot_utils.helpers.safe_str.Safe_Str__File__Name  import Safe_Str__File__Name
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
@@ -24,8 +26,8 @@ class File_FS__Name(Type_Safe):
                        file_name: Safe_Str__File__Name
                   ) -> Safe_Str__File__Path:
         if file_path:                                                                               # check if a file_path was provided
-            elements = [file_path, file_name]
-            return Safe_Str__File__Path('/'.join(elements))
+            full_path = path.join(str(file_path), str(file_name))
+            return Safe_Str__File__Path(full_path)
         else:
             return Safe_Str__File__Path(file_name)                                                  # if not file_path then just return the file_name as a path
 
