@@ -45,10 +45,22 @@ class File_FS__Paths(Type_Safe):
     def paths__content(self) -> Safe_Str__File__Path:
         full_file_paths = []
         full_file_name = self.file_fs__name().content()
-        if self.file__config.file_paths:                                  # if we have file_paths define mapp them all
+        if self.file__config.file_paths:                                  # if we have file_paths define map them all
             for file_path in self.file__config.file_paths:
                 content_path = self.file_fs__name().content__for_path(file_path)
                 full_file_paths.append(content_path)
+        else:
+            full_file_paths.append(Safe_Str__File__Path(full_file_name))
+
+        return full_file_paths
+
+    def paths__metadata(self) -> Safe_Str__File__Path:
+        full_file_paths = []
+        full_file_name = self.file_fs__name().metadata()
+        if self.file__config.file_paths:                                  # if we have file_paths define map them all
+            for file_path in self.file__config.file_paths:
+                metadata_path = self.file_fs__name().content__for_path(file_path)
+                full_file_paths.append(metadata_path)
         else:
             full_file_paths.append(Safe_Str__File__Path(full_file_name))
 

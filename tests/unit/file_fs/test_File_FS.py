@@ -40,6 +40,14 @@ class test_File_FS(Base_Test__File_FS):                                         
             assert _.create__content(test_content) == [f'{_.file_id()}.json']
             assert _.exists__content() is True
 
+    def test_create__metadata(self):                                                     # Test content creation
+        test_content = b'test data'
+
+        with self.file as _:
+            assert _.exists__metadata() is False
+            assert _.create__metadata(test_content) == [f'{_.file_id()}.json.metadata']
+            #assert _.exists__metadata() is True
+
     def test_create__both(self):                                                        # Test creating both config and content
         test_data = "test string data"
 

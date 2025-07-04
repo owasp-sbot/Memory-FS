@@ -1,3 +1,4 @@
+from memory_fs.file_fs.data.File_FS__Metadata import File_FS__Metadata
 from memory_fs.storage_fs.Storage_FS                    import Storage_FS
 from osbot_utils.type_safe.decorators.type_safe         import type_safe
 from osbot_utils.utils.Json                             import json_to_bytes
@@ -21,11 +22,16 @@ class File_FS__Create(Type_Safe):                                               
         return File_FS__Exists(file__config=self.file__config, storage_fs=self.storage_fs)
 
     @cache_on_self
+    def file_fs__metadata(self):
+        return File_FS__Metadata(file__config=self.file__config, storage_fs=self.storage_fs)
+
+    @cache_on_self
     def file_fs__paths(self):                                                                      # todo: refactor to file_fs__paths
         return File_FS__Paths(file__config=self.file__config)
 
     # todo: we will need a top level create(content, metadata) method
 
+    # todo refactor to return self.file_fs__config().create()
     def create__config(self):
         if self.exists() is False:
             files_to_save = self.file_fs__paths().paths__config()
@@ -39,6 +45,7 @@ class File_FS__Create(Type_Safe):                                               
             #return self.file__edit().create__config()              # todo: see if the exists check should not be inside create__config
         return []
 
+    # todo refactor to return self.file_fs__content().create(content=content)
     @type_safe
     def create__content(self, content: bytes):                      # todo: need to updated the metadata file (with for example to save the length of the file, and update timestamp)
         files_to_save = self.file_fs__paths().paths__content()
@@ -48,6 +55,10 @@ class File_FS__Create(Type_Safe):                                               
                 files_saved.append(file_to_save)
         return files_saved
 
+    def create__metadata(self, content: bytes):
+        return self.file_fs__metadata().create(content=content)
+
+    # todo refactor to return self.file_fs__config().delete()
     def delete__config(self):                                   # todo: # refactor to File_FS__Delete
         files_deleted = []                                      # todo: refactor with delete__content since the code is just about the same
         for file_path in self.file_fs__paths().paths__config():
@@ -55,6 +66,7 @@ class File_FS__Create(Type_Safe):                                               
                 files_deleted.append(file_path)
         return files_deleted
 
+    # todo refactor to return self.file_fs__content().delete()
     def delete__content(self):                                  # todo: refactor to File_FS__Delete
         files_deleted = []
         for file_path in self.file_fs__paths().paths__content():
@@ -62,14 +74,5 @@ class File_FS__Create(Type_Safe):                                               
                 files_deleted.append(file_path)
         return files_deleted
 
-        # files_deleted = []
-        # content_files = self.storage.content_data()
-        # for file_path in self.memory_fs__paths(file__config=file_config).paths__content():
-        #     if file_path in content_files:
-        #         del content_files[file_path]                         # todo: this needs to be abstracted out in the storage class
-        #         files_deleted.append(file_path)
-        # return files_deleted
-
     def exists(self) -> bool:
-        return self.file_fs__exists().config()
-        #return self.file__data().exists()
+        return self.file_fs__exists().config()                  # we use the .config file to determine if the file exists

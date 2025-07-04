@@ -21,6 +21,10 @@ class File_FS__Exists(Type_Safe):
         config_paths = self.file_fs__paths().paths__content()
         return self.check_using_strategy(config_paths)
 
+    def metadata(self) -> bool:
+        metadata_paths = self.file_fs__paths().paths__metadata()
+        return self.check_using_strategy(metadata_paths)
+
     def check_using_strategy(self, paths):
         for path in paths:                                                          # todo: add the exists_strategy since at the moment this is implementing the Enum__Memory_FS__File__Exists_Strategy.ANY
             if self.storage_fs.file__exists(path):

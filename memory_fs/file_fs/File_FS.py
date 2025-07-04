@@ -54,6 +54,9 @@ class File_FS(Type_Safe):
     def create__content(self, content: bytes):                                                  # todo: this is a temp method to help with some of the legacy unit tests, since we really shouldn't be doing this directly
         return self.save(file_data=content)
 
+    def create__metadata(self, content: bytes):                                                  # todo: this is a temp method to help with some of the legacy unit tests, since we really shouldn't be doing this directly
+        return self.file_fs__create().create__metadata(content=content)
+
     def create__both(self, file_data: Any):                                                     # todo: this is a temporary method, to simulate the creation of both files
         return sorted(self.create() + self.save(file_data=file_data))                           # todo: see if implications of doing this sort here
 
@@ -77,6 +80,9 @@ class File_FS(Type_Safe):
 
     def exists__content(self):
         return self.file_fs__exists().content()                                                         # todo: see if (apart from unit tests) we need this method
+
+    def exists__metadata(self):
+        return self.file_fs__exists().metadata()                                                         # todo: see if (apart from unit tests) we need this method
 
     def info(self):
         return self.file_fs__info().info()
