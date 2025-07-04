@@ -1,3 +1,4 @@
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
 from memory_fs.file_types.Memory_FS__File__Type__Json  import Memory_FS__File__Type__Json
 from tests.unit.Base_Test__File_FS                     import Base_Test__File_FS
 from memory_fs.file_fs.data.File_FS__Content           import File_FS__Content
@@ -21,16 +22,14 @@ class test_File_FS__Content(Base_Test__File_FS):                                
             assert _.bytes()                        is None                             # No content yet
             assert type(_.file__config.file_type)   is Memory_FS__File__Type__Json
             test_content         = b'raw bytes content'
-            test_content_as_json = b'"raw bytes content"'
             self.file.create__content(test_content)
-            assert _.bytes() != test_content                                            # todo: BUG: should be equal
-            assert _.bytes() == test_content_as_json                                    # todo: BUG: review this use case (for example should we allow a raw bytes value in a Memory_FS__File__Type__Json object)
+            assert _.bytes() == test_content
 
     def test_data(self):                                                                # Test data method (deserialized)
         with self.file_content as _:
             test_data = {"key": "value", "number": 42}
-            self.file.save(test_data)
-
+            assert self.file.save(test_data) == [Safe_Str__File__Path('test-file.json'         ),
+                                                 Safe_Str__File__Path('test-file.json.metadata')]
             assert _.data() == test_data                                                # Should deserialize JSON
 
     def test_data_with_text_file(self):                                                # Test data with text file type

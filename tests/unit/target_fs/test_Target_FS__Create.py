@@ -26,7 +26,7 @@ class test_Target_FS__Create(Base_Test__File_FS):                               
 
     def test_from_path__config_with_file(self):                                        # Test loading from path when file exists
         # Create and save a file
-        self.file.create()
+        self.file.create(self.default_content)
 
         with self.target_fs_create as _:
             target_fs = _.from_path__config(self.test_path)

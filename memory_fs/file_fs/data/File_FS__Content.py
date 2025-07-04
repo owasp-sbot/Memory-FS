@@ -1,4 +1,7 @@
-from typing                                             import Any
+from typing import Any, List
+
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
+
 from memory_fs.file_fs.actions.File_FS__Deserialize     import File_FS__Deserialize
 from memory_fs.file_fs.actions.File_FS__Exists          import File_FS__Exists
 from memory_fs.storage_fs.Storage_FS                    import Storage_FS
@@ -34,6 +37,9 @@ class File_FS__Content(Type_Safe):
             if file_bytes:                                                      # todo: see if we should get this info from the metadata, or if it is ok to just load the first one we find , or if we should be following the Enum__Memory_FS__File__Exists_Strategy strategy
                 return file_bytes
 
+    def create(self, content: bytes) -> List[Safe_Str__File__Path]:
+        return self.save(content=content)
+
     def data(self) -> Any:
         file_type     = self.file__config.file_type
         content_bytes = self.bytes()
@@ -43,6 +49,16 @@ class File_FS__Content(Type_Safe):
     def exists(self) -> bool:
         return self.file_fs__exists().content()
 
+    def save(self, content:bytes) -> List[Safe_Str__File__Path]:
+        files_to_save = self.file_fs__paths().paths__content()
+        files_saved = []
+        for file_to_save in files_to_save:
+            if self.storage_fs.file__save(file_to_save, content):
+                files_saved.append(file_to_save)
+        return files_saved
+
+    def update(self, content:bytes) -> List[Safe_Str__File__Path]:
+        return self.save(content=content)
 
 
 

@@ -1,5 +1,5 @@
 from tests.unit.Base_Test__File_FS                          import Base_Test__File_FS
-from memory_fs.file_fs.actions.File_FS__Name                import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
+from memory_fs.file_fs.actions.File_FS__Name                import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG, FILE_EXTENSION__MEMORY_FS__FILE__METADATA
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
@@ -13,8 +13,10 @@ class test_Memory_FS__Memory__File_System(Base_Test__File_FS):                  
     @classmethod
     def setUpClass(cls):                                                                # Class-level setup runs ONCE
         super().setUpClass()
-        cls.test_path          = Safe_Str__File__Path(f"an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}")
-        cls.test_content_path  = Safe_Str__File__Path("an-file.json")
+        cls.file_id          = "an-file"
+        cls.test_content_path  = Safe_Str__File__Path(f"{cls.file_id}.json")
+        cls.test_config_path   = Safe_Str__File__Path(f"{cls.file_id}.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}")
+        cls.test_metadata_path = Safe_Str__File__Path(f"{cls.file_id}.json.{FILE_EXTENSION__MEMORY_FS__FILE__METADATA}")
         cls.test_content_bytes = b"test content"
         cls.file_id            = 'an-file'
 
@@ -26,25 +28,28 @@ class test_Memory_FS__Memory__File_System(Base_Test__File_FS):                  
         assert self.file.exists         () is False
         assert self.file.exists__content() is False
 
-        assert self.file.create         ()                                    == [self.test_path]
-        assert self.file.create__content(content=self.test_content_bytes)    == [self.test_content_path]
+        assert self.file.create__config ()                                == [self.test_config_path]
+        assert self.file.create__content(content=self.test_content_bytes) == [self.test_content_path]
 
         assert self.file.exists         () is True
         assert self.file.exists__content() is True
 
     def test__bug__load(self):                                                          # Tests loading files
-        self.file.create()
+        self.file.create(file_data=self.test_content_bytes)
         metadata = self.file.metadata()
         assert metadata.content__size != Safe_UInt__FileSize(len(self.test_content_bytes))  # BUG: size not captured
 
     def test_delete(self):                                                              # Tests deleting files
-        assert self.file.create         ()                                    == [self.test_path]
-        assert self.file.create__content(content=self.test_content_bytes)    == [self.test_content_path]
+        assert self.file.create(file_data=self.test_content_bytes)            == [self.test_content_path,
+                                                                                  self.test_config_path ,
+                                                                                  self.test_metadata_path
+                                                                                  ]
         assert self.file.exists         ()                                    is True
         assert self.file.exists__content()                                    is True
 
-        assert self.file.delete         ()                                    == [self.test_path]
-        assert self.file.delete__content()                                    == [self.test_content_path]
+        assert self.file.delete         ()                                    == [self.test_content_path  ,
+                                                                                  self.test_config_path   ,
+                                                                                  self.test_metadata_path ]
         assert self.file.exists         ()                                    is False
         assert self.file.exists__content()                                    is False
 
@@ -59,15 +64,15 @@ class test_Memory_FS__Memory__File_System(Base_Test__File_FS):                  
 
         # Test with path_1
         self.file.file_config.file_paths = [path_1]
-        assert self.file.create() == [f'folder1/{full_file_name}']
+        assert self.file.create__config() == [f'folder1/{full_file_name}']
 
         # Test with path_2
         self.file.file_config.file_paths = [path_2]
-        assert self.file.create() == [f'folder1/sub-folder-1/{full_file_name}']
+        assert self.file.create__config() == [f'folder1/sub-folder-1/{full_file_name}']
 
         # Test with path_3
         self.file.file_config.file_paths = [path_3]
-        assert self.file.create() == [f'folder2/{full_file_name}']
+        assert self.file.create__config() == [f'folder2/{full_file_name}']
 
         # Verify files list
         all_files = sorted(list(self.storage_fs.files__paths()))
@@ -83,21 +88,23 @@ class test_Memory_FS__Memory__File_System(Base_Test__File_FS):                  
     def test_get_file_info(self):                                                       # Tests getting file information
         assert self.file.info() is None
 
-        assert self.file.create         ()                                 == [self.test_path]
-        assert self.file.create__content(content=self.test_content_bytes) == [self.test_content_path]
+        assert self.file.create(file_data=self.test_content_bytes) == [self.test_content_path ,
+                                                                       self.test_config_path  ,
+                                                                       self.test_metadata_path]
 
         info = self.file.info()
         assert type(info)                    is dict                                    # BUG: should be strongly typed
         assert info[Safe_Id("exists")]       is True
-        assert info[Safe_Id("size")]         != len(self.test_content_bytes)           # BUG: size issue
+        assert info[Safe_Id("size")]         == len(self.test_content_bytes) + 2        # content size includes the serialised string
         assert info[Safe_Id("content_hash")] == safe_str_hash('"test content"')
         assert info[Safe_Id("content_type")] == "application/json; charset=utf-8"
 
     def test_clear(self):                                                               # Tests clearing all files
-        assert self.file.create         ()                                 == [self.test_path]
-        assert self.file.create__content(content=self.test_content_bytes) == [self.test_content_path]
+        assert self.file.create(file_data=self.test_content_bytes) == [self.test_content_path ,
+                                                                       self.test_config_path  ,
+                                                                       self.test_metadata_path]
 
-        assert len(self.storage_fs.content_data) == 2                                   # Config and content
+        assert len(self.storage_fs.content_data) == 3                                   # Config,  content and metadata files
 
         self.storage_fs.clear()
 

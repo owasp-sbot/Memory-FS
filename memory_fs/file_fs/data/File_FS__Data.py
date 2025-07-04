@@ -48,7 +48,7 @@ class File_FS__Data(Type_Safe):
         return self.file_fs__exists().config()                                                          # if the .config() exists, then the file 'exists'
 
     def metadata(self) -> Schema__Memory_FS__File__Metadata:
-        return self.file_fs__metadata().metadata()
+        return self.file_fs__metadata().load()
 
     def not_exists(self):
         return self.exists() is False

@@ -1,7 +1,7 @@
 from typing                                                 import Any
-from memory_fs.file_fs.actions.File_FS__Serialize           import File_FS__Serialize
 from memory_fs.file_fs.actions.File_FS__Exists              import File_FS__Exists
 from memory_fs.file_fs.actions.File_FS__Info                import File_FS__Info
+from memory_fs.file_fs.actions.File_FS__Update              import File_FS__Update
 from memory_fs.file_fs.data.File_FS__Data                   import File_FS__Data
 from memory_fs.storage_fs.Storage_FS                        import Storage_FS
 from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
@@ -22,7 +22,7 @@ class File_FS(Type_Safe):
     ###### File_FS__* methods #######
 
     @cache_on_self
-    def file_fs__create(self):                                                                     # todo: rename these methods to file_fs__*
+    def file_fs__create(self):
         return File_FS__Create(file__config=self.file_config, storage_fs=self.storage_fs)
 
     @cache_on_self
@@ -41,24 +41,27 @@ class File_FS(Type_Safe):
     def file_fs__info(self):
         return File_FS__Info(file__config=self.file_config, storage_fs= self.storage_fs)
 
-
     @cache_on_self
-    def file_fs__serialize(self):
-        return File_FS__Serialize()                 # todo: this should be File_FS__Serialize(file__config=self.file_config)
+    def file_fs__update(self):
+        return File_FS__Update(file__config=self.file_config, storage_fs=self.storage_fs)
+
 
     ###### Class methods #######
 
-    def create(self):
+    def create(self, file_data: Any):
+        return self.file_fs__create().create(file_data=file_data)
+
+    def create__config(self):
         return self.file_fs__create().create__config()
 
-    def create__content(self, content: bytes):                                                  # todo: this is a temp method to help with some of the legacy unit tests, since we really shouldn't be doing this directly
-        return self.save(file_data=content)
+    def create__content(self, content: bytes):                                                   # todo: this is a temp method to help with some of the legacy unit tests, since we really shouldn't be doing this directly
+        return self.file_fs__create().create__content(content=content)
 
     def create__metadata(self, content: bytes):                                                  # todo: this is a temp method to help with some of the legacy unit tests, since we really shouldn't be doing this directly
         return self.file_fs__create().create__metadata(content=content)
 
-    def create__both(self, file_data: Any):                                                     # todo: this is a temporary method, to simulate the creation of both files
-        return sorted(self.create() + self.save(file_data=file_data))                           # todo: see if implications of doing this sort here
+    # def create__both(self, file_data: Any):                                                     # todo: this is a temporary method, to simulate the creation of both files
+    #     return sorted(self.create() + self.save(file_data=file_data))                           # todo: see if implications of doing this sort here
 
     def config(self) -> Schema__Memory_FS__File__Config:
         return self.file_fs__data().config()
@@ -70,7 +73,7 @@ class File_FS(Type_Safe):
         return self.file_fs__data().data()                # this is the serialised data
 
     def delete(self):                                                                                   # BUG: the delete should delete all files not just the config
-        return self.file_fs__create().delete__config()                                                  # todo: this should be in a .delete__config() method
+        return self.file_fs__create().delete()
 
     def delete__content(self):
         return self.file_fs__create().delete__content()
@@ -95,11 +98,9 @@ class File_FS(Type_Safe):
         content      = self.content()
         metadata = Schema__Memory_FS__File__Metadata()                                                  # todo: implement the logic to create, load and save the metadata file
         if content:
-            metadata.content__hash = safe_str_hash(content.decode())                                    # todo: this should be calculated on create/edit (and saved to storage)
+            metadata.content__hash = safe_str_hash(content)                                    # todo: this should be calculated on create/edit (and saved to storage)
         return metadata
 
     def save(self, file_data: Any):
-        file_type     = self.file_config.file_type
-        content_bytes = self.file_fs__serialize()._serialize_data(file_data, file_type)
-        saved_files   = self.file_fs__create().create__content(content=content_bytes)
+        saved_files   = self.file_fs__update().update(file_data=file_data)                  # todo: see if this should still be .create_content (and not .update_content )
         return saved_files

@@ -28,9 +28,11 @@ class test_File_FS(Base_Test__File_FS):                                         
 
     def test_create(self):                                                              # Test file creation
         with self.file as _:
-            assert _.exists() is False
-            assert _.create() == [f"{_.file_id()}.json.config"]
-            assert _.exists() is True
+            assert _.exists()                     is False
+            assert _.create(self.default_content) == [f"{_.file_id()}.json"         ,
+                                                      f"{_.file_id()}.json.config"  ,
+                                                      f"{_.file_id()}.json.metadata"]
+            assert _.exists()                     is True
 
     def test_create__content(self):                                                     # Test content creation
         test_content = b'test data'
@@ -46,25 +48,14 @@ class test_File_FS(Base_Test__File_FS):                                         
         with self.file as _:
             assert _.exists__metadata() is False
             assert _.create__metadata(test_content) == [f'{_.file_id()}.json.metadata']
-            #assert _.exists__metadata() is True
-
-    def test_create__both(self):                                                        # Test creating both config and content
-        test_data = "test string data"
-
-        with self.file as _:
-            files_created = _.create__both(test_data)
-            assert sorted(files_created) == sorted([f'{_.file_id()}.json'        ,
-                                                   f'{_.file_id()}.json.config' ])
-            assert _.exists()          is True
-            assert _.exists__content() is True
+            assert _.exists__metadata() is True
 
     def test_content(self):                                                             # Test raw content retrieval
         test_bytes = b'raw bytes'
 
         with self.file as _:
             _.create__content(test_bytes)
-            assert _.content() != test_bytes
-            assert _.content() == b'"raw bytes"'
+            assert _.content() == test_bytes
 
     def test_data(self):                                                                # Test deserialized data retrieval
         test_dict = {"key": "value", "list": [1, 2, 3]}
@@ -75,11 +66,13 @@ class test_File_FS(Base_Test__File_FS):                                         
 
     def test_delete(self):                                                              # Test file deletion
         with self.file as _:
-            _.create()
+            _.create(file_data=self.default_content)
             assert _.exists() is True
 
             deleted_files = _.delete()
-            assert deleted_files == [f'{_.file_id()}.json.config']
+            assert deleted_files == [f'{_.file_id()}.json'         ,
+                                     f'{_.file_id()}.json.config'  ,
+                                     f'{_.file_id()}.json.metadata']
             assert _.exists()    is False
 
     def test_delete__content(self):                                                     # Test content deletion
@@ -95,7 +88,7 @@ class test_File_FS(Base_Test__File_FS):                                         
         with self.file as _:
             assert _.info() is None                                                     # No file yet
 
-            _.create__both("test data")
+            _.create(self.default_content)
             info = _.info()
 
             assert info is not None
@@ -117,7 +110,8 @@ class test_File_FS(Base_Test__File_FS):                                         
 
         with self.file as _:
             saved_files = _.save(test_data)
-            assert saved_files == [f'{_.file_id()}.json']
+            assert saved_files == [f'{_.file_id()}.json'         ,
+                                   f'{_.file_id()}.json.metadata']
             assert _.data()    == test_data
 
 

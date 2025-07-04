@@ -1,3 +1,4 @@
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 from memory_fs.file_fs.File_FS                              import File_FS
 from tests.unit.Base_Test__File_FS                          import Base_Test__File_FS
 from memory_fs.file_fs.actions.File_FS__Info                import File_FS__Info
@@ -24,9 +25,10 @@ class test_File_FS__Info(Base_Test__File_FS):                                   
             assert _.info() is None
 
     def test_info_with_file(self):                                                     # Test info when file exists
-        test_content = b'test content'
-        self.file.create()
-        self.file.create__content(test_content)
+        test_content = 'test content'
+        assert self.file.create(file_data=test_content) == [Safe_Str__File__Path('test-file.json'         ),
+                                                            Safe_Str__File__Path('test-file.json.config'  ),
+                                                            Safe_Str__File__Path('test-file.json.metadata')]
 
         with self.file_info as _:
             info = _.info()
@@ -34,11 +36,9 @@ class test_File_FS__Info(Base_Test__File_FS):                                   
 
             assert info[Safe_Id("exists")]       is True
             assert info[Safe_Id("content_type")] == "application/json; charset=utf-8"
-            assert info[Safe_Id("content_hash")] == safe_str_hash('"test content"')
-
-            # BUG: Size is not being captured properly
-            assert info[Safe_Id("size")] != len(test_content)
-            assert info[Safe_Id("size")] == 0                                           # Current bug
+            assert info[Safe_Id("content_hash")] == safe_str_hash(f'"{test_content}"')          # todo: see the side effects that the hash is of the serialised test_content and not the actually value
+            assert info[Safe_Id("size"        )] == len(test_content) + 2                       # size contains the padded "
+            assert info[Safe_Id("size"        )] == 12  + 2
 
     def test_info_different_file_types(self):                                           # Test info with different file types
         # Test with text file
@@ -48,8 +48,7 @@ class test_File_FS__Info(Base_Test__File_FS):                                   
         text_info   = File_FS__Info(file__config = text_config ,
                                     storage_fs   = self.storage_fs )
 
-        text_file.create()
-        text_file.create__content(b'plain text')
+        text_file.create(b'plain text')
 
         info = text_info.info()
         assert info[Safe_Id("content_type")] == "text/plain; charset=utf-8"

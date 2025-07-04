@@ -1,13 +1,8 @@
-from typing import List
-
-from osbot_utils.utils.Dev import pprint
-
-from memory_fs.file_fs.actions.File_FS__Exists import File_FS__Exists
-from osbot_utils.utils.Json import json_to_bytes
-
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
-
-from memory_fs.file_fs.actions.File_FS__Paths import File_FS__Paths
+from typing                                                 import List
+from memory_fs.file_fs.actions.File_FS__Exists              import File_FS__Exists
+from osbot_utils.utils.Json                                 import json_to_bytes
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
+from memory_fs.file_fs.actions.File_FS__Paths               import File_FS__Paths
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata
 from memory_fs.storage_fs.Storage_FS                        import Storage_FS
@@ -33,18 +28,12 @@ class File_FS__Metadata(Type_Safe):
 
     ###### File_FS__Metadata methods #######
 
-    def create(self, content: bytes) -> List[Safe_Str__File__Path]:
-        if self.exists() is False:
+    def create(self, content: bytes) -> List[Safe_Str__File__Path]:                     # todo: see (or document) the side effect that the hash and size is of the bytes value (which by now has already been serialised into the current file type
+        if self.exists() is False:                                                      #       this might actually be ok, but there could be cases (like raw binary strings or strings) where we will actually want to capture the raw hash
             file_metadata = self.default()
             self.update_metadata_obj(file_metadata=file_metadata, content=content)
-            json_data     = file_metadata.json()
-            content__bytes = json_to_bytes(json_data)
-            files_to_save = self.file_fs__paths().paths__metadata()
-            files_saved   = []
-            for file_to_save in files_to_save:
-                if self.storage_fs.file__save(file_to_save, content__bytes):
-                    files_saved.append(file_to_save)
-            return files_saved
+
+            return self.save(file_metadata=file_metadata)
         return []
 
     def delete(self):
@@ -76,19 +65,28 @@ class File_FS__Metadata(Type_Safe):
     def file_fs__content(self):                                                                                         # todo: see if we should have this dependency here (or if this class should receive the file's bytes, data, and config)
         return File_FS__Content(file__config=self.file__config, storage_fs=self.storage_fs)
 
-    def metadata(self) -> Schema__Memory_FS__File__Metadata:
-        content_bytes = self.file_fs__content().bytes()
-        metadata      = Schema__Memory_FS__File__Metadata()
-        if content_bytes:
-            metadata.content__hash = safe_str_hash(content_bytes.decode())                                  # todo: this should be calculated on create/edit (and saved to storage), and this need refactored into separate method (if not class)
-        return metadata
+    def save(self, file_metadata: Schema__Memory_FS__File__Metadata) -> List[Safe_Str__File__Path]:
+        files_saved    = []
+        json_data      = file_metadata.json()
+        content__bytes = json_to_bytes(json_data)
+        files_to_save  = self.file_fs__paths().paths__metadata()
+        for file_to_save in files_to_save:
+            if self.storage_fs.file__save(file_to_save, content__bytes):
+                files_saved.append(file_to_save)
+        return files_saved
+
+    def update(self, content: bytes):
+        file_metadata = self.load()
+        self.update_metadata_obj(file_metadata=file_metadata, content=content)
+        files_updated = self.save(file_metadata)
+        return files_updated
 
     def update_metadata_obj(self, file_metadata: Schema__Memory_FS__File__Metadata, content:bytes):         # figure out a better way to implement this
         #if content is None:                                                                                        # todo: see if we need to support the case when content is None
         # else:
         #     content__hash = None
         #     content__size = 0
-        content__hash = safe_str_hash(content.decode())
+        content__hash = safe_str_hash(content)
         content__size = len(content)
 
         file_metadata.content__hash = content__hash

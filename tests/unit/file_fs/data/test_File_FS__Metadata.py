@@ -21,7 +21,7 @@ class test_File_FS__Metadata(Base_Test__File_FS):                               
 
     def test__exists__create__load__delete(self):
         with self.file_metadata as _:
-            assert safe_str_hash(self.default_content.decode()) == '9473fdd0d8'
+            assert safe_str_hash(self.default_content)          == '9473fdd0d8'
             assert _.exists()                                   is False
             assert _.paths()                                    == [Safe_Str__File__Path('test-file.json.metadata')]
             assert _.create(content=self.default_content)       == ['test-file.json.metadata']                          # first call to create should create the files
@@ -48,18 +48,18 @@ class test_File_FS__Metadata(Base_Test__File_FS):                               
 
     def test_metadata_no_content(self):                                                # Test metadata when no content exists
         with self.file_metadata as _:
-            metadata = _.metadata()
+            metadata = _.load()
             assert type(metadata)      is Schema__Memory_FS__File__Metadata
             assert metadata.content__hash is None                                       # No hash when no content
 
     def test_metadata_with_content(self):                                              # Test metadata when content exists
         test_content = b'test content for metadata'
-        self.file.create__content(test_content)
+        self.file.create__metadata(test_content)
 
         with self.file_metadata as _:
-            metadata = _.metadata()
+            metadata = _.load()
             assert type(metadata) is Schema__Memory_FS__File__Metadata
 
             # Note: JSON encoding wraps in quotes
-            expected_hash = safe_str_hash('"test content for metadata"')
+            expected_hash = safe_str_hash('test content for metadata')
             assert metadata.content__hash == expected_hash

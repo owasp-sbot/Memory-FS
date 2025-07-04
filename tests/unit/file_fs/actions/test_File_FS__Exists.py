@@ -22,7 +22,7 @@ class test_File_FS__Exists(Base_Test__File_FS):                                 
         with self.file_exists as _:
             assert _.config() is False
 
-            self.file.create()
+            self.file.create__config()
             assert _.config() is True
 
             self.file.delete()
@@ -32,7 +32,7 @@ class test_File_FS__Exists(Base_Test__File_FS):                                 
         with self.file_exists as _:
             assert _.content() is False
 
-            self.file.create__content(b'test')
+            self.file.create__content(content=b'test')
             assert _.content() is True
 
             self.file.delete__content()

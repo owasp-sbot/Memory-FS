@@ -1,3 +1,5 @@
+from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
+from osbot_utils.utils.Objects                              import __
 from tests.unit.Base_Test__File_FS                          import Base_Test__File_FS
 from memory_fs.file_fs.data.File_FS__Data                   import File_FS__Data
 from memory_fs.file_fs.actions.File_FS__Name                import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
@@ -26,10 +28,8 @@ class test_File_FS__Data(Base_Test__File_FS):                                   
             assert _.content() is None                                                  # No content yet
 
             test_content        = b'test content'
-            test_content_bytes  = b'"test content"'
             self.file.create__content(test_content)
-            assert _.content() != test_content
-            assert _.content() == test_content_bytes
+            assert _.content() == test_content
 
 
     def test_data(self):                                                                # Test data method (deserialized)
@@ -43,25 +43,30 @@ class test_File_FS__Data(Base_Test__File_FS):                                   
         with self.file_data as _:
             assert _.exists() is False
 
-            self.file.create()
+            self.file.create(self.default_content)
             assert _.exists() is True
 
     def test_not_exists(self):                                                          # Test not_exists method
         with self.file_data as _:
             assert _.not_exists() is True
 
-            self.file.create()
+            self.file.create(self.default_content)
             assert _.not_exists() is False
 
     def test_metadata(self):                                                            # Test metadata method
-        test_content = b'content for metadata'
-        self.file.create()
-        self.file.create__content(test_content)
+        test_content           = b'content for metadata'
+        test_content__for_hash = b'"content for metadata"'
+        self.file.create(test_content)
 
         with self.file_data as _:
             metadata = _.metadata()
-            assert metadata is not None
-            # Note: metadata implementation has known issues with size tracking
+            assert metadata.content__hash == safe_str_hash(test_content__for_hash)
+            assert metadata.obj()         == __(content__hash         = '58a28b6f67'      ,
+                                                chain_hash            = None              ,
+                                                previous_version_path = None              ,
+                                                content__size         = 20 + 2            ,
+                                                tags                  = []                ,
+                                                timestamp             = metadata.timestamp)
 
     def test_paths(self):                                                               # Test paths method
         with self.file_data as _:
