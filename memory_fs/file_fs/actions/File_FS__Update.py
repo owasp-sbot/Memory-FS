@@ -1,5 +1,5 @@
 from typing                                             import Any, List
-from memory_fs.file_fs.actions.File_FS__Serialize       import File_FS__Serialize
+from memory_fs.file_fs.actions.File_FS__Serializer      import File_FS__Serializer
 from memory_fs.file_fs.data.File_FS__Content            import File_FS__Content
 from memory_fs.file_fs.data.File_FS__Metadata           import File_FS__Metadata
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
@@ -25,15 +25,15 @@ class File_FS__Update(Type_Safe):
         return File_FS__Metadata(file__config=self.file__config, storage_fs=self.storage_fs)
 
     @cache_on_self
-    def file_fs__serialize(self):
-        return File_FS__Serialize()
+    def file_fs__serializer(self):
+        return File_FS__Serializer()
 
 
     ###### File_FS__Update methods #######
 
     def update(self, file_data: Any) -> List[Safe_Str__File__Path]:
         file_type     = self.file__config.file_type
-        content       = self.file_fs__serialize()._serialize_data(file_data, file_type)
+        content       = self.file_fs__serializer().serialize(file_data, file_type)
         files_updated = (self.update__content (content=content) +                                   # we only update the content and metadata, because the config file cannot be updated
                          self.update__metadata(content=content) )
         return files_updated

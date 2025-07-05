@@ -1,6 +1,6 @@
 from typing                                             import List, Any
 from memory_fs.file_fs.data.File_FS__Content            import File_FS__Content
-from memory_fs.file_fs.actions.File_FS__Serialize       import File_FS__Serialize
+from memory_fs.file_fs.actions.File_FS__Serializer      import File_FS__Serializer
 from memory_fs.file_fs.data.File_FS__Metadata           import File_FS__Metadata
 from memory_fs.storage_fs.Storage_FS                    import Storage_FS
 from osbot_utils.type_safe.decorators.type_safe         import type_safe
@@ -39,15 +39,15 @@ class File_FS__Create(Type_Safe):                                               
         return File_FS__Paths(file__config=self.file__config)
 
     @cache_on_self
-    def file_fs__serialize(self):
-        return File_FS__Serialize()
+    def file_fs__serializer(self):
+        return File_FS__Serializer()
 
 
     ###### File_FS__Create Methods #######
 
     def create(self, file_data: Any) -> List:
         file_type     = self.file__config.file_type
-        content       = self.file_fs__serialize()._serialize_data(file_data, file_type)
+        content       = self.file_fs__serializer().serialize(file_data, file_type)
         files_created = (self.create__config  () +
                          self.create__content (content=content) +
                          self.create__metadata(content=content))

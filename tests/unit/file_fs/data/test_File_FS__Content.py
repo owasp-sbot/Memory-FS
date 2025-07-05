@@ -30,7 +30,7 @@ class test_File_FS__Content(Base_Test__File_FS):                                
             test_data = {"key": "value", "number": 42}
             assert self.file.save(test_data) == [Safe_Str__File__Path('test-file.json'         ),
                                                  Safe_Str__File__Path('test-file.json.metadata')]
-            assert _.data() == test_data                                                # Should deserialize JSON
+            assert _.load() == test_data                                                # Should deserialize JSON
 
     def test_data_with_text_file(self):                                                # Test data with text file type
         text_config = self.create_file_config(file_id   = 'text-file'       ,
@@ -42,7 +42,7 @@ class test_File_FS__Content(Base_Test__File_FS):                                
         plain_text = "This is plain text"
         text_file.save(plain_text)
 
-        assert text_content.data() == plain_text                                       # Should return plain text
+        assert text_content.load() == plain_text                                       # Should return plain text
 
     def test_exists(self):                                                              # Test exists method
         with self.file_content as _:

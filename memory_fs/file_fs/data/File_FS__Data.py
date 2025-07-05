@@ -42,7 +42,7 @@ class File_FS__Data(Type_Safe):
         return self.file_fs__content().bytes()
 
     def data(self) -> Any:
-        return self.file_fs__content().data()
+        return self.file_fs__content().load()
 
     def exists(self):
         return self.file_fs__exists().config()                                                          # if the .config() exists, then the file 'exists'
