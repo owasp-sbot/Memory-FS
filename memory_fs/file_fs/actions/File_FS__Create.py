@@ -1,4 +1,6 @@
 from typing                                             import List, Any
+
+from memory_fs.file_fs.data.File_FS__Config import File_FS__Config
 from memory_fs.file_fs.data.File_FS__Content            import File_FS__Content
 from memory_fs.file_fs.actions.File_FS__Serializer      import File_FS__Serializer
 from memory_fs.file_fs.data.File_FS__Metadata           import File_FS__Metadata
@@ -21,6 +23,10 @@ class File_FS__Create(Type_Safe):                                               
     storage_fs  : Storage_FS
 
     ###### File_FS__* methods #######
+
+    @cache_on_self
+    def file_fs__config(self):
+        return File_FS__Config(file__config=self.file__config, storage_fs=self.storage_fs)
 
     @cache_on_self
     def file_fs__content(self):
@@ -54,19 +60,8 @@ class File_FS__Create(Type_Safe):                                               
         return sorted(files_created)
 
     def create__config(self):
-        if self.exists() is False:
-            files_to_save = self.file_fs__paths().paths__config()
-            files_saved   = []
-            for file_to_save in files_to_save:
-                content__data  = self.file__config.json()
-                content__bytes = json_to_bytes(content__data)
-                if self.storage_fs.file__save(file_to_save, content__bytes):
-                    files_saved.append(file_to_save)
-            return files_saved
-            #return self.file__edit().create__config()              # todo: see if the exists check should not be inside create__config
-        return []
+        return self.file_fs__config().create()
 
-    # todo refactor to return self.file_fs__content().create(content=content)
     @type_safe
     def create__content(self, content: bytes):
         return self.file_fs__content().create(content=content)
@@ -79,6 +74,7 @@ class File_FS__Create(Type_Safe):                                               
                          self.delete__content  () +             # todo: should be file_fs__content().delete()
                          self.file_fs__metadata().delete())
         return sorted(files_deleted)
+
     # todo refactor to return self.file_fs__config().delete()
     def delete__config(self):                                   # todo: # refactor to File_FS__Delete
         files_deleted = []                                      # todo: refactor with delete__content since the code is just about the same

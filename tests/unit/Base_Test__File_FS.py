@@ -20,8 +20,8 @@ class Base_Test__File_FS(TestCase):                                             
     def setUp(self):                                                                            # Clear storage and create fresh file for each test
         self.storage_fs.clear()
         self.file_config = self.create_file_config()
-        self.file        = File_FS(file_config = self.file_config ,
-                                   storage_fs  = self.storage_fs  )
+        self.file        = File_FS(file__config = self.file_config ,
+                                   storage_fs   = self.storage_fs  )
 
     def create_file_config(self, file_id    : str                           = None ,            # Helper to create file configuration
                                  file_type  : Schema__Memory_FS__File__Type = None ,

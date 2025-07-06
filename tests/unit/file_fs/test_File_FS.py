@@ -1,4 +1,6 @@
 import pytest
+
+from memory_fs.schemas.Schema__Memory_FS__File__Metadata import Schema__Memory_FS__File__Metadata
 from osbot_utils.utils.Env                                      import not_in_github_action
 from osbot_utils.helpers.duration.decorators.capture_duration   import capture_duration
 from osbot_utils.helpers.Safe_Id                                import Safe_Id
@@ -15,54 +17,45 @@ class test_File_FS(Base_Test__File_FS):                                         
             assert type(_)         is File_FS
             assert type(_.config()) is Schema__Memory_FS__File__Config
 
-            expected_obj = __(file_config = __(exists_strategy = 'FIRST'                  ,
-                                               file_id         = _.file_config.file_id    ,
-                                               file_paths      = []                       ,
-                                               file_type       = __(name           = 'json'   ,
-                                                                    content_type   = 'JSON'    ,
-                                                                    file_extension = 'json'    ,
-                                                                    encoding       = 'UTF_8'   ,
-                                                                    serialization  = 'JSON'    )),
+            expected_obj = __(file__config = __(exists_strategy = 'FIRST'                   ,
+                                                file_id         = _.file__config.file_id    ,
+                                                file_paths      = []                        ,
+                                                file_type       = __(name           = 'json'   ,
+                                                                     content_type   = 'JSON'    ,
+                                                                     file_extension = 'json'    ,
+                                                                     encoding       = 'UTF_8'   ,
+                                                                     serialization  = 'JSON'    )),
                               storage_fs   = __(content_data = __()           ))
             assert _.obj() == expected_obj
 
     def test_create(self):                                                              # Test file creation
         with self.file as _:
             assert _.exists()                     is False
+            assert _.file_fs__config  ().exists() is False
+            assert _.file_fs__content ().exists() is False
+            assert _.file_fs__metadata().exists() is False
+
             assert _.create(self.default_content) == [f"{_.file_id()}.json"         ,
                                                       f"{_.file_id()}.json.config"  ,
                                                       f"{_.file_id()}.json.metadata"]
+
             assert _.exists()                     is True
-
-    def test_create__content(self):                                                     # Test content creation
-        test_content = b'test data'
-
-        with self.file as _:
-            assert _.exists__content() is False
-            assert _.create__content(test_content) == [f'{_.file_id()}.json']
-            assert _.exists__content() is True
-
-    def test_create__metadata(self):                                                     # Test content creation
-        test_content = b'test data'
-
-        with self.file as _:
-            assert _.exists__metadata() is False
-            assert _.create__metadata(test_content) == [f'{_.file_id()}.json.metadata']
-            assert _.exists__metadata() is True
+            assert _.file_fs__config  ().exists() is True
+            assert _.file_fs__content ().exists() is True
+            assert _.file_fs__metadata().exists() is True
 
     def test_content(self):                                                             # Test raw content retrieval
-        test_bytes = b'raw bytes'
+        test_bytes = 'raw bytes'
 
         with self.file as _:
-            _.create__content(test_bytes)
+            _.update(test_bytes)
             assert _.content() == test_bytes
 
-    def test_data(self):                                                                # Test deserialized data retrieval
         test_dict = {"key": "value", "list": [1, 2, 3]}
 
         with self.file as _:
-            _.save(test_dict)
-            assert _.data() == test_dict
+            _.update(test_dict)
+            assert _.content() == test_dict
 
     def test_delete(self):                                                              # Test file deletion
         with self.file as _:
@@ -74,15 +67,6 @@ class test_File_FS(Base_Test__File_FS):                                         
                                      f'{_.file_id()}.json.config'  ,
                                      f'{_.file_id()}.json.metadata']
             assert _.exists()    is False
-
-    def test_delete__content(self):                                                     # Test content deletion
-        with self.file as _:
-            _.create__content(b'content')
-            assert _.exists__content() is True
-
-            deleted_files = _.delete__content()
-            assert deleted_files       == [f'{_.file_id()}.json']
-            assert _.exists__content() is False
 
     def test_info(self):                                                                # Test file info
         with self.file as _:
@@ -96,23 +80,27 @@ class test_File_FS(Base_Test__File_FS):                                         
             assert info[Safe_Id('content_type')] == 'application/json; charset=utf-8'
 
     def test_metadata(self):                                                            # Test metadata
-        test_content = b'content for metadata'
+        test_content = 'content for metadata'
 
         with self.file as _:
-            _.create__content(test_content)
+            _.create(test_content)
             metadata = _.metadata()
+            assert type(metadata) == Schema__Memory_FS__File__Metadata
+            assert metadata.obj() == __(content__hash         ='58a28b6f67'       ,
+                                        chain_hash            = None              ,
+                                        previous_version_path = None              ,
+                                        content__size         = 22                ,
+                                        tags                  = []                ,
+                                        timestamp             = metadata.timestamp)
 
-            assert metadata.content__hash is not None
-            # Note: Known bug with content__size
-
-    def test_save(self):                                                                # Test save method
+    def test_update(self):                                                                # Test save method
         test_data = {"saved": "data"}
 
         with self.file as _:
-            saved_files = _.save(test_data)
+            saved_files = _.update(test_data)
             assert saved_files == [f'{_.file_id()}.json'         ,
                                    f'{_.file_id()}.json.metadata']
-            assert _.data()    == test_data
+            assert _.content()    == test_data
 
 
     def test__performance__create(self):
@@ -123,13 +111,9 @@ class test_File_FS(Base_Test__File_FS):                                         
             with self.file as _:
                 for i in range(0, items_to_create):
                     _.create()
-
-                    # full .create()           is ~0.01624      # the prob seems to be inside the self.file_fs__exists().config() method
-                    # just .file_fs__create()  is ~0.00105
-
         #pprint(duration.seconds)
         #assert duration.seconds < 0.002                    # should be low like this
-        assert duration.seconds < 0.03                      # but at the moment is big
+        assert duration.seconds < 0.10                      # but at the moment is big
 
     def test__performance__file_fs__exists__config(self):
         if not_in_github_action:

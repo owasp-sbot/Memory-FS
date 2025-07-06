@@ -21,7 +21,7 @@ class Memory_FS__Project(Type_Safe):
             file_paths.append(file_path)
 
         with File_FS() as file:
-            with file.file_config as _:
+            with file.file__config as _:
                 _.file_type  = file_type
                 _.file_paths = file_paths
                 _.file_id  = file_id

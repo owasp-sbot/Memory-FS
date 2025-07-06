@@ -31,6 +31,6 @@ class test_File_FS__Config(Base_Test__File_FS):                                 
 
     def test_exists(self):                                                              # Test exists method
         with self.file_fs_config as _:
-            assert _.exists()                 is False
-            assert self.file.create__config() == [f'{self.file_config.file_id}.json.config']
-            assert _.exists()                 is True
+            assert _.exists() is False
+            assert _.create() == [f'{self.file_config.file_id}.json.config']
+            assert _.exists() is True

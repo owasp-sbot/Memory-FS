@@ -25,7 +25,7 @@ class Base_Test__Memory_FS(TestCase):                               # Base test 
                                content: bytes = b'test content'):
 
         config  = Schema__Memory_FS__File__Config(file_id=file_id)
-        file_fs = File_FS                        (file_config=config, storage=self.memory_fs.storage)
+        file_fs = File_FS                        (file__config=config, storage=self.memory_fs.storage)
 
         if content:
             file_fs.create()

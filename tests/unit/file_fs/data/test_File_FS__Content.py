@@ -21,15 +21,16 @@ class test_File_FS__Content(Base_Test__File_FS):                                
         with self.file_content as _:
             assert _.bytes()                        is None                             # No content yet
             assert type(_.file__config.file_type)   is Memory_FS__File__Type__Json
-            test_content         = b'raw bytes content'
-            self.file.create__content(test_content)
-            assert _.bytes() == test_content
+            content          = 'raw bytes content'
+            content_as_bytes = b'"raw bytes content"'                                   # saved as serialised string
+            self.file.create(content)
+            assert _.bytes() == content_as_bytes
 
     def test_data(self):                                                                # Test data method (deserialized)
         with self.file_content as _:
             test_data = {"key": "value", "number": 42}
-            assert self.file.save(test_data) == [Safe_Str__File__Path('test-file.json'         ),
-                                                 Safe_Str__File__Path('test-file.json.metadata')]
+            assert self.file.update(test_data) == [Safe_Str__File__Path('test-file.json'         ),
+                                                   Safe_Str__File__Path('test-file.json.metadata')]
             assert _.load() == test_data                                                # Should deserialize JSON
 
     def test_data_with_text_file(self):                                                # Test data with text file type
@@ -40,7 +41,7 @@ class test_File_FS__Content(Base_Test__File_FS):                                
                                         storage_fs   = self.storage_fs )
 
         plain_text = "This is plain text"
-        text_file.save(plain_text)
+        text_file.update(plain_text)
 
         assert text_content.load() == plain_text                                       # Should return plain text
 
@@ -48,11 +49,11 @@ class test_File_FS__Content(Base_Test__File_FS):                                
         with self.file_content as _:
             assert _.exists() is False
 
-            self.file.create__content(b'some content')
+            self.file.create(b'some content')
             assert _.exists() is True
 
     # Helper method
     def create_test_file_from_config(self, config):                                    # Create a File_FS from config
         from memory_fs.file_fs.File_FS import File_FS
-        return File_FS(file_config = config       ,
-                       storage_fs  = self.storage_fs )
+        return File_FS(file__config = config       ,
+                       storage_fs   = self.storage_fs )

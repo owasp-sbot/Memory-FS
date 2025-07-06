@@ -30,9 +30,9 @@ class test_Target_FS__Create(Base_Test__File_FS):                               
 
         with self.target_fs_create as _:
             target_fs = _.from_path__config(self.test_path)
-            assert type(target_fs)               is Target_FS
-            assert target_fs.file_config.file_id == self.file_config.file_id
-            assert target_fs.storage_fs          == self.storage_fs
+            assert type(target_fs)                is Target_FS
+            assert target_fs.file__config.file_id == self.file_config.file_id
+            assert target_fs.storage_fs           == self.storage_fs
 
             # Verify we can use the loaded target_fs
             file_fs = target_fs.file_fs()
@@ -67,5 +67,5 @@ class test_Target_FS__Create(Base_Test__File_FS):                               
             target_fs_1 = _.from_path__config(path1)
             target_fs_2 = _.from_path__config(path2)
 
-            assert target_fs_1.file_config.file_id == "file1"
-            assert target_fs_2.file_config.file_id == "file2"
+            assert target_fs_1.file__config.file_id == "file1"
+            assert target_fs_2.file__config.file_id == "file2"

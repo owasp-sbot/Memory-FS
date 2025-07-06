@@ -53,13 +53,12 @@ class test_File_FS__Metadata(Base_Test__File_FS):                               
             assert metadata.content__hash is None                                       # No hash when no content
 
     def test_metadata_with_content(self):                                              # Test metadata when content exists
-        test_content = b'test content for metadata'
-        self.file.create__metadata(test_content)
+        test_content = 'test content for metadata'
+        self.file.create(test_content)
 
         with self.file_metadata as _:
             metadata = _.load()
             assert type(metadata) is Schema__Memory_FS__File__Metadata
 
-            # Note: JSON encoding wraps in quotes
-            expected_hash = safe_str_hash('test content for metadata')
+            expected_hash = safe_str_hash('"test content for metadata"')            # Note: JSON encoding wraps in quotes
             assert metadata.content__hash == expected_hash

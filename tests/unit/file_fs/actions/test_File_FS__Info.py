@@ -56,5 +56,5 @@ class test_File_FS__Info(Base_Test__File_FS):                                   
     # Helper method
     #   todo: see if we really need this, or if we should have this in Base_Test__File_FS
     def create_test_file_from_config(self, config):                                     # Create a File_FS from config
-        return File_FS(file_config = config       ,
-                       storage_fs  = self.storage_fs )
+        return File_FS(file__config = config       ,
+                       storage_fs   = self.storage_fs )

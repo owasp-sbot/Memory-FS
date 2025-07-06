@@ -24,16 +24,6 @@ class test_Memory_FS__Memory__File_System(Base_Test__File_FS):                  
         super().setUp()
         self.file_config.file_id = self.file_id                                        # Just update the ID
 
-    def test_save_and_exists(self):                                                     # Tests saving files and checking existence
-        assert self.file.exists         () is False
-        assert self.file.exists__content() is False
-
-        assert self.file.create__config ()                                == [self.test_config_path]
-        assert self.file.create__content(content=self.test_content_bytes) == [self.test_content_path]
-
-        assert self.file.exists         () is True
-        assert self.file.exists__content() is True
-
     def test__bug__load(self):                                                          # Tests loading files
         self.file.create(file_data=self.test_content_bytes)
         metadata = self.file.metadata()
@@ -45,16 +35,13 @@ class test_Memory_FS__Memory__File_System(Base_Test__File_FS):                  
                                                                                   self.test_metadata_path
                                                                                   ]
         assert self.file.exists         ()                                    is True
-        assert self.file.exists__content()                                    is True
 
         assert self.file.delete         ()                                    == [self.test_content_path  ,
                                                                                   self.test_config_path   ,
                                                                                   self.test_metadata_path ]
         assert self.file.exists         ()                                    is False
-        assert self.file.exists__content()                                    is False
 
         assert self.file.delete         ()                                    == []     # Delete non-existent
-        assert self.file.delete__content()                                    == []
 
     def test_list_files(self):                                                          # Tests listing files
         path_1         = Safe_Str__File__Path("folder1")
@@ -63,27 +50,39 @@ class test_Memory_FS__Memory__File_System(Base_Test__File_FS):                  
         full_file_name = f'an-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}'
 
         # Test with path_1
-        self.file.file_config.file_paths = [path_1]
-        assert self.file.create__config() == [f'folder1/{full_file_name}']
+        self.file.file__config.file_paths = [path_1]
+        assert self.file.create() == [Safe_Str__File__Path('folder1/an-file.json'         ),
+                                      Safe_Str__File__Path('folder1/an-file.json.config'  ),
+                                      Safe_Str__File__Path('folder1/an-file.json.metadata')]
 
         # Test with path_2
-        self.file.file_config.file_paths = [path_2]
-        assert self.file.create__config() == [f'folder1/sub-folder-1/{full_file_name}']
+        self.file.file__config.file_paths = [path_2]
+        assert self.file.create() == [Safe_Str__File__Path('folder1/sub-folder-1/an-file.json'),
+                                      Safe_Str__File__Path('folder1/sub-folder-1/an-file.json.config'),
+                                      Safe_Str__File__Path('folder1/sub-folder-1/an-file.json.metadata')]
 
         # Test with path_3
-        self.file.file_config.file_paths = [path_3]
-        assert self.file.create__config() == [f'folder2/{full_file_name}']
+        self.file.file__config.file_paths = [path_3]
+        assert self.file.create() == [Safe_Str__File__Path('folder2/an-file.json'         ),
+                                      Safe_Str__File__Path('folder2/an-file.json.config'  ),
+                                      Safe_Str__File__Path('folder2/an-file.json.metadata')]
 
         # Verify files list
         all_files = sorted(list(self.storage_fs.files__paths()))
-        assert len(all_files) == 3
-        assert all_files == [Safe_Str__File__Path('folder1/an-file.json.config'             ),
+        assert len(all_files) == 9
+        assert all_files == [Safe_Str__File__Path('folder1/an-file.json'),
+                             Safe_Str__File__Path('folder1/an-file.json.config'),
+                             Safe_Str__File__Path('folder1/an-file.json.metadata'),
+                             Safe_Str__File__Path('folder1/sub-folder-1/an-file.json'),
                              Safe_Str__File__Path('folder1/sub-folder-1/an-file.json.config'),
-                             Safe_Str__File__Path('folder2/an-file.json.config'             )]
+                             Safe_Str__File__Path('folder1/sub-folder-1/an-file.json.metadata'),
+                             Safe_Str__File__Path('folder2/an-file.json'),
+                             Safe_Str__File__Path('folder2/an-file.json.config'),
+                             Safe_Str__File__Path('folder2/an-file.json.metadata')]
 
         # Test filtered list
         folder1_files = [p for p in all_files if str(p).startswith('folder1/')]
-        assert len(folder1_files) == 2
+        assert len(folder1_files) == 6
 
     def test_get_file_info(self):                                                       # Tests getting file information
         assert self.file.info() is None

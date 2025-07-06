@@ -43,15 +43,15 @@ class test_Memory_FS__Project(TestCase):                                        
                           file_type     = Memory_FS__File__Type__Text()          )
 
             assert type(file) is File_FS
-            assert file.obj() == __(file_config = __(exists_strategy = 'FIRST'            ,
-                                                     file_id         = 'an-file'          ,
-                                                     file_paths      = ['latest', self.path_now],
-                                                     file_type       = __(name           = 'text'  ,
-                                                                          content_type   = 'TXT'    ,
-                                                                          file_extension = 'txt'    ,
-                                                                          encoding       = 'UTF_8'  ,
-                                                                          serialization  = 'STRING' )),
-                                    storage_fs   = __())
+            assert file.obj() == __(file__config = __(exists_strategy = 'FIRST'            ,
+                                                      file_id         = 'an-file'          ,
+                                                      file_paths      = ['latest', self.path_now],
+                                                      file_type       = __(name           = 'text'  ,
+                                                                           content_type   = 'TXT'    ,
+                                                                           file_extension = 'txt'    ,
+                                                                           encoding       = 'UTF_8'  ,
+                                                                           serialization  = 'STRING' )),
+                                    storage_fs    = __())
 
 
     def test_path_strategy(self):                                                       # Test path strategy retrieval

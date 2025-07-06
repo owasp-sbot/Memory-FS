@@ -38,6 +38,9 @@ class File_FS__Content(Type_Safe):
     def create(self, content: bytes) -> List[Safe_Str__File__Path]:
         return self.save(content=content)
 
+    def content(self) -> Any:
+        return self.load()
+
     def load(self) -> Any:
         file_type     = self.file__config.file_type
         content_bytes = self.bytes()
