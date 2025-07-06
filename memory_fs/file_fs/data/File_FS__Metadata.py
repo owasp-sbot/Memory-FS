@@ -58,7 +58,7 @@ class File_FS__Metadata(Type_Safe):
             if json_data:
                 return Schema__Memory_FS__File__Metadata.from_json(json_data)
 
-    def metadata(self):
+    def metadata(self) -> Schema__Memory_FS__File__Metadata:
         return self.load()
 
     def paths(self):

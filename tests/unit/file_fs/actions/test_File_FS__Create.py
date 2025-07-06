@@ -1,8 +1,6 @@
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from tests.unit.Base_Test__File_FS                      import Base_Test__File_FS
 from osbot_utils.utils.Json                             import json_to_bytes, json_to_str
 from memory_fs.file_fs.actions.File_FS__Create          import File_FS__Create
-
 
 class test_File_FS__Create(Base_Test__File_FS):  # Test file creation operations
 
@@ -52,23 +50,3 @@ class test_File_FS__Create(Base_Test__File_FS):  # Test file creation operations
             for file_created in files_created:
                 assert self.storage_fs.file__exists(file_created) is True
                 assert self.storage_fs.file__bytes(file_created) == content
-
-    def test_delete__config(self):                                          # Test config file deletion
-        with self.file_create as _:
-            _.create__config()
-            assert _.exists() is True
-
-            files_deleted = _.delete__config()
-            assert files_deleted == [f"{self.file.file_id()}.json.config"]
-            assert _.exists() is False
-
-    def test_delete__content(self):                                         # Test content file deletion
-        content = b'test content'
-
-        with self.file_create as _:
-            _.create__content(content)
-            assert self.storage_fs.file__exists(Safe_Str__File__Path(f'{self.file_config.file_id}.json')) is True
-
-            files_deleted = _.delete__content()
-            assert files_deleted == [f'{self.file_config.file_id}.json']
-            assert self.storage_fs.file__exists(Safe_Str__File__Path(f'{self.file_config.file_id}.json')) is False

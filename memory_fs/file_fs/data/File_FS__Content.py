@@ -41,6 +41,13 @@ class File_FS__Content(Type_Safe):
     def content(self) -> Any:
         return self.load()
 
+    def delete(self):
+        files_deleted = []
+        for file_path in self.file_fs__paths().paths__content():
+            if self.storage_fs.file__delete(path=file_path):
+                files_deleted.append(file_path)
+        return files_deleted
+
     def load(self) -> Any:
         file_type     = self.file__config.file_type
         content_bytes = self.bytes()

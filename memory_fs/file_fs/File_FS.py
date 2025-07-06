@@ -1,4 +1,5 @@
 from typing                                                 import Any
+from memory_fs.file_fs.actions.File_FS__Delete              import File_FS__Delete
 from memory_fs.file_fs.actions.File_FS__Exists              import File_FS__Exists
 from memory_fs.file_fs.actions.File_FS__Info                import File_FS__Info
 from memory_fs.file_fs.actions.File_FS__Update              import File_FS__Update
@@ -6,7 +7,6 @@ from memory_fs.file_fs.data.File_FS__Config                 import File_FS__Conf
 from memory_fs.file_fs.data.File_FS__Content                import File_FS__Content
 from memory_fs.file_fs.data.File_FS__Metadata               import File_FS__Metadata
 from memory_fs.storage_fs.Storage_FS                        import Storage_FS
-from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
 from memory_fs.file_fs.actions.File_FS__Create              import File_FS__Create
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata
@@ -31,6 +31,10 @@ class File_FS(Type_Safe):
     @cache_on_self
     def file_fs__content(self):
         return File_FS__Content(file__config=self.file__config, storage_fs=self.storage_fs)
+
+    @cache_on_self
+    def file_fs__delete(self):
+        return File_FS__Delete(file__config=self.file__config, storage_fs=self.storage_fs)
 
     @cache_on_self
     def file_fs__exists(self):
@@ -73,7 +77,7 @@ class File_FS(Type_Safe):
         return self.file_fs__content().content()
 
     def delete(self):
-        return self.file_fs__create().delete()
+        return self.file_fs__delete().delete()
 
     # def delete__content(self):
     #     return self.file_fs__create().delete__content()
@@ -93,7 +97,7 @@ class File_FS(Type_Safe):
     def file_id(self):
         return self.file__config.file_id
 
-    def metadata(self):
+    def metadata(self) -> Schema__Memory_FS__File__Metadata:
         return self.file_fs__metadata().metadata()
     #     content      = self.content()
     #     metadata = Schema__Memory_FS__File__Metadata()                                                  # todo: implement the logic to create, load and save the metadata file

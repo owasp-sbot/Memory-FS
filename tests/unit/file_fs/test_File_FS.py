@@ -1,6 +1,5 @@
 import pytest
-
-from memory_fs.schemas.Schema__Memory_FS__File__Metadata import Schema__Memory_FS__File__Metadata
+from memory_fs.schemas.Schema__Memory_FS__File__Metadata        import Schema__Memory_FS__File__Metadata
 from osbot_utils.utils.Env                                      import not_in_github_action
 from osbot_utils.helpers.duration.decorators.capture_duration   import capture_duration
 from osbot_utils.helpers.Safe_Id                                import Safe_Id

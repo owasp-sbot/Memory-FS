@@ -1,4 +1,5 @@
 from unittest                                               import TestCase
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 from memory_fs.file_fs.File_FS                              import File_FS
 from memory_fs.schemas.Schema__Memory_FS__File__Type        import Schema__Memory_FS__File__Type
 from memory_fs.storage_fs.providers.Storage_FS__Memory      import Storage_FS__Memory
@@ -16,6 +17,9 @@ class Base_Test__File_FS(TestCase):                                             
         cls.file_type_text         = Memory_FS__File__Type__Text()
         cls.default_file_id        = 'test-file'
         cls.default_content        = b'test content'
+        cls.file__created_files    = [Safe_Str__File__Path(f'{cls.default_file_id}.json'         ),
+                                      Safe_Str__File__Path(f'{cls.default_file_id}.json.config'  ),
+                                      Safe_Str__File__Path(f'{cls.default_file_id}.json.metadata')]
 
     def setUp(self):                                                                            # Clear storage and create fresh file for each test
         self.storage_fs.clear()
