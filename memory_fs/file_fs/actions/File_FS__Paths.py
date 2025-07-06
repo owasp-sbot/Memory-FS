@@ -6,10 +6,12 @@ from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__P
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
-# todo:
+# note:
 #  content to be saved as {file_id}.{extension}
-#  ".fs.json" to be saved as {file_id}.{extension}.config
+#  config to be saved as {file_id}.{extension}.config
 #  metatada to be saved as {file_id}.{extension}.metadata
+
+# todo: shared code below can be refactored into separate methods
 
 class File_FS__Paths(Type_Safe):
     file__config: Schema__Memory_FS__File__Config

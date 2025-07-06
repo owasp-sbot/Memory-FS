@@ -24,8 +24,8 @@ class test_File_FS__Metadata(Base_Test__File_FS):                               
             assert safe_str_hash(self.default_content)          == '9473fdd0d8'
             assert _.exists()                                   is False
             assert _.paths()                                    == [Safe_Str__File__Path('test-file.json.metadata')]
-            assert _.create(content=self.default_content)       == ['test-file.json.metadata']                          # first call to create should create the files
-            assert _.create(content=self.default_content)       == []                                                   # next call should not do anything
+            assert _.create(data=self.default_content)       == ['test-file.json.metadata']                          # first call to create should create the files
+            assert _.create(data=self.default_content)       == []                                                   # next call should not do anything
             assert _.exists()                                   is True
             with _.load() as file_metadata_1:                                                                           # this is needed because we need the .timestamp value in the test below
                 assert file_metadata_1.obj()                    == __(content__hash         = '9473fdd0d8',

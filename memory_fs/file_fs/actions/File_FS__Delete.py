@@ -25,6 +25,7 @@ class File_FS__Delete(Type_Safe):                                               
         return File_FS__Metadata(file__config=self.file__config, storage_fs=self.storage_fs)
 
     ###### File_FS__Delete Methods #######
+
     def delete(self):
         files_deleted = (self.delete__config   () +
                          self.delete__content  () +

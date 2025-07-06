@@ -39,7 +39,7 @@ class File_FS__Update(Type_Safe):
         return files_updated
 
     def update__content(self, content: Any) -> List[Safe_Str__File__Path]:
-        return self.file_fs__content().update(content=content)
+        return self.file_fs__content().update(data=content)
 
     def update__metadata(self, content: Any) -> List[Safe_Str__File__Path]:
-        return self.file_fs__metadata().update(content=content)
+        return self.file_fs__metadata().update(data=content)

@@ -25,10 +25,8 @@ class File_FS__Serializer(Type_Safe):
             import base64
             return base64.b64decode(content_bytes)
 
-        elif serialization == Enum__Memory_FS__Serialization.TYPE_SAFE:
-            # This would need the actual Type_Safe class to deserialize
-            # For now, return the JSON string
-            return content_bytes.decode(file_type.encoding.value)
+        elif serialization == Enum__Memory_FS__Serialization.TYPE_SAFE:                  # todo: need to add Type_Safe support
+            raise NotImplementedError
 
         else:
             raise ValueError(f"Unknown serialization method: {serialization}")
@@ -62,12 +60,13 @@ class File_FS__Serializer(Type_Safe):
             else:
                 return base64.b64encode(str(data).encode('utf-8'))
 
-        elif serialization == Enum__Memory_FS__Serialization.TYPE_SAFE:
-            if hasattr(data, 'json'):
-                json_str = data.json()
-                return json_str.encode(file_type.encoding.value)
-            else:
-                raise ValueError(f"TYPE_SAFE serialization requires object with json() method, got {type(data)}")
+        elif serialization == Enum__Memory_FS__Serialization.TYPE_SAFE:             # todo: need to add Type_Safe support
+            raise NotImplementedError
+            # if hasattr(data, 'json'):
+            #     json_str = data.json()
+            #     return json_str.encode(file_type.encoding.value)
+            # else:
+            #     raise ValueError(f"TYPE_SAFE serialization requires object with json() method, got {type(data)}")
 
         else:
             raise ValueError(f"Unknown serialization method: {serialization}")

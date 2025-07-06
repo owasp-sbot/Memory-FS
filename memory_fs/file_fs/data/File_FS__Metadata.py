@@ -1,47 +1,18 @@
 from typing                                                 import List
-from memory_fs.file_fs.actions.File_FS__Exists              import File_FS__Exists
+from memory_fs.file_fs.data.File_FS__File                   import File_FS__File
 from osbot_utils.utils.Json                                 import json_to_bytes
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
-from memory_fs.file_fs.actions.File_FS__Paths               import File_FS__Paths
-from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata
-from memory_fs.storage_fs.Storage_FS                        import Storage_FS
 from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
-from osbot_utils.decorators.methods.cache_on_self           import cache_on_self
-from memory_fs.file_fs.data.File_FS__Content                import File_FS__Content
-from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 
-# todo: most methods here need to be refactored with the other similar methods in File_FS__Config and File_FS__Content
-class File_FS__Metadata(Type_Safe):
-    file__config : Schema__Memory_FS__File__Config
-    storage_fs  : Storage_FS
+# todo: review the pattern of not having a global object to hold the metadata value from disk (since we have some code complexity below caused by the fact that we don't have those values in memory)
 
-    ###### File_FS__* methods #######
-    @cache_on_self
-    def file_fs__exists(self):
-        return File_FS__Exists(file__config=self.file__config, storage_fs=self.storage_fs)
+class File_FS__Metadata(File_FS__File):
 
-    @cache_on_self
-    def file_fs__paths(self):
-        return File_FS__Paths(file__config=self.file__config)
-
-
-    ###### File_FS__Metadata methods #######
-
-    def create(self, content: bytes) -> List[Safe_Str__File__Path]:                     # todo: see (or document) the side effect that the hash and size is of the bytes value (which by now has already been serialised into the current file type
-        if self.exists() is False:                                                      #       this might actually be ok, but there could be cases (like raw binary strings or strings) where we will actually want to capture the raw hash
-            file_metadata = self.default()
-            self.update_metadata_obj(file_metadata=file_metadata, content=content)
-
-            return self.save(file_metadata=file_metadata)
+    def create(self, data: bytes) -> List[Safe_Str__File__Path]:                        # todo: see (or document) the side effect that the hash and size is of the bytes value (which by now has already been serialised into the current file type
+        if self.exists() is False:                                                      #      this might actually be ok, but there could be cases (like raw binary strings or strings) where we will actually want to capture the raw hash
+            return self.update_metadata(file_bytes=data)
         return []
-
-    def delete(self):
-        files_deleted = []
-        for file_path in self.file_fs__paths().paths__metadata():
-            if self.storage_fs.file__delete(path=file_path):
-                files_deleted.append(file_path)
-        return files_deleted
 
     def default(self):
         return Schema__Memory_FS__File__Metadata()
@@ -64,33 +35,17 @@ class File_FS__Metadata(Type_Safe):
     def paths(self):
         return self.file_fs__paths().paths__metadata()
 
-    @cache_on_self
-    def file_fs__content(self):                                                                                         # todo: see if we should have this dependency here (or if this class should receive the file's bytes, data, and config)
-        return File_FS__Content(file__config=self.file__config, storage_fs=self.storage_fs)
-
-    def save(self, file_metadata: Schema__Memory_FS__File__Metadata) -> List[Safe_Str__File__Path]:
-        files_saved    = []
-        json_data      = file_metadata.json()
-        content__bytes = json_to_bytes(json_data)
-        files_to_save  = self.file_fs__paths().paths__metadata()
-        for file_to_save in files_to_save:
-            if self.storage_fs.file__save(file_to_save, content__bytes):
-                files_saved.append(file_to_save)
-        return files_saved
-
-    def update(self, content: bytes):
+    def update_metadata(self, file_bytes: bytes):
         file_metadata = self.load()
-        self.update_metadata_obj(file_metadata=file_metadata, content=content)
-        files_updated = self.save(file_metadata)
+        self.update_metadata_obj(file_metadata=file_metadata, file_bytes=file_bytes)
+        json_data   = file_metadata.json()
+        data        = json_to_bytes(json_data)
+        files_updated = self.update(data=data)
         return files_updated
 
-    def update_metadata_obj(self, file_metadata: Schema__Memory_FS__File__Metadata, content:bytes):         # figure out a better way to implement this
-        #if content is None:                                                                                        # todo: see if we need to support the case when content is None
-        # else:
-        #     content__hash = None
-        #     content__size = 0
-        content__hash = safe_str_hash(content)
-        content__size = len(content)
+    def update_metadata_obj(self, file_metadata: Schema__Memory_FS__File__Metadata, file_bytes:bytes):         # figure out a better way to implement this
+        content__hash = safe_str_hash(file_bytes)
+        content__size = len(file_bytes)
 
         file_metadata.content__hash = content__hash
         file_metadata.content__size = content__size

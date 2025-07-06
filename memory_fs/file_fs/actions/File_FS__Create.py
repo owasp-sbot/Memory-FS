@@ -5,16 +5,9 @@ from memory_fs.file_fs.actions.File_FS__Serializer      import File_FS__Serializ
 from memory_fs.file_fs.data.File_FS__Metadata           import File_FS__Metadata
 from memory_fs.storage_fs.Storage_FS                    import Storage_FS
 from osbot_utils.type_safe.decorators.type_safe         import type_safe
-from memory_fs.file_fs.actions.File_FS__Exists          import File_FS__Exists
-from memory_fs.file_fs.actions.File_FS__Paths           import File_FS__Paths
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
-
-# todo: move the note below to https://github.com/owasp-sbot/Memory-FS/blob/dev/docs/memory_fs/file/actions/Memory_FS__File__Create.md
-#       this is where we are going to be storing details about each class
-
-# note: config file can only be created or deleted (it cannot be edited)
 
 class File_FS__Create(Type_Safe):                                                       # todo: refactor to file_fs__create
     file__config: Schema__Memory_FS__File__Config
@@ -31,16 +24,8 @@ class File_FS__Create(Type_Safe):                                               
         return File_FS__Content(file__config=self.file__config, storage_fs=self.storage_fs)
 
     @cache_on_self
-    def file_fs__exists(self):
-        return File_FS__Exists(file__config=self.file__config, storage_fs=self.storage_fs)
-
-    @cache_on_self
     def file_fs__metadata(self):
         return File_FS__Metadata(file__config=self.file__config, storage_fs=self.storage_fs)
-
-    @cache_on_self
-    def file_fs__paths(self):                                                                      # todo: refactor to file_fs__paths
-        return File_FS__Paths(file__config=self.file__config)
 
     @cache_on_self
     def file_fs__serializer(self):
@@ -53,19 +38,16 @@ class File_FS__Create(Type_Safe):                                               
         file_type     = self.file__config.file_type
         content_bytes = self.file_fs__serializer().serialize(file_data, file_type)              # we convert the file_data into bytes here so that we only do this once
         files_created = (self.create__config  () +
-                         self.create__content (content=content_bytes) +                         # todo: see if we shouldn't rename the 'content' parameter name into 'content_bytes' (so that is not confused with the wired use of 'content()' in other places of the code-base
-                         self.create__metadata(content=content_bytes))                          # note: we currently have a side effect here for strings and bytes, since hash will be done of the bytes not on the original content
+                         self.create__content (data=content_bytes) +                         # todo: see if we shouldn't rename the 'content' parameter name into 'content_bytes' (so that is not confused with the wired use of 'content()' in other places of the code-base
+                         self.create__metadata(data=content_bytes))                          # note: we currently have a side effect here for strings and bytes, since hash will be done of the bytes not on the original content
         return sorted(files_created)
 
     def create__config(self):
         return self.file_fs__config().create()
 
     @type_safe
-    def create__content(self, content: bytes):
-        return self.file_fs__content().create(content=content)
+    def create__content(self, data: bytes):
+        return self.file_fs__content().create(data=data)
 
-    def create__metadata(self, content: bytes):
-        return self.file_fs__metadata().create(content=content)
-
-    def exists(self) -> bool:
-        return self.file_fs__exists().config()                  # we use the .config file to determine if the file exists
+    def create__metadata(self, data: bytes):
+        return self.file_fs__metadata().create(data=data)

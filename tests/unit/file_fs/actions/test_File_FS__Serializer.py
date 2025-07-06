@@ -2,6 +2,9 @@ import base64
 import json
 from unittest                                               import TestCase
 from typing                                                 import Any
+
+import pytest
+
 from memory_fs.file_fs.actions.File_FS__Serializer          import File_FS__Serializer
 from memory_fs.schemas.Enum__Memory_FS__Serialization       import Enum__Memory_FS__Serialization
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding      import Enum__Memory_FS__File__Encoding
@@ -108,16 +111,17 @@ class test_File_FS__Serializer(TestCase):                                       
         with self.serializer as _:
             # Test with Type_Safe object
             obj = MockTypeSafeObject(data="test_value")
-            result = _.serialize(obj, file_type)
-            expected = b'{"data": "test_value"}'
-            assert result == expected
+            with pytest.raises(NotImplementedError):  # todo: need to add Type_Safe support (and test round trip here)
+                result = _.serialize(obj, file_type)
+            # expected = b'{"data": "test_value"}'
+            # assert result == expected
 
-            # Test with non-Type_Safe object (should raise error)
-            try:
-                _.serialize({"not": "type_safe"}, file_type)
-                assert False, "Should raise ValueError"
-            except ValueError as e:
-                assert "TYPE_SAFE serialization requires object with json() method" in str(e)
+            # # Test with non-Type_Safe object (should raise error)
+            # try:
+            #     _.serialize({"not": "type_safe"}, file_type)
+            #     assert False, "Should raise ValueError"
+            # except ValueError as e:
+            #     assert "TYPE_SAFE serialization requires object with json() method" in str(e)
 
     def test_serialize_unknown(self):                                                   # Test unknown serialization method
         file_type = MockFileType("UNKNOWN")                                             # Invalid serialization
@@ -224,11 +228,10 @@ class test_File_FS__Serializer(TestCase):                                       
         with self.serializer as _:
             # Currently just returns the JSON string
             content = b'{"data": "test_value"}'
-            result = _.deserialize(content, file_type)
-            assert result == '{"data": "test_value"}'
+            with pytest.raises(NotImplementedError):                                    # todo: need to add Type_Safe support (and test round trip here)
+                result = _.deserialize(content, file_type)
+            #assert result == '{"data": "test_value"}'
 
-            # TODO: This should actually deserialize to Type_Safe object
-            # when the implementation is complete
 
     def test_deserialize_unknown(self):                                                 # Test unknown serialization method
         file_type = MockFileType("UNKNOWN")                                             # Invalid serialization

@@ -21,9 +21,9 @@ class test_File_FS__Delete(Base_Test__File_FS):
     def test_delete__config(self):                                          # Test config file deletion
         with self.file_create as _:
             _.create__config()
-            assert _.exists()                        is True
+            assert _.file_fs__config().exists()      is True
             assert self.file_delete.delete__config() == [f"{self.file.file_id()}.json.config"]
-            assert _.exists()                        is False
+            assert _.file_fs__config().exists()      is False
 
     def test_delete__content(self):                                         # Test content file deletion
         content = b'test content'

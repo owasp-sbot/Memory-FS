@@ -20,7 +20,7 @@ class test_File_FS__Create(Base_Test__File_FS):  # Test file creation operations
         content__bytes  = json_to_bytes(content__json)
 
         with self.file_create as _:
-            assert _.exists() is False
+            assert _.file_fs__config().exists() is False
             files_created = _.create__config()
             assert files_created == [f"{self.file.file_id()}.json.config"]
 
@@ -30,7 +30,7 @@ class test_File_FS__Create(Base_Test__File_FS):  # Test file creation operations
                 assert self.storage_fs.file__str    (file_created) == content__str
                 assert self.storage_fs.file__json   (file_created) == content__json
 
-            assert _.exists() is True
+            assert _.file_fs__config().exists() is True
 
     def test_create__config_already_exists(self):                           # Test creating config when it already exists
         with self.file_create as _:
