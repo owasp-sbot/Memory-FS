@@ -38,9 +38,9 @@ class Base_Test__File_FS(TestCase):                                             
                               ):
         self.file.create()
         if content is not None:
-            self.file.create__content(content)
+            self.file.create(content)
         else:
-            self.file.create__content(self.default_content)
+            self.file.create(self.default_content)
         return self.file
 
     def assert_file_exists(self, exists : bool = True):                                         # Helper assertion for file existence

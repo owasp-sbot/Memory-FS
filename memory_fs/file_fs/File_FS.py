@@ -58,18 +58,6 @@ class File_FS(Type_Safe):
     def create(self, file_data: Any=None):
         return self.file_fs__create().create(file_data=file_data)
 
-    # def create__config(self):
-    #     return self.file_fs__create().create__config()
-    #
-    # def create__content(self, content: bytes):                                                   # todo: this is a temp method to help with some of the legacy unit tests, since we really shouldn't be doing this directly
-    #     return self.file_fs__create().create__content(content=content)
-    #
-    # def create__metadata(self, content: bytes):                                                  # todo: this is a temp method to help with some of the legacy unit tests, since we really shouldn't be doing this directly
-    #     return self.file_fs__create().create__metadata(content=content)
-
-    # def create__both(self, file_data: Any):                                                     # todo: this is a temporary method, to simulate the creation of both files
-    #     return sorted(self.create() + self.save(file_data=file_data))                           # todo: see if implications of doing this sort here
-
     def config(self) -> Schema__Memory_FS__File__Config:
         return self.file_fs__config().config()
 
@@ -79,17 +67,8 @@ class File_FS(Type_Safe):
     def delete(self):
         return self.file_fs__delete().delete()
 
-    # def delete__content(self):
-    #     return self.file_fs__create().delete__content()
-
     def exists(self):
         return self.file_fs__exists().config()                                                          # use the .config() existence as the 'file exists' metric
-
-    # def exists__content(self):
-    #     return self.file_fs__exists().content()                                                         # todo: see if (apart from unit tests) we need this method
-    # 
-    # def exists__metadata(self):
-    #     return self.file_fs__exists().metadata()                                                         # todo: see if (apart from unit tests) we need this method
 
     def info(self):
         return self.file_fs__info().info()
@@ -99,11 +78,6 @@ class File_FS(Type_Safe):
 
     def metadata(self) -> Schema__Memory_FS__File__Metadata:
         return self.file_fs__metadata().metadata()
-    #     content      = self.content()
-    #     metadata = Schema__Memory_FS__File__Metadata()                                                  # todo: implement the logic to create, load and save the metadata file
-    #     if content:
-    #         metadata.content__hash = safe_str_hash(content)                                    # todo: this should be calculated on create/edit (and saved to storage)
-    #     return metadata
 
     def update(self, file_data: Any):
         return self.file_fs__update().update(file_data=file_data)
