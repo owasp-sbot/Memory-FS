@@ -33,7 +33,7 @@ class test_File_FS__Paths(TestCase):                                            
     # ===== Tests for paths() method (returns config paths) =====
 
     def test_paths_no_file_paths(self):                                                         # Test paths() when no file_paths are defined
-        paths = self.paths.paths()
+        paths = self.paths.paths__config()
         assert type(paths) is list
         assert len(paths)  == 1
         assert paths       == [Safe_Str__File__Path(f'test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
@@ -42,7 +42,7 @@ class test_File_FS__Paths(TestCase):                                            
         path = Safe_Str__File__Path("folder/subfolder")
         self.file_config.file_paths = [path]
 
-        paths = self.paths.paths()
+        paths = self.paths.paths__config()
         assert len(paths) == 1
         assert paths      == [Safe_Str__File__Path(f'folder/subfolder/test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
@@ -52,7 +52,7 @@ class test_File_FS__Paths(TestCase):                                            
                       Safe_Str__File__Path("path3/sub/deep")   ]
         self.file_config.file_paths = paths_list
 
-        paths = self.paths.paths()
+        paths = self.paths.paths__config()
         assert len(paths) == 3
         assert paths      == [Safe_Str__File__Path(f'path1/test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')        ,
                               Safe_Str__File__Path(f'path2/sub/test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')    ,
@@ -60,17 +60,17 @@ class test_File_FS__Paths(TestCase):                                            
 
     def test_paths_different_file_types(self):                                         # Test paths() with different file types
         # Test with JSON
-        paths_json = self.paths.paths()
+        paths_json = self.paths.paths__config()
         assert paths_json == [Safe_Str__File__Path(f'test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
         # Test with Text
         self.file_config.file_type = self.file_type_text
-        paths_text = File_FS__Paths(file__config=self.file_config).paths()
+        paths_text = File_FS__Paths(file__config=self.file_config).paths__config()
         assert paths_text == [Safe_Str__File__Path(f'test-file.txt.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
         # Test with PNG
         self.file_config.file_type = self.file_type_png
-        paths_png = File_FS__Paths(file__config=self.file_config).paths()
+        paths_png = File_FS__Paths(file__config=self.file_config).paths__config()
         assert paths_png == [Safe_Str__File__Path(f'test-file.png.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
     # ===== Tests for paths__config() method =====
@@ -147,7 +147,7 @@ class test_File_FS__Paths(TestCase):                                            
         self.file_config.file_id = special_file_id
         self.file_config.file_paths = [Safe_Str__File__Path("data")]
 
-        paths = File_FS__Paths(file__config=self.file_config).paths()
+        paths = File_FS__Paths(file__config=self.file_config).paths__config()
         assert paths == [Safe_Str__File__Path(f'data/my-file_2024_v1.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
     def test_paths_with_empty_path_string(self):                                               # Test behavior with empty path string
@@ -162,19 +162,19 @@ class test_File_FS__Paths(TestCase):                                            
     def test_paths_with_trailing_slash(self):                                                  # Test paths with trailing slashes
         self.file_config.file_paths = [Safe_Str__File__Path("folder/")]
 
-        paths = self.paths.paths()
+        paths = self.paths.paths__config()
         assert paths == [Safe_Str__File__Path(f'folder/test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
     def test_paths_with_root_path(self):                                                       # Test paths with root path "/"
         self.file_config.file_paths = [Safe_Str__File__Path("/")]
 
-        paths = self.paths.paths()
+        paths = self.paths.paths__config()
         assert paths == [Safe_Str__File__Path(f'/test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
     def test__regression__none_extension(self):                                                  # Test bug when file_type.file_extension is None
         file_config = Schema__Memory_FS__File__Config(file_id='test-file')                     # Create a file type with no extension set
         with File_FS__Paths(file__config=file_config) as _:
-            paths = _.paths()
+            paths = _.paths__config()
             assert paths == [Safe_Str__File__Path(f'test-file.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
             content_paths = _.paths__content()
@@ -201,10 +201,12 @@ class test_File_FS__Paths(TestCase):                                            
     def test_consistency_paths_and_paths__config(self):                                        # Test that paths() and paths__config() return same results
         self.file_config.file_paths = [Safe_Str__File__Path("test/path")]
 
-        paths_from_paths = self.paths.paths()
-        paths_from_config = self.paths.paths__config()
+        paths_from_paths    = self.paths.paths          ()
+        paths_from_config   = self.paths.paths__config  ()
+        paths_from_content  = self.paths.paths__content ()
+        paths_from_metadata = self.paths.paths__metadata()
 
-        assert paths_from_paths == paths_from_config
+        assert paths_from_paths == paths_from_config + paths_from_content + paths_from_metadata
 
     def test_all_methods_handle_multiple_paths_consistently(self):                             # Test all methods handle multiple paths consistently
         paths_list = [Safe_Str__File__Path("path1"),
@@ -212,7 +214,7 @@ class test_File_FS__Paths(TestCase):                                            
         self.file_config.file_paths = paths_list
 
         # All methods should return same number of paths
-        assert len(self.paths.paths         ()) == 2
+        assert len(self.paths.paths         ()) == 6
         assert len(self.paths.paths__config ()) == 2
         assert len(self.paths.paths__content()) == 2
 
@@ -222,7 +224,7 @@ class test_File_FS__Paths(TestCase):                                            
         complex_path = Safe_Str__File__Path("a/b/c/d/e/f/g")
         self.file_config.file_paths = [complex_path]
 
-        paths = self.paths.paths()
+        paths = self.paths.paths__config()
         assert paths == [Safe_Str__File__Path(f'a/b/c/d/e/f/g/test-file.json.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
     def test_paths_with_dots_in_path(self):                                                    # Test paths containing dots
@@ -231,26 +233,6 @@ class test_File_FS__Paths(TestCase):                                            
 
         paths = self.paths.paths__content()
         assert paths == [Safe_Str__File__Path('folder.v1/subfolder.v2/test-file.json')]
-
-    # ===== Tests for TODO comments implementation =====
-
-    def test_todo_comments_implementation(self):                                               # Test areas marked with TODO comments
-        # TODO items mentioned in the code:
-        # 1. content to be saved as {file_id}.{extension}
-        # 2. config to be saved as {file_id}.{extension}.config
-        # 3. metadata to be saved as {file_id}.{extension}.metadata
-
-        # Current implementation for config files
-        paths = self.paths.paths()
-        assert all(str(p).endswith(f'.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}') for p in paths)
-
-        # Content paths don't have .config suffix
-        content_paths = self.paths.paths__content()
-        assert all(not str(p).endswith(f'.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}') for p in content_paths)
-
-        # Config paths use config suffix
-        config_paths = self.paths.paths__config()
-        assert all(str(p).endswith(f'.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}') for p in config_paths)
 
     # ===== Additional test scenarios based on implementation =====
 
