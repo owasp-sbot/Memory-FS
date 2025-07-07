@@ -34,6 +34,11 @@ class test_File_FS__Serializer(TestCase):                                       
         with self.serializer as _:
             assert type(_) is File_FS__Serializer
 
+
+    ###################################
+    ###### Serialization tests   ######
+    ###################################
+
     def test_serialize_string(self):                                                    # Test STRING serialization
         file_type = MockFileType(Enum__Memory_FS__Serialization.STRING)
 
@@ -150,10 +155,16 @@ class test_File_FS__Serializer(TestCase):                                       
             assert False, "Should raise encoding error"
         except UnicodeEncodeError:
             pass                                                                        # Expected
-        
-        
-    # ##### Deserialisation tests
-    
+
+
+
+    ###################################
+    ###### Deserialization tests ######
+    ###################################
+
+    def test_deserialize__using_none(self):
+        assert self.serializer.deserialize(None, None) is None
+
     def test_deserialize_string(self):                                                  # Test STRING deserialization
         file_type = MockFileType(Enum__Memory_FS__Serialization.STRING)
 

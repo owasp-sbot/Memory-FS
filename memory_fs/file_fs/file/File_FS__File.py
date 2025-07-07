@@ -51,7 +51,7 @@ class File_FS__File(Type_Safe):
         return self.exists() is False
 
     def paths(self):
-        raise []
+        return []
 
     def update(self, data: bytes) -> List[Safe_Str__File__Path]:
         files_to_save = self.paths()
