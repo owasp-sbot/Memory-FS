@@ -1,8 +1,8 @@
 from typing                                             import List, Any
-from memory_fs.file_fs.data.File_FS__Config             import File_FS__Config
-from memory_fs.file_fs.data.File_FS__Content            import File_FS__Content
+from memory_fs.file_fs.file.File_FS__Config             import File_FS__Config
+from memory_fs.file_fs.file.File_FS__Content            import File_FS__Content
 from memory_fs.file_fs.actions.File_FS__Serializer      import File_FS__Serializer
-from memory_fs.file_fs.data.File_FS__Metadata           import File_FS__Metadata
+from memory_fs.file_fs.file.File_FS__Metadata           import File_FS__Metadata
 from memory_fs.storage_fs.Storage_FS                    import Storage_FS
 from osbot_utils.type_safe.decorators.type_safe         import type_safe
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self

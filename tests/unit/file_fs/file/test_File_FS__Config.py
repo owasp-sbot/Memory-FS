@@ -1,5 +1,5 @@
 from tests.unit.Base_Test__File_FS                          import Base_Test__File_FS
-from memory_fs.file_fs.data.File_FS__Config                 import File_FS__Config
+from memory_fs.file_fs.file.File_FS__Config                 import File_FS__Config
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
 
 

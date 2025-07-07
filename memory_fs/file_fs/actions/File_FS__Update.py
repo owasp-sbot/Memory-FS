@@ -1,7 +1,7 @@
 from typing                                             import Any, List
 from memory_fs.file_fs.actions.File_FS__Serializer      import File_FS__Serializer
-from memory_fs.file_fs.data.File_FS__Content            import File_FS__Content
-from memory_fs.file_fs.data.File_FS__Metadata           import File_FS__Metadata
+from memory_fs.file_fs.file.File_FS__Content            import File_FS__Content
+from memory_fs.file_fs.file.File_FS__Metadata           import File_FS__Metadata
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config

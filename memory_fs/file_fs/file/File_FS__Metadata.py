@@ -1,5 +1,5 @@
 from typing                                                 import List
-from memory_fs.file_fs.data.File_FS__File                   import File_FS__File
+from memory_fs.file_fs.file.File_FS__File                   import File_FS__File
 from osbot_utils.utils.Json                                 import json_to_bytes
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata

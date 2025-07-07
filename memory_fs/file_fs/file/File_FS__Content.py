@@ -1,5 +1,5 @@
 from typing                                             import Any, List
-from memory_fs.file_fs.data.File_FS__File               import File_FS__File
+from memory_fs.file_fs.file.File_FS__File               import File_FS__File
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from memory_fs.file_fs.actions.File_FS__Serializer      import File_FS__Serializer
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
