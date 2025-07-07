@@ -1,29 +1,36 @@
-from typing                                                 import Optional, Dict, Any
-from memory_fs.file_fs.data.File_FS__Data                      import File_FS__Data
-from osbot_utils.decorators.methods.cache_on_self           import cache_on_self
-from osbot_utils.helpers.Safe_Id                            import Safe_Id
-from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
-from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
-from osbot_utils.type_safe.Type_Safe                        import Type_Safe
+from typing                                             import Optional, Dict, Any
+from memory_fs.file_fs.file.File_FS__Config             import File_FS__Config
+from memory_fs.file_fs.file.File_FS__Metadata           import File_FS__Metadata
+from memory_fs.storage_fs.Storage_FS                    import Storage_FS
+from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
+from osbot_utils.helpers.Safe_Id                        import Safe_Id
+from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
+from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 
 class File_FS__Info(Type_Safe):
     file__config: Schema__Memory_FS__File__Config
-    storage     : Memory_FS__Storage
+    storage_fs  : Storage_FS
+
+    ###### File_FS__* methods #######
+    @cache_on_self
+    def file_fs__config(self):
+        return File_FS__Config(file__config=self.file__config, storage_fs=self.storage_fs)
 
     @cache_on_self
-    def file_fs__data(self):
-        return File_FS__Data(file__config=self.file__config, storage= self.storage)
+    def file_fs__metadata(self):
+        return File_FS__Metadata(file__config=self.file__config, storage_fs=self.storage_fs)
 
+    ###### File_FS__Info methods #######
 
     # todo: this method should return a strongly typed class (ideally one from the file)
     def info(self) -> Optional[Dict[Safe_Id, Any]]:
 
-        if self.file_fs__data().not_exists():
+        if self.file_fs__config().not_exists():
             return None
 
-        config   = self.file_fs__data().config()
-        metadata = self.file_fs__data().metadata()
+        config   = self.file_fs__config  ().config  ()
+        metadata = self.file_fs__metadata().metadata()
 
 
         content_size = int(metadata.content__size)                                # Get size from metadata

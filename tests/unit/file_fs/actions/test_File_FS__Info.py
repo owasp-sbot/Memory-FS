@@ -1,30 +1,34 @@
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 from memory_fs.file_fs.File_FS                              import File_FS
 from tests.unit.Base_Test__File_FS                          import Base_Test__File_FS
 from memory_fs.file_fs.actions.File_FS__Info                import File_FS__Info
 from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__Hash            import safe_str_hash
 
+# todo: review performance impact of these tests (and methods used), since they are taking ~10ms to ~15ms to execute (which is a significant % of the current test suite)
+
 class test_File_FS__Info(Base_Test__File_FS):                                          # Test file info operations
 
     def setUp(self):                                                                    # Initialize test data
         super().setUp()
         self.file_info = File_FS__Info(file__config = self.file_config ,
-                                       storage      = self.storage      )
+                                       storage_fs   = self.storage_fs      )
 
     def test__init__(self):                                                             # Test initialization
         with self.file_info as _:
             assert type(_)         is File_FS__Info
             assert _.file__config  == self.file_config
-            assert _.storage       == self.storage
+            assert _.storage_fs    == self.storage_fs
 
     def test_info_no_file(self):                                                       # Test info when file doesn't exist
         with self.file_info as _:
             assert _.info() is None
 
     def test_info_with_file(self):                                                     # Test info when file exists
-        test_content = b'test content'
-        self.file.create()
-        self.file.create__content(test_content)
+        test_content = 'test content'
+        assert self.file.create(file_data=test_content) == [Safe_Str__File__Path('test-file.json'         ),
+                                                            Safe_Str__File__Path('test-file.json.config'  ),
+                                                            Safe_Str__File__Path('test-file.json.metadata')]
 
         with self.file_info as _:
             info = _.info()
@@ -32,11 +36,9 @@ class test_File_FS__Info(Base_Test__File_FS):                                   
 
             assert info[Safe_Id("exists")]       is True
             assert info[Safe_Id("content_type")] == "application/json; charset=utf-8"
-            assert info[Safe_Id("content_hash")] == safe_str_hash('"test content"')
-
-            # BUG: Size is not being captured properly
-            assert info[Safe_Id("size")] != len(test_content)
-            assert info[Safe_Id("size")] == 0                                           # Current bug
+            assert info[Safe_Id("content_hash")] == safe_str_hash(f'"{test_content}"')          # todo: see the side effects that the hash is of the serialised test_content and not the actually value
+            assert info[Safe_Id("size"        )] == len(test_content) + 2                       # size contains the padded "
+            assert info[Safe_Id("size"        )] == 12  + 2
 
     def test_info_different_file_types(self):                                           # Test info with different file types
         # Test with text file
@@ -44,10 +46,9 @@ class test_File_FS__Info(Base_Test__File_FS):                                   
                                               file_type = self.file_type_text)
         text_file   = self.create_test_file_from_config(text_config)
         text_info   = File_FS__Info(file__config = text_config ,
-                                    storage      = self.storage )
+                                    storage_fs   = self.storage_fs )
 
-        text_file.create()
-        text_file.create__content(b'plain text')
+        text_file.create(b'plain text')
 
         info = text_info.info()
         assert info[Safe_Id("content_type")] == "text/plain; charset=utf-8"
@@ -55,5 +56,5 @@ class test_File_FS__Info(Base_Test__File_FS):                                   
     # Helper method
     #   todo: see if we really need this, or if we should have this in Base_Test__File_FS
     def create_test_file_from_config(self, config):                                     # Create a File_FS from config
-        return File_FS(file_config = config       ,
-                       storage     = self.storage )
+        return File_FS(file__config = config       ,
+                       storage_fs   = self.storage_fs )

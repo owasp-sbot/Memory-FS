@@ -6,7 +6,6 @@ from osbot_utils.helpers.Safe_Id                            import Safe_Id
 from memory_fs.path_handlers.Path__Handler__Latest          import Path__Handler__Latest
 from memory_fs.path_handlers.Path__Handler__Temporal        import Path__Handler__Temporal
 from memory_fs.project.Schema__Memory_FS__Project__Config   import Schema__Memory_FS__Project__Path_Strategy, Schema__Memory_FS__Project__Config
-from memory_fs.storage.Memory_FS__Storage                   import Memory_FS__Storage
 from memory_fs.project.Memory_FS__Project                   import Memory_FS__Project
 
 
@@ -30,11 +29,11 @@ class test_Memory_FS__Project(TestCase):                                        
             assert type(_) is Memory_FS__Project
 
             expected_json = {'config': {'name'           : 'test-project',
-                                       'path_strategies': {Safe_Id('latest-temporal'): {'name'         : 'latest-temporal'                                                         ,
+                                        'path_strategies': {Safe_Id('latest-temporal'): {'name'         : 'latest-temporal'                                                         ,
                                                                                         'path_handlers': ['memory_fs.path_handlers.Path__Handler__Latest.Path__Handler__Latest'    ,
                                                                                                           'memory_fs.path_handlers.Path__Handler__Temporal.Path__Handler__Temporal']}},
-                                       'storage'        : 'memory_fs.storage.Memory_FS__Storage.Memory_FS__Storage'},
-                             'storage': {'storage_fs': {}, 'storage_type': 'memory'}}
+                                        'storage_fs'     : 'memory_fs.storage_fs.Storage_FS.Storage_FS'},
+                             'storage_fs': {}}
             assert _.json() == expected_json
 
     def test_file(self):                                                                # Test file creation
@@ -44,16 +43,15 @@ class test_Memory_FS__Project(TestCase):                                        
                           file_type     = Memory_FS__File__Type__Text()          )
 
             assert type(file) is File_FS
-            assert file.obj() == __(file_config = __(exists_strategy = 'FIRST'            ,
-                                                     file_id         = 'an-file'          ,
-                                                     file_paths      = ['latest', self.path_now],
-                                                     file_type       = __(name           = 'text'  ,
-                                                                          content_type   = 'TXT'    ,
-                                                                          file_extension = 'txt'    ,
-                                                                          encoding       = 'UTF_8'  ,
-                                                                          serialization  = 'STRING' )),
-                                    storage    = __(storage_type = 'memory'                       ,
-                                                    storage_fs   = __()                            ))
+            assert file.obj() == __(file__config = __(exists_strategy = 'FIRST'            ,
+                                                      file_id         = 'an-file'          ,
+                                                      file_paths      = ['latest', self.path_now],
+                                                      file_type       = __(name           = 'text'  ,
+                                                                           content_type   = 'TXT'    ,
+                                                                           file_extension = 'txt'    ,
+                                                                           encoding       = 'UTF_8'  ,
+                                                                           serialization  = 'STRING' )),
+                                    storage_fs    = __())
 
 
     def test_path_strategy(self):                                                       # Test path strategy retrieval
