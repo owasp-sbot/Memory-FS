@@ -11,7 +11,6 @@ class Path__Handler__Temporal(Path__Handler):                               # Ha
 
     # todo: refactor to the more comprehensive date path generation we have in the HackerNews (where we can also control which date and time element to use (from year to miliseconds)
     def generate_path(self) -> Safe_Str__File__Path:
-        now        = datetime.now  ()
         time_path  = self.path_now()
         areas_path = "/".join(str(area) for area in self.areas) if self.areas else ""
 

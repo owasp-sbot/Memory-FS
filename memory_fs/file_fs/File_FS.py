@@ -1,7 +1,9 @@
-from typing                                                 import Any
+from typing                                                 import Any, List
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 from memory_fs.file_fs.actions.File_FS__Delete              import File_FS__Delete
 from memory_fs.file_fs.actions.File_FS__Exists              import File_FS__Exists
 from memory_fs.file_fs.actions.File_FS__Info                import File_FS__Info
+from memory_fs.file_fs.actions.File_FS__Paths               import File_FS__Paths
 from memory_fs.file_fs.actions.File_FS__Update              import File_FS__Update
 from memory_fs.file_fs.file.File_FS__Config                 import File_FS__Config
 from memory_fs.file_fs.file.File_FS__Content                import File_FS__Content
@@ -49,6 +51,10 @@ class File_FS(Type_Safe):
         return File_FS__Metadata(file__config=self.file__config, storage_fs=self.storage_fs)
 
     @cache_on_self
+    def file_fs__paths(self):
+        return File_FS__Paths(file__config=self.file__config)
+
+    @cache_on_self
     def file_fs__update(self):
         return File_FS__Update(file__config=self.file__config, storage_fs=self.storage_fs)
 
@@ -78,6 +84,9 @@ class File_FS(Type_Safe):
 
     def metadata(self) -> Schema__Memory_FS__File__Metadata:
         return self.file_fs__metadata().metadata()
+
+    def paths(self) -> List[Safe_Str__File__Path]:
+        return self.file_fs__paths().paths()
 
     def update(self, file_data: Any):
         return self.file_fs__update().update(file_data=file_data)

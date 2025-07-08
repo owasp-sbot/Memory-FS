@@ -8,8 +8,9 @@ from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 class Target_FS__Create(Type_Safe):
     storage_fs  : Storage_FS
-
+    # todo: this needs to be re-implemented to take into account the new Target_FS architecture
     def from_path__config(self, path : Safe_Str__File__Path) -> Target_FS:                  # Load a File_Fs object from a config path
+        raise NotImplementedError
         with self.storage_fs as _:                                                          # todo: refactor the logic to load the config file from storage into a separate method or class
             if _.file__exists(path):                                                        # todo add a check if path is indeed a .config file
                 file_bytes  = _.file__bytes(path)
