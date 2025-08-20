@@ -23,7 +23,7 @@ from memory_fs.file_types.Memory_FS__File__Type__Data                           
 
 class Memory_FS(Type_Safe):
     storage_fs    : Storage_FS          = None
-    path_handlers : List[Path__Handler] = []
+    path_handlers : List[Path__Handler]
 
     def __init__(self, storage_fs : Storage_FS = None):
         super().__init__()
