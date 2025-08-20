@@ -1,7 +1,7 @@
-from unittest                                               import TestCase
-from memory_fs.path_handlers.Path__Handler__Versioned       import Path__Handler__Versioned
-from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id                            import Safe_Id
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
+from unittest                                                                   import TestCase
+from memory_fs.path_handlers.Path__Handler__Versioned                           import Path__Handler__Versioned
+from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id              import Safe_Id
+from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path  import Safe_Str__File__Path
 
 
 class test_Path__Handler__Versioned(TestCase):                                          # Test versioned path handler
@@ -11,34 +11,48 @@ class test_Path__Handler__Versioned(TestCase):                                  
 
     def test__init__(self):                                                             # Test initialization
         with self.handler as _:
-            assert type(_) is Path__Handler__Versioned
-            assert _.name  == Safe_Id("versioned")
+            assert type(_)           is Path__Handler__Versioned
+            assert _.name            == Safe_Id("versioned")
+            assert _.current_version == 1
+            assert _.version_prefix  == "v"
 
-    def test_generate_path_metadata(self):                                              # Test metadata path generation
+    def test_generate_path_default(self):                                              # Test default path generation
         with self.handler as _:
-            result = _.generate_path(file_id     = "test-file"  ,
-                                     file_ext    = "txt"         ,
-                                     is_metadata = True          ,
-                                     version     = 1             )
-            assert result == Safe_Str__File__Path("v1/test-file.json")
+            result = _.generate_path()
+            assert result == Safe_Str__File__Path("v1")
 
-    def test_generate_path_content(self):                                               # Test content path generation
+    def test_generate_path_with_prefix_suffix(self):                                   # Test with prefix and suffix
         with self.handler as _:
-            result = _.generate_path(file_id     = "test-file"  ,
-                                     file_ext    = "txt"         ,
-                                     is_metadata = False         ,
-                                     version     = 1             )
-            assert result == Safe_Str__File__Path("v1/test-file.txt")
+            _.prefix_path = Safe_Str__File__Path("releases")
+            _.suffix_path = Safe_Str__File__Path("stable")
+            result = _.generate_path()
+            assert result == Safe_Str__File__Path("releases/v1/stable")
 
-    def test_generate_path_different_versions(self):                                    # Test different version numbers
+    def test_increment_version(self):                                                  # Test version increment
         with self.handler as _:
-            result_v1 = _.generate_path(file_id     = "file"    ,
-                                        file_ext    = "json"     ,
-                                        is_metadata = False      ,
-                                        version     = 1          )
-            result_v5 = _.generate_path(file_id     = "file"    ,
-                                        file_ext    = "json"     ,
-                                        is_metadata = False      ,
-                                        version     = 5          )
-            assert result_v1 == Safe_Str__File__Path("v1/file.json")
-            assert result_v5 == Safe_Str__File__Path("v5/file.json")
+            assert _.generate_path() == Safe_Str__File__Path("v1")
+
+            _.increment_version()
+            assert _.current_version == 2
+            assert _.generate_path() == Safe_Str__File__Path("v2")
+
+            _.increment_version()
+            assert _.current_version == 3
+            assert _.generate_path() == Safe_Str__File__Path("v3")
+
+    def test_set_version(self):                                                        # Test setting specific version
+        with self.handler as _:
+            _.set_version(5)
+            assert _.current_version == 5
+            assert _.generate_path() == Safe_Str__File__Path("v5")
+
+            _.set_version(10)
+            assert _.current_version == 10
+            assert _.generate_path() == Safe_Str__File__Path("v10")
+
+    def test_custom_version_prefix(self):                                              # Test custom version prefix
+        with self.handler as _:
+            _.version_prefix = "version-"
+            _.set_version(3)
+            result = _.generate_path()
+            assert result == Safe_Str__File__Path("version-3")
