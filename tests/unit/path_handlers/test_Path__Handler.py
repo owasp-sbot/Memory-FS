@@ -12,8 +12,4 @@ class test_Path__Handler(TestCase):                                             
 
     def test_generate_path(self):                                                      # Test abstract method
         with Path__Handler() as _:
-            try:
-                _.generate_path()
-                assert False, "Should raise NotImplementedError"
-            except NotImplementedError:
-                pass                                                                    # Expected
+            assert _.generate_path() == ""
