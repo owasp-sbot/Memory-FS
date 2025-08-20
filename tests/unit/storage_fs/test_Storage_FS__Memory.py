@@ -1,10 +1,8 @@
-from unittest                                               import TestCase
-
-from osbot_utils.type_safe.Type_Safe__Dict import Type_Safe__Dict
-
-from memory_fs.storage_fs.providers.Storage_FS__Memory      import Storage_FS__Memory
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
-from osbot_utils.utils.Json                                 import json_to_bytes, bytes_to_json
+from unittest                                                                       import TestCase
+from osbot_utils.type_safe.type_safe_core.collections.Type_Safe__Dict               import Type_Safe__Dict
+from memory_fs.storage_fs.providers.Storage_FS__Memory                              import Storage_FS__Memory
+from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
+from osbot_utils.utils.Json                                                         import json_to_bytes
 
 
 class test_Storage_FS__Memory(TestCase):                                                # Test memory storage provider

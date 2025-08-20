@@ -1,17 +1,17 @@
 import pytest
-from memory_fs.path_handlers.Path__Handler                  import Path__Handler
-from memory_fs.path_handlers.Path__Handler__Temporal        import Path__Handler__Temporal
-from osbot_utils.type_safe.Type_Safe__List                  import Type_Safe__List
-from memory_fs.path_handlers.Path__Handler__Latest          import Path__Handler__Latest
-from memory_fs.storage_fs.Storage_FS                        import Storage_FS
-from osbot_utils.utils.Objects                              import __
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
-from memory_fs.file_types.Memory_FS__File__Type__Json       import Memory_FS__File__Type__Json
-from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
-from osbot_utils.helpers.Safe_Id                            import Safe_Id
-from tests.unit.Base_Test__File_FS                          import Base_Test__File_FS
-from memory_fs.target_fs.Target_FS                          import Target_FS
-from memory_fs.file_fs.File_FS                              import File_FS
+from osbot_utils.type_safe.type_safe_core.collections.Type_Safe__List               import Type_Safe__List
+from memory_fs.path_handlers.Path__Handler                                          import Path__Handler
+from memory_fs.path_handlers.Path__Handler__Temporal                                import Path__Handler__Temporal
+from memory_fs.path_handlers.Path__Handler__Latest                                  import Path__Handler__Latest
+from memory_fs.storage_fs.Storage_FS                                                import Storage_FS
+from osbot_utils.utils.Objects                                                      import __
+from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
+from memory_fs.file_types.Memory_FS__File__Type__Json                               import Memory_FS__File__Type__Json
+from memory_fs.schemas.Schema__Memory_FS__File__Config                              import Schema__Memory_FS__File__Config
+from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id                  import Safe_Id
+from tests.unit.Base_Test__File_FS                                                  import Base_Test__File_FS
+from memory_fs.target_fs.Target_FS                                                  import Target_FS
+from memory_fs.file_fs.File_FS                                                      import File_FS
 
 
 class test_Target_FS(Base_Test__File_FS):                                               # Test target FS class

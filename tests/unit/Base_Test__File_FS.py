@@ -1,5 +1,5 @@
 from unittest                                               import TestCase
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
 from memory_fs.file_fs.File_FS                              import File_FS
 from memory_fs.schemas.Schema__Memory_FS__File__Type        import Schema__Memory_FS__File__Type
 from memory_fs.storage_fs.providers.Storage_FS__Memory      import Storage_FS__Memory

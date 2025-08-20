@@ -1,6 +1,6 @@
 from typing                                 import Type, List, Dict
 from memory_fs.storage_fs.Storage_FS        import Storage_FS
-from osbot_utils.helpers.Safe_Id            import Safe_Id
+from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id            import Safe_Id
 from memory_fs.path_handlers.Path__Handler  import Path__Handler
 from osbot_utils.type_safe.Type_Safe        import Type_Safe
 

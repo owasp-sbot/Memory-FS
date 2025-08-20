@@ -1,11 +1,11 @@
-from unittest                                               import TestCase
-from osbot_utils.helpers.safe_str.Safe_Str__File__Name      import Safe_Str__File__Name
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
-from memory_fs.file_fs.actions.File_FS__Name                import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__CONFIG, FILE_EXTENSION__MEMORY_FS__FILE__METADATA
-from memory_fs.file_types.Memory_FS__File__Type__Json       import Memory_FS__File__Type__Json
-from memory_fs.file_types.Memory_FS__File__Type__Text       import Memory_FS__File__Type__Text
-from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
-from osbot_utils.helpers.Safe_Id                            import Safe_Id
+from unittest                                                                    import TestCase
+from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Name  import Safe_Str__File__Name
+from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path   import Safe_Str__File__Path
+from memory_fs.file_fs.actions.File_FS__Name                                     import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__CONFIG, FILE_EXTENSION__MEMORY_FS__FILE__METADATA
+from memory_fs.file_types.Memory_FS__File__Type__Json                            import Memory_FS__File__Type__Json
+from memory_fs.file_types.Memory_FS__File__Type__Text                            import Memory_FS__File__Type__Text
+from memory_fs.schemas.Schema__Memory_FS__File__Config                           import Schema__Memory_FS__File__Config
+from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id               import Safe_Id
 
 
 class test_File_FS__Name(TestCase):                                                     # Test file naming logic

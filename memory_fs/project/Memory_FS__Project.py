@@ -1,8 +1,8 @@
 from memory_fs.file_fs.File_FS                              import File_FS
 from memory_fs.schemas.Schema__Memory_FS__File__Type        import Schema__Memory_FS__File__Type
 from memory_fs.storage_fs.Storage_FS                        import Storage_FS
-from osbot_utils.type_safe.decorators.type_safe             import type_safe
-from osbot_utils.helpers.Safe_Id                            import Safe_Id
+from osbot_utils.type_safe.type_safe_core.decorators.type_safe             import type_safe
+from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id                            import Safe_Id
 from memory_fs.project.Schema__Memory_FS__Project__Config   import Schema__Memory_FS__Project__Config, Schema__Memory_FS__Project__Path_Strategy
 from osbot_utils.type_safe.Type_Safe                        import Type_Safe
 

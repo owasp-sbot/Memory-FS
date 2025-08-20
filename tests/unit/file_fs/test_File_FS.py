@@ -1,12 +1,12 @@
 import pytest
-from memory_fs.schemas.Schema__Memory_FS__File__Metadata        import Schema__Memory_FS__File__Metadata
-from osbot_utils.utils.Env                                      import not_in_github_action
-from osbot_utils.helpers.duration.decorators.capture_duration   import capture_duration
-from osbot_utils.helpers.Safe_Id                                import Safe_Id
-from tests.unit.Base_Test__File_FS                              import Base_Test__File_FS
-from memory_fs.schemas.Schema__Memory_FS__File__Config          import Schema__Memory_FS__File__Config
-from osbot_utils.utils.Objects                                  import __
-from memory_fs.file_fs.File_FS                                  import File_FS
+from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id import Safe_Id
+from memory_fs.schemas.Schema__Memory_FS__File__Metadata           import Schema__Memory_FS__File__Metadata
+from osbot_utils.utils.Env                                         import not_in_github_action
+from osbot_utils.helpers.duration.decorators.capture_duration      import capture_duration
+from tests.unit.Base_Test__File_FS                                 import Base_Test__File_FS
+from memory_fs.schemas.Schema__Memory_FS__File__Config             import Schema__Memory_FS__File__Config
+from osbot_utils.utils.Objects                                     import __
+from memory_fs.file_fs.File_FS                                     import File_FS
 
 
 class test_File_FS(Base_Test__File_FS):                                                # Tests for File_FS class

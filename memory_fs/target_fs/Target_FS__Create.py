@@ -2,7 +2,7 @@ from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS
 from memory_fs.storage_fs.Storage_FS                    import Storage_FS
 from osbot_utils.utils.Json                             import bytes_to_json
 from memory_fs.target_fs.Target_FS                      import Target_FS
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path  import Safe_Str__File__Path
 from osbot_utils.type_safe.Type_Safe                    import Type_Safe
 
 
