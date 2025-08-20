@@ -206,7 +206,7 @@ class test_File_FS__Paths(TestCase):                                            
         paths_from_content  = self.paths.paths__content ()
         paths_from_metadata = self.paths.paths__metadata()
 
-        assert paths_from_paths == paths_from_config + paths_from_content + paths_from_metadata
+        assert paths_from_paths == sorted(paths_from_config + paths_from_content + paths_from_metadata)
 
     def test_all_methods_handle_multiple_paths_consistently(self):                             # Test all methods handle multiple paths consistently
         paths_list = [Safe_Str__File__Path("path1"),

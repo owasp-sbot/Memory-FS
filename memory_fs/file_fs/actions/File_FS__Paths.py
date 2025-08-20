@@ -21,20 +21,10 @@ class File_FS__Paths(Type_Safe):
         return File_FS__Name(file__config=self.file__config)
 
     @type_safe
-    def paths(self) -> List[Safe_Str__File__Path]:            # todo: this file should return all paths (config, content and metadata), not just the config ones, which is what it is doing at the moment
-        return (self.paths__config  () +
-                self.paths__content () +
-                self.paths__metadata())
-        # full_file_paths = []
-        # if self.file__config.file_paths:                                  # if we have file_paths define mapp them all
-        #     for file_path in self.file__config.file_paths:
-        #         full_file_path = self.file_fs__name().config__for_path(file_path)
-        #         full_file_paths.append(full_file_path)
-        # else:
-        #     full_file_path = self.file_fs__name().config__for_path()
-        #     full_file_paths.append(full_file_path)
-        #
-        # return full_file_paths
+    def paths(self) -> List[Safe_Str__File__Path]:
+        return sorted(self.paths__config  () +
+                      self.paths__content () +
+                      self.paths__metadata())
 
     def paths__config(self) -> List[Safe_Str__File__Path]:
         full_file_paths = []
