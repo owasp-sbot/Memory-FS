@@ -3,7 +3,7 @@ from osbot_utils.utils.Json                                 import json_to_str
 from tests.unit.Base_Test__File_FS                          import Base_Test__File_FS
 from memory_fs.target_fs.Target_FS__Create                  import Target_FS__Create
 from memory_fs.file_fs.actions.File_FS__Name                import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
 
 
 class test_Target_FS__Create(Base_Test__File_FS):                                      # Test target FS create factory

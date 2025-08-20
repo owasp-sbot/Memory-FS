@@ -1,6 +1,6 @@
 from unittest                                               import TestCase
 from memory_fs.storage_fs.Storage_FS                        import Storage_FS
-from osbot_utils.helpers.Safe_Id                            import Safe_Id
+from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id                            import Safe_Id
 from memory_fs.path_handlers.Path__Handler__Latest          import Path__Handler__Latest
 from memory_fs.project.Schema__Memory_FS__Project__Config   import Schema__Memory_FS__Project__Path_Strategy, Schema__Memory_FS__Project__Config
 

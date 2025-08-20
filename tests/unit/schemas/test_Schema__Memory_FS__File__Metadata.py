@@ -1,10 +1,10 @@
-from unittest                                               import TestCase
-from osbot_utils.utils.Objects                              import __
-from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata
-from osbot_utils.helpers.Safe_Id                            import Safe_Id
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
-from osbot_utils.helpers.safe_str.Safe_Str__Hash            import Safe_Str__Hash
-from osbot_utils.helpers.safe_int.Safe_UInt__FileSize       import Safe_UInt__FileSize
+from unittest                                                                       import TestCase
+from osbot_utils.type_safe.primitives.safe_str.cryptography.hashes.Safe_Str__Hash   import Safe_Str__Hash
+from osbot_utils.type_safe.primitives.safe_uint.Safe_UInt__FileSize                 import Safe_UInt__FileSize
+from osbot_utils.utils.Objects                                                      import __
+from memory_fs.schemas.Schema__Memory_FS__File__Metadata                            import Schema__Memory_FS__File__Metadata
+from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id                  import Safe_Id
+from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
 
 
 class test_Schema__Memory_FS__File__Metadata(TestCase):                                # Test file metadata schema

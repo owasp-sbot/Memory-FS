@@ -2,8 +2,8 @@ from unittest                                                   import TestCase
 from osbot_utils.utils.Objects                                  import __
 from memory_fs.schemas.Schema__Memory_FS__File__Config          import Schema__Memory_FS__File__Config
 from memory_fs.schemas.Enum__Memory_FS__File__Exists_Strategy   import Enum__Memory_FS__File__Exists_Strategy
-from osbot_utils.helpers.Safe_Id                                import Safe_Id
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path          import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id                                import Safe_Id
+from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path          import Safe_Str__File__Path
 
 
 class test_Schema__Memory_FS__File__Config(TestCase):                                  # Test file config schema

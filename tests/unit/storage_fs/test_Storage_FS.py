@@ -1,6 +1,6 @@
 from unittest                                               import TestCase
 from memory_fs.storage_fs.Storage_FS                        import Storage_FS
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
 
 
 class test_Storage_FS(TestCase):                                                        # Test base storage FS class
@@ -17,7 +17,7 @@ class test_Storage_FS(TestCase):                                                
     def test_clear(self):                                                               # Test clear method (not implemented in base)
         with self.storage_fs as _:
             result = _.clear()
-            assert result is None                                                       # Base class returns None
+            assert result is False                                                       # Base class returns None
 
     def test_file__bytes(self):                                                         # Test file bytes retrieval
         with self.storage_fs as _:
