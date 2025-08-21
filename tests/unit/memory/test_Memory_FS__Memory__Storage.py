@@ -67,10 +67,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
         with self.file_fs as _:
             saved_paths = _.update(test_dict)
 
-            assert saved_paths == [Safe_Str__File__Path('latest/an-file.json'                ),
-                                   Safe_Str__File__Path(f'{self.path_now}/an-file.json'         ),
-                                   Safe_Str__File__Path('latest/an-file.json.metadata'       ),
-                                   Safe_Str__File__Path(f'{self.path_now}/an-file.json.metadata')]
+            assert saved_paths == sorted([Safe_Str__File__Path('latest/an-file.json'                   ),
+                                          Safe_Str__File__Path(f'{self.path_now}/an-file.json'         ),
+                                          Safe_Str__File__Path('latest/an-file.json.metadata'          ),
+                                          Safe_Str__File__Path(f'{self.path_now}/an-file.json.metadata')])
             loaded_data = _.content()
             assert loaded_data      == test_dict
 
@@ -82,10 +82,10 @@ class test_Memory_FS__Memory__Storage(TestCase):
         with File_FS(file__config=config_markdown, storage_fs=self.storage_fs) as _:
             markdown_content = "# Test Header\n\nThis is a test."
             saved_paths      = _.update(markdown_content)
-            assert saved_paths == [ 'latest/an-file.md'                  ,
-                                   f'{self.path_now}/an-file.md'         ,
-                                    'latest/an-file.md.metadata'         ,
-                                   f'{self.path_now}/an-file.md.metadata']
+            assert saved_paths == sorted([ 'latest/an-file.md'                  ,
+                                           f'{self.path_now}/an-file.md'         ,
+                                            'latest/an-file.md.metadata'         ,
+                                           f'{self.path_now}/an-file.md.metadata'])
 
             assert _.content() == markdown_content                      # confirm that round trip works
 

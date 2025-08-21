@@ -1,4 +1,4 @@
-from typing                                                 import Any, List
+from typing import Any, List, Dict
 from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
 from memory_fs.file_fs.actions.File_FS__Delete              import File_FS__Delete
 from memory_fs.file_fs.actions.File_FS__Exists              import File_FS__Exists
@@ -84,6 +84,9 @@ class File_FS(Type_Safe):
 
     def metadata(self) -> Schema__Memory_FS__File__Metadata:
         return self.file_fs__metadata().metadata()
+
+    def metadata__update(self, data: Dict[str, Any]):                       # the callers can only update the data section of the metadata file
+        return self.file_fs__metadata().update__data(data=data)
 
     def paths(self) -> List[Safe_Str__File__Path]:
         return self.file_fs__paths().paths()

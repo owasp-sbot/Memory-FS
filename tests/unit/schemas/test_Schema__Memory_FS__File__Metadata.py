@@ -13,11 +13,12 @@ class test_Schema__Memory_FS__File__Metadata(TestCase):                         
         with Schema__Memory_FS__File__Metadata() as _:
             assert type(_) is Schema__Memory_FS__File__Metadata
             assert _.obj() == __(content__hash         = None       ,
-                                content__size         = 0           ,
-                                chain_hash            = None       ,
-                                previous_version_path = None       ,
-                                tags                  = []         ,
-                                timestamp             = _.timestamp)
+                                 content__size         = 0          ,
+                                 data                  = __()       ,
+                                 chain_hash            = None       ,
+                                 previous_version_path = None       ,
+                                 tags                  = []         ,
+                                 timestamp             = _.timestamp)
 
     def test__with_values(self):                                                        # Test initialization with values
         content_hash  = Safe_Str__Hash('abc1234567')                                    # default value needs to be 10 chars

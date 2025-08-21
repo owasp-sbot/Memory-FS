@@ -30,6 +30,7 @@ class test_File_FS__Metadata(Base_Test__File_FS):                               
             with _.load() as file_metadata_1:                                                                           # this is needed because we need the .timestamp value in the test below
                 assert file_metadata_1.obj()                    == __(content__hash         = '9473fdd0d8',
                                                                       chain_hash            = None        ,             # Not implemented (at the moment)
+                                                                      data                  = __()        ,
                                                                       previous_version_path = None        ,             # Not implemented (at the moment)
                                                                       content__size         = 12          ,
                                                                       tags                  = []          ,
@@ -39,6 +40,7 @@ class test_File_FS__Metadata(Base_Test__File_FS):                               
             with _.load() as file_metadata_2:
                 assert file_metadata_2.obj()                    == __(content__hash         = None        ,             # confirm we are now getting a default value
                                                                       chain_hash            = None        ,
+                                                                      data                  = __()        ,
                                                                       previous_version_path = None        ,
                                                                       content__size         = 0           ,
                                                                       tags                  = []          ,

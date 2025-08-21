@@ -1,4 +1,4 @@
-from typing                                                                     import List
+from typing import List, Dict, Any
 
 from osbot_utils.type_safe.primitives.safe_str.cryptography.hashes.Safe_Str__Hash import safe_str_hash
 
@@ -37,10 +37,19 @@ class File_FS__Metadata(File_FS__File):
     def paths(self):
         return self.file_fs__paths().paths__metadata()
 
-    def update_metadata(self, file_bytes: bytes):
+    def update__data(self, data: Dict[str, Any]):        # this updates the data part of the metadata
+        metadata = self.metadata()
+        metadata.data = data
+        json_data   = metadata.json()                   # todo: refactor with the code with update_metadata
+        data        = json_to_bytes(json_data)
+        files_updated = self.update(data=data)
+        return files_updated
+
+    # todo: this method needs a better name
+    def update_metadata(self, file_bytes: bytes):        # this updates the non-data related values (like content__hash, content__size)
         file_metadata = self.load()
         self.update_metadata_obj(file_metadata=file_metadata, file_bytes=file_bytes)
-        json_data   = file_metadata.json()
+        json_data   = file_metadata.json()              # todo: refactor with the code with update_metadata
         data        = json_to_bytes(json_data)
         files_updated = self.update(data=data)
         return files_updated
