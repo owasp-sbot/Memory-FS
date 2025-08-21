@@ -33,6 +33,7 @@ class test_Schema__Memory_FS__File(TestCase):                                   
                                                                           serialization  =None)),
                                            metadata=__(content__hash         = None                 ,
                                                        chain_hash            = None                 ,
+                                                       data                  = __()                 ,
                                                        previous_version_path = None                 ,
                                                        content__size         = 0                    ,
                                                        tags                  = []                   ,

@@ -87,6 +87,7 @@ class test_File_FS(Base_Test__File_FS):                                         
             assert type(metadata) == Schema__Memory_FS__File__Metadata
             assert metadata.obj() == __(content__hash         ='58a28b6f67'       ,
                                         chain_hash            = None              ,
+                                        data                  = __()              ,
                                         previous_version_path = None              ,
                                         content__size         = 22                ,
                                         tags                  = []                ,

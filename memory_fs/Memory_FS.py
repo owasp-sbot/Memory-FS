@@ -86,7 +86,7 @@ class Memory_FS(Type_Safe):
     # File creation methods
     def file(self, file_id   : Safe_Id                      ,                             # Create file with specified type
                    file_type : Type[Schema__Memory_FS__File__Type] = None                 # Default to JSON if not specified
-            ) -> File_FS:
+              ) -> File_FS:
         if not self.storage_fs:
             raise ValueError("No storage configured. Use add_storage__* methods first.")
 
