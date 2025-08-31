@@ -8,7 +8,7 @@ class Path__Handler__Versioned(Path__Handler):                                  
     name            : Safe_Id = Safe_Id("versioned")
     version_prefix  : str     = "v"                                                      # Prefix for version folder
 
-    def generate_path(self) -> Safe_Str__File__Path:                                    # Generate versioned path
+    def generate_path(self, file_id:Safe_Id = None) -> Safe_Str__File__Path:                                    # Generate versioned path
         version_folder = f"{self.version_prefix}{self.current_version}"
         return self.combine_paths(version_folder)
 
