@@ -90,7 +90,7 @@ class Memory_FS(Type_Safe):
         if not self.storage_fs:
             raise ValueError("No storage configured. Use add_storage__* methods first.")
 
-        file_paths = [handler.generate_path() for handler in self.path_handlers]
+        file_paths = [handler.generate_path(file_id=file_id) for handler in self.path_handlers]
 
         file_config = Schema__Memory_FS__File__Config(file_id    = file_id    ,
                                                       file_paths = file_paths ,
