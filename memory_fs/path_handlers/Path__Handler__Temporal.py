@@ -12,7 +12,7 @@ class Path__Handler__Temporal(Path__Handler):                                   
     name              : Safe_Id       = Safe_Id("temporal")
     time_path_pattern : str           = DEFAULT__PATH_HANDLER__TEMPORAL__TIME_PATH
 
-    def generate_path(self) -> Safe_Str__File__Path:                                     # Generate temporal path with areas
+    def generate_path(self, file_id:Safe_Id = None)-> Safe_Str__File__Path:                                     # Generate temporal path with areas
         middle_segments = []
 
         # Add temporal component
