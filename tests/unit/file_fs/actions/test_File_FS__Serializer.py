@@ -1,10 +1,8 @@
+import pytest
 import base64
 import json
 from unittest                                               import TestCase
 from typing                                                 import Any
-
-import pytest
-
 from memory_fs.file_fs.actions.File_FS__Serializer          import File_FS__Serializer
 from memory_fs.schemas.Enum__Memory_FS__Serialization       import Enum__Memory_FS__Serialization
 from memory_fs.schemas.Enum__Memory_FS__File__Encoding      import Enum__Memory_FS__File__Encoding
