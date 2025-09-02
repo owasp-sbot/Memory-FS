@@ -1,4 +1,6 @@
 from typing                                                                     import List, Type, Optional
+
+from memory_fs.file_types.Memory_FS__File__Type__Binary import Memory_FS__File__Type__Binary
 from osbot_utils.type_safe.Type_Safe                                            import Type_Safe
 from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path  import Safe_Str__File__Path
 from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id              import Safe_Id
@@ -105,6 +107,11 @@ class Memory_FS(Type_Safe):
     def file__text(self, file_id : Safe_Id                                                # Create text file
                   ) -> File_FS:
         return self.file(file_id, Memory_FS__File__Type__Text)
+
+    def file__binary(self, file_id: Safe_Id                                               # Create binary file
+                      ) -> File_FS:
+        return self.file(file_id, Memory_FS__File__Type__Binary)
+
 
     def file__data(self, file_id : Safe_Id                                                # Create data file
                   ) -> File_FS:

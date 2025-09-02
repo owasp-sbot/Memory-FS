@@ -12,12 +12,12 @@ class test_Enum__Memory_FS__File__Content_Type(TestCase):                       
         assert Enum__Memory_FS__File__Content_Type.HTML.value      == 'text/html; charset=utf-8'
         assert Enum__Memory_FS__File__Content_Type.JSON.value      == 'application/json; charset=utf-8'
         assert Enum__Memory_FS__File__Content_Type.JPEG.value      == 'image/jpeg'
-        assert Enum__Memory_FS__File__Content_Type.MARKDOWN.value  == 'text/markdown'
-        assert Enum__Memory_FS__File__Content_Type.DOT.value       == 'text/vnd.graphviz'
+        assert Enum__Memory_FS__File__Content_Type.MARKDOWN.value  == 'text/markdown; charset=utf-8'
+        assert Enum__Memory_FS__File__Content_Type.DOT.value       == 'text/vnd.graphviz; charset=utf-8'
         assert Enum__Memory_FS__File__Content_Type.PNG.value       == 'image/png'
         assert Enum__Memory_FS__File__Content_Type.TXT.value       == 'text/plain; charset=utf-8'
 
     def test__enum_members(self):                                                       # Test all members present
-        expected_members = ['HTML', 'JSON', 'JPEG', 'MARKDOWN', 'DOT', 'PNG', 'TXT']
+        expected_members = ['BINARY', 'HTML', 'GZIP', 'JSON', 'JPEG', 'MARKDOWN', 'DOT', 'PNG', 'TXT','ZIP']
         actual_members   = [member.name for member in Enum__Memory_FS__File__Content_Type]
         assert actual_members == expected_members
