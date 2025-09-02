@@ -1,15 +1,17 @@
 from enum import Enum
 
 class Enum__Memory_FS__File__Content_Type(Enum):
+    BINARY     : str = "application/octet-stream"
     HTML       : str = 'text/html; charset=utf-8'
+    GZIP       : str = "application/gzip"
     JSON       : str = 'application/json; charset=utf-8'
     JPEG       : str = 'image/jpeg'
-    MARKDOWN   : str = "text/markdown"                          # question: should we add charset=utf-8 here?
-    DOT        : str = "text/vnd.graphviz"                      # and here?
+    MARKDOWN   : str = "text/markdown; charset=utf-8"
+    DOT        : str = "text/vnd.graphviz; charset=utf-8"
     PNG        : str = 'image/png'
     TXT        : str = 'text/plain; charset=utf-8'
+    ZIP        : str = "application/zip"
 
-    #BASE64     : str = 'Base64'                                 # question: where should we capture the case when we need to store the file in binary format
 
 # or should we be using something like
 
