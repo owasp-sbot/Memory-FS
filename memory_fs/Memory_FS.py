@@ -1,8 +1,8 @@
 from typing                                                                     import List, Type, Optional
 from memory_fs.file_types.Memory_FS__File__Type__Binary                         import Memory_FS__File__Type__Binary
 from osbot_utils.type_safe.Type_Safe                                            import Type_Safe
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path  import Safe_Str__File__Path
-from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id              import Safe_Id
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id              import Safe_Id
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                  import type_safe
 from memory_fs.file_fs.File_FS                                                  import File_FS
 from memory_fs.storage_fs.Storage_FS                                            import Storage_FS

@@ -1,10 +1,10 @@
-from typing import Optional, Set, Dict, Any
-from osbot_utils.type_safe.primitives.safe_int.Timestamp_Now                        import Timestamp_Now
-from osbot_utils.type_safe.primitives.safe_str.cryptography.hashes.Safe_Str__Hash   import Safe_Str__Hash
-from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id                  import Safe_Id
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
+from typing                                                                         import Optional, Set, Dict, Any
+from osbot_utils.type_safe.primitives.domains.files.safe_uint.Safe_UInt__FileSize   import Safe_UInt__FileSize
+from osbot_utils.type_safe.primitives.domains.identifiers.Timestamp_Now             import Timestamp_Now
+from osbot_utils.type_safe.primitives.domains.cryptography.safe_str.Safe_Str__Hash  import Safe_Str__Hash
+from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                   import Safe_Id
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
 from osbot_utils.type_safe.Type_Safe                                                import Type_Safe
-from osbot_utils.type_safe.primitives.safe_uint.Safe_UInt__FileSize                 import Safe_UInt__FileSize
 
 class Schema__Memory_FS__File__Metadata(Type_Safe):
     content__hash        : Safe_Str__Hash                        = None

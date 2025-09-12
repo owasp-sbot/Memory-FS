@@ -1,5 +1,5 @@
 from typing                                                                         import Any, List, Dict
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 from memory_fs.file_fs.actions.File_FS__Delete                                      import File_FS__Delete
 from memory_fs.file_fs.actions.File_FS__Exists                                      import File_FS__Exists
 from memory_fs.file_fs.actions.File_FS__Info                                        import File_FS__Info

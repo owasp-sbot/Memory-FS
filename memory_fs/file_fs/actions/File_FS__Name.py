@@ -1,6 +1,6 @@
 from os                                                                         import path
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Name  import Safe_Str__File__Name
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path  import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Name  import Safe_Str__File__Name
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Config                          import Schema__Memory_FS__File__Config
 from osbot_utils.type_safe.Type_Safe                                            import Type_Safe
 

@@ -1,4 +1,4 @@
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path  import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from tests.unit.Base_Test__File_FS                      import Base_Test__File_FS
 
 

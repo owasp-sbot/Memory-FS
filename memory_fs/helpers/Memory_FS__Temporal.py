@@ -1,6 +1,6 @@
 from typing                                                         import List
 from memory_fs.path_handlers.Path__Handler__Temporal                import Path__Handler__Temporal
-from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id  import Safe_Id
+from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id  import Safe_Id
 from memory_fs.Memory_FS                                            import Memory_FS
 
 

@@ -1,8 +1,8 @@
 from unittest                                               import TestCase
 from datetime                                               import datetime
 from memory_fs.path_handlers.Path__Handler__Temporal        import Path__Handler__Temporal
-from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id                            import Safe_Id
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                            import Safe_Id
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 
 
 class test_Path__Handler__Temporal(TestCase):                                           # Test temporal path handler

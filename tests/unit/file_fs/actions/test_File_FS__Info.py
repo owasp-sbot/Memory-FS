@@ -1,9 +1,9 @@
-from osbot_utils.type_safe.primitives.safe_str.cryptography.hashes.Safe_Str__Hash   import safe_str_hash
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.cryptography.safe_str.Safe_Str__Hash   import safe_str_hash
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 from memory_fs.file_fs.File_FS                                                      import File_FS
 from tests.unit.Base_Test__File_FS                                                  import Base_Test__File_FS
 from memory_fs.file_fs.actions.File_FS__Info                                        import File_FS__Info
-from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id                  import Safe_Id
+from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                  import Safe_Id
 
 # todo: review performance impact of these tests (and methods used), since they are taking ~10ms to ~15ms to execute (which is a significant % of the current test suite)
 
