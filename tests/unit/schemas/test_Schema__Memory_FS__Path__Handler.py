@@ -1,6 +1,6 @@
 from unittest                                               import TestCase
 from memory_fs.schemas.Schema__Memory_FS__Path__Handler     import Schema__Memory_FS__Path__Handler
-from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id                            import Safe_Id
+from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                            import Safe_Id
 
 
 class test_Schema__Memory_FS__Path__Handler(TestCase):                                 # Test path handler schema

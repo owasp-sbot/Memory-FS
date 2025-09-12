@@ -1,6 +1,6 @@
 from unittest                                               import TestCase
 from memory_fs.storage_fs.Storage_FS                        import Storage_FS
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 
 
 class test_Storage_FS(TestCase):                                                        # Test base storage FS class

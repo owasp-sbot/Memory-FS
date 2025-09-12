@@ -1,6 +1,6 @@
 import tempfile
 from unittest                                                                   import TestCase
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path  import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from osbot_utils.utils.Files                                                    import file_exists, file_delete, folder_delete_all, file_size
 from osbot_utils.utils.Json                                                     import json_to_bytes
 from memory_fs.storage_fs.providers.Storage_FS__Zip                             import Storage_FS__Zip

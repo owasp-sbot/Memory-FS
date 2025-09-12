@@ -1,5 +1,5 @@
 import pytest
-from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id import Safe_Id
+from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id import Safe_Id
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata           import Schema__Memory_FS__File__Metadata
 from osbot_utils.utils.Env                                         import not_in_github_action
 from osbot_utils.helpers.duration.decorators.capture_duration      import capture_duration
@@ -16,14 +16,14 @@ class test_File_FS(Base_Test__File_FS):                                         
             assert type(_)         is File_FS
             assert type(_.config()) is Schema__Memory_FS__File__Config
 
-            expected_obj = __(file__config = __(exists_strategy = 'FIRST'                   ,
+            expected_obj = __(file__config = __(exists_strategy = 'first'                   ,
                                                 file_id         = _.file__config.file_id    ,
                                                 file_paths      = []                        ,
                                                 file_type       = __(name           = 'json'   ,
-                                                                     content_type   = 'JSON'    ,
+                                                                     content_type   = 'application/json; charset=utf-8'    ,
                                                                      file_extension = 'json'    ,
-                                                                     encoding       = 'UTF_8'   ,
-                                                                     serialization  = 'JSON'    )),
+                                                                     encoding       = 'utf-8'   ,
+                                                                     serialization  = 'json'    )),
                               storage_fs   = __(content_data = __()           ))
             assert _.obj() == expected_obj
 

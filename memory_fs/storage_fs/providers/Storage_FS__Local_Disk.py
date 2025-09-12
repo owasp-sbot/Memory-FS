@@ -1,5 +1,5 @@
 from typing                                                                     import List, Optional
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path  import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                  import type_safe
 from osbot_utils.utils.Json                                                     import bytes_to_json, json_to_bytes
 from osbot_utils.utils.Files                                                    import Files, file_bytes, file_contents, file_create_bytes, file_delete, file_exists, file_create, folder_create, folder_delete_all, path_combine, files_list__virtual_paths, parent_folder, folder_exists, folder_delete

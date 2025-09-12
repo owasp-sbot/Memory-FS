@@ -5,8 +5,8 @@ from memory_fs.file_types.Memory_FS__File__Type__Json       import Memory_FS__Fi
 from memory_fs.file_types.Memory_FS__File__Type__Text       import Memory_FS__File__Type__Text
 from memory_fs.file_types.Memory_FS__File__Type__Png        import Memory_FS__File__Type__Png
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
-from osbot_utils.type_safe.primitives.safe_str.identifiers.Safe_Id                            import Safe_Id
-from osbot_utils.type_safe.primitives.safe_str.filesystem.Safe_Str__File__Path      import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                            import Safe_Id
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
 
 
 class test_File_FS__Paths(TestCase):                                                    # Test path generation logic
