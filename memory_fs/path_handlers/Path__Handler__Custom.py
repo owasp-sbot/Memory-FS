@@ -7,7 +7,9 @@ class Path__Handler__Custom(Path__Handler):                                     
     custom_path : Safe_Str__File__Path
     name        : Safe_Id = Safe_Id("custom")
 
-    def generate_path(self, file_id:Safe_Id = None) -> Safe_Str__File__Path:                                    # Generate custom path
+    def generate_path(self, file_id  : Safe_Id              = None,                     # not used by this path handler
+                            file_key : Safe_Str__File__Path = None                      # not used by this path handler
+                       ) -> Safe_Str__File__Path:                                       # Generate custom path
         if self.custom_path:
             return self.combine_paths(str(self.custom_path))
         return self.combine_paths()

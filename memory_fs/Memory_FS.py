@@ -86,12 +86,13 @@ class Memory_FS(Type_Safe):
 
     # File creation methods
     def file(self, file_id   : Safe_Id                      ,                             # Create file with specified type
+                   file_key  : Safe_Str__File__Path                = None ,               # Some path handlers use this
                    file_type : Type[Schema__Memory_FS__File__Type] = None                 # Default to JSON if not specified
               ) -> File_FS:
         if not self.storage_fs:
             raise ValueError("No storage configured. Use add_storage__* methods first.")
 
-        file_paths = [handler.generate_path(file_id=file_id) for handler in self.path_handlers]
+        file_paths = [handler.generate_path(file_id=file_id, file_key=file_key) for handler in self.path_handlers]
 
         file_config = Schema__Memory_FS__File__Config(file_id    = file_id    ,
                                                       file_paths = file_paths ,
@@ -99,22 +100,26 @@ class Memory_FS(Type_Safe):
 
         return File_FS(file__config=file_config, storage_fs=self.storage_fs)
 
-    def file__json(self, file_id : Safe_Id                                                # Create JSON file
-                  ) -> File_FS:
-        return self.file(file_id, Memory_FS__File__Type__Json)
+    def file__json(self, file_id : Safe_Id                    ,                           # Create JSON file
+                         file_key: Safe_Str__File__Path = None                            # File key (used by some path handlers)
+                    ) -> File_FS:
+        return self.file(file_id=file_id, file_key=file_key,  file_type=Memory_FS__File__Type__Json)
 
-    def file__text(self, file_id : Safe_Id                                                # Create text file
-                  ) -> File_FS:
-        return self.file(file_id, Memory_FS__File__Type__Text)
+    def file__text(self, file_id : Safe_Id                    ,                            # Create text file
+                         file_key: Safe_Str__File__Path = None                            # File key (used by some path handlers)
+                    ) -> File_FS:
+        return self.file(file_id=file_id, file_key=file_key, file_type=Memory_FS__File__Type__Text)
 
-    def file__binary(self, file_id: Safe_Id                                               # Create binary file
+    def file__binary(self, file_id : Safe_Id                    ,                         # Create binary file
+                           file_key: Safe_Str__File__Path = None                          # File key (used by some path handlers)
                       ) -> File_FS:
-        return self.file(file_id, Memory_FS__File__Type__Binary)
+        return self.file(file_id=file_id, file_key=file_key, file_type=Memory_FS__File__Type__Binary)
 
 
-    def file__data(self, file_id : Safe_Id                                                # Create data file
-                  ) -> File_FS:
-        return self.file(file_id, Memory_FS__File__Type__Data)
+    def file__data(self, file_id : Safe_Id                    ,                           # Create data file
+                         file_key: Safe_Str__File__Path = None                            # File key (used by some path handlers)
+                    ) -> File_FS:
+        return self.file(file_id=file_id, file_key=file_key, file_type=Memory_FS__File__Type__Data)
 
     # Helper methods
     def get_handler(self, handler_type : Type[Path__Handler]                              # Get handler by type
