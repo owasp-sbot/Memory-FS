@@ -1,6 +1,6 @@
 [tool.poetry]
 name        = "memory_fs"
-version     = "v0.22.0"
+version     = "v0.22.1"
 description = "Memory-FS"
 authors     = ["Dinis Cruz <dinis.cruz@owasp.org>"]
 license     = "Apache 2.0"
@@ -13,5 +13,5 @@ python            = "^3.12"
 osbot-utils       = "*"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.9.1"]
 build-backend = "poetry.core.masonry.api"
