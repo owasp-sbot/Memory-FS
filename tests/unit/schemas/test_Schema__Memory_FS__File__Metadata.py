@@ -1,10 +1,10 @@
 from unittest                                                                       import TestCase
-from osbot_utils.type_safe.primitives.domains.cryptography.safe_str.Safe_Str__Hash   import Safe_Str__Hash
-from osbot_utils.type_safe.primitives.domains.files.safe_uint.Safe_UInt__FileSize                 import Safe_UInt__FileSize
+from osbot_utils.type_safe.primitives.domains.files.safe_uint.Safe_UInt__FileSize   import Safe_UInt__FileSize
 from osbot_utils.utils.Objects                                                      import __
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata                            import Schema__Memory_FS__File__Metadata
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                  import Safe_Id
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                   import Safe_Id
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
+from memory_fs.schemas.Safe_Str__Cache_Hash                    import Safe_Str__Cache_Hash
 
 
 class test_Schema__Memory_FS__File__Metadata(TestCase):                                # Test file metadata schema
@@ -21,9 +21,9 @@ class test_Schema__Memory_FS__File__Metadata(TestCase):                         
                                  timestamp             = _.timestamp)
 
     def test__with_values(self):                                                        # Test initialization with values
-        content_hash  = Safe_Str__Hash('abc1234567')                                    # default value needs to be 10 chars
+        content_hash  = Safe_Str__Cache_Hash('abc1234567')                                    # default value needs to be 10 chars
         content_size  = Safe_UInt__FileSize(1024)
-        chain_hash    = Safe_Str__Hash('def1234567')
+        chain_hash    = Safe_Str__Cache_Hash('def1234567')
         prev_path     = Safe_Str__File__Path('v1/file.json')
         tags          = {Safe_Id('tag1'), Safe_Id('tag2')}
 

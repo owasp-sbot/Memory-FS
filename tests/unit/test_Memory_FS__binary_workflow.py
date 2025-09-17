@@ -1,10 +1,11 @@
 from unittest                                                                      import TestCase
-from osbot_utils.type_safe.primitives.domains.cryptography.safe_str.Safe_Str__Hash  import safe_str_hash
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                 import Safe_Id
+from osbot_utils.type_safe.primitives.domains.cryptography.safe_str.Safe_Str__Hash import safe_str_hash
+from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                  import Safe_Id
 from memory_fs.Memory_FS                                                           import Memory_FS
 from memory_fs.file_types.Memory_FS__File__Type__Binary                            import Memory_FS__File__Type__Binary
 from memory_fs.schemas.Enum__Memory_FS__File__Content_Type                         import Enum__Memory_FS__File__Content_Type
 from memory_fs.schemas.Enum__Memory_FS__Serialization                              import Enum__Memory_FS__Serialization
+from memory_fs.schemas.Safe_Str__Cache_Hash import Safe_Str__Cache_Hash
 
 
 class test_Memory_FS__binary_workflow(TestCase):                                        # Test complete binary file workflow
@@ -85,7 +86,7 @@ class test_Memory_FS__binary_workflow(TestCase):                                
             assert metadata.content__size == len(self.test_large_binary)              # 2560 bytes
 
             # Verify hash is calculated correctly for binary data
-            expected_hash = safe_str_hash(self.test_large_binary)
+            expected_hash = Safe_Str__Cache_Hash(safe_str_hash(self.test_large_binary))
             assert metadata.content__hash == expected_hash
 
             # Check file info
@@ -253,6 +254,6 @@ class test_Memory_FS__binary_workflow(TestCase):                                
                     assert type(retrieved) is bytes
 
                     # Verify hash integrity
-                    expected_hash = safe_str_hash(test_data)
+                    expected_hash = Safe_Str__Cache_Hash(safe_str_hash(test_data))
                     metadata = test_file.metadata()
                     assert metadata.content__hash == expected_hash
