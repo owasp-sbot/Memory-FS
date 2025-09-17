@@ -4,6 +4,8 @@ from memory_fs.file_fs.file.File_FS__File                                       
 from osbot_utils.utils.Json                                                         import json_to_bytes
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata                            import Schema__Memory_FS__File__Metadata
+from memory_fs.schemas.Safe_Str__Cache_Hash                                         import Safe_Str__Cache_Hash
+
 
 # todo: review the pattern of not having a global object to hold the metadata value from disk (since we have some code complexity below caused by the fact that we don't have those values in memory)
 
@@ -53,7 +55,7 @@ class File_FS__Metadata(File_FS__File):
         return files_updated
 
     def update_metadata_obj(self, file_metadata: Schema__Memory_FS__File__Metadata, file_bytes:bytes):         # figure out a better way to implement this
-        content__hash = safe_str_hash(file_bytes)
+        content__hash = Safe_Str__Cache_Hash(safe_str_hash(file_bytes))                                         # todo: add a helper for safe_str_hash for Safe_Str__Cache_Hash
         content__size = len(file_bytes)
 
         file_metadata.content__hash = content__hash

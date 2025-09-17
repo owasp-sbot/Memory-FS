@@ -1,9 +1,10 @@
 from osbot_utils.type_safe.primitives.domains.cryptography.safe_str.Safe_Str__Hash import safe_str_hash
-from osbot_utils.utils.Objects                                                    import __
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path    import Safe_Str__File__Path
-from tests.unit.Base_Test__File_FS                                                import Base_Test__File_FS
-from memory_fs.file_fs.file.File_FS__Metadata                                     import File_FS__Metadata
-from memory_fs.schemas.Schema__Memory_FS__File__Metadata                          import Schema__Memory_FS__File__Metadata
+from osbot_utils.utils.Objects                                                     import __
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
+from memory_fs.schemas.Safe_Str__Cache_Hash                                        import Safe_Str__Cache_Hash
+from tests.unit.Base_Test__File_FS                                                 import Base_Test__File_FS
+from memory_fs.file_fs.file.File_FS__Metadata                                      import File_FS__Metadata
+from memory_fs.schemas.Schema__Memory_FS__File__Metadata                           import Schema__Memory_FS__File__Metadata
 
 
 class test_File_FS__Metadata(Base_Test__File_FS):                                      # Test file metadata operations
@@ -62,5 +63,5 @@ class test_File_FS__Metadata(Base_Test__File_FS):                               
             metadata = _.load()
             assert type(metadata) is Schema__Memory_FS__File__Metadata
 
-            expected_hash = safe_str_hash('"test content for metadata"')            # Note: JSON encoding wraps in quotes
+            expected_hash = Safe_Str__Cache_Hash(safe_str_hash('"test content for metadata"'))            # Note: JSON encoding wraps in quotes
             assert metadata.content__hash == expected_hash
