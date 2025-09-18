@@ -1,8 +1,8 @@
 import os
 from unittest                                                                       import TestCase
 from osbot_utils.testing.Temp_Folder                                                import Temp_Folder
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                   import Safe_Id
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id     import Safe_Str__Id
 from osbot_utils.utils.Files                                                        import folder_delete_all
 from memory_fs.Memory_FS                                                            import Memory_FS
 import pytest
@@ -12,7 +12,7 @@ class test_Memory_FS__binary_storage_integration(TestCase):                     
 
     def setUp(self):                                                                   # Per-test setup
         self.test_binary_data = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR'               # Sample PNG header
-        self.test_file_id = Safe_Id("test-binary-storage")
+        self.test_file_id = Safe_Str__Id("test-binary-storage")
         self.memory_fs_instances = []                                                 # Track instances for cleanup
 
     def tearDown(self):                                                               # Clean up all created Memory_FS instances
@@ -133,7 +133,7 @@ class test_Memory_FS__binary_storage_integration(TestCase):                     
             assert len(storage.files__paths()) == 0
 
     def test_binary_storage_switching(self):                                         # Test switching storage backends with binary files
-        file_id = Safe_Id("storage-switch")
+        file_id = Safe_Str__Id("storage-switch")
         test_data = b'\x00\xFF\x00\xFF' * 100                                       # 400 bytes pattern
 
         # Create in memory storage
@@ -184,19 +184,19 @@ class test_Memory_FS__binary_storage_integration(TestCase):                     
             created_files = []                                                        # Track all created files
 
             # Binary file
-            binary_file = memory_fs.file__binary(Safe_Id(f"{base_id}-binary"))
+            binary_file = memory_fs.file__binary(Safe_Str__Id(f"{base_id}-binary"))
             binary_data = b'\x89PNG\r\n\x1a\n'
             binary_file.create(binary_data)
             created_files.append(binary_file)
 
             # JSON file
-            json_file = memory_fs.file__json(Safe_Id(f"{base_id}-json"))
+            json_file = memory_fs.file__json(Safe_Str__Id(f"{base_id}-json"))
             json_data = {"type": "config", "version": 1}
             json_file.create(json_data)
             created_files.append(json_file)
 
             # Text file
-            text_file = memory_fs.file__text(Safe_Id(f"{base_id}-text"))
+            text_file = memory_fs.file__text(Safe_Str__Id(f"{base_id}-text"))
             text_data = "This is plain text content"
             text_file.create(text_data)
             created_files.append(text_file)
@@ -212,9 +212,9 @@ class test_Memory_FS__binary_storage_integration(TestCase):                     
             assert text_file.paths()[0].endswith(".txt")
 
             # Verify metadata shows correct content types
-            assert binary_file.info()[Safe_Id('content_type')] == 'application/octet-stream'
-            assert json_file.info()[Safe_Id('content_type')]   == 'application/json; charset=utf-8'
-            assert text_file.info()[Safe_Id('content_type')]   == 'text/plain; charset=utf-8'
+            assert binary_file.info()[Safe_Str__Id('content_type')] == 'application/octet-stream'
+            assert json_file.info()[Safe_Str__Id('content_type')]   == 'application/json; charset=utf-8'
+            assert text_file.info()[Safe_Str__Id('content_type')]   == 'text/plain; charset=utf-8'
 
             # Clean up all created files
             for file_obj in created_files:
@@ -230,7 +230,7 @@ class test_Memory_FS__binary_storage_integration(TestCase):                     
             memory_fs.set_storage__memory()
             memory_fs.add_handler__latest()
 
-            binary_file = memory_fs.file__binary(Safe_Id("test-errors"))
+            binary_file = memory_fs.file__binary(Safe_Str__Id("test-errors"))
 
             # Reading non-existent file
             assert binary_file.exists() is False

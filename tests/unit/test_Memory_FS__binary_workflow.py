@@ -1,6 +1,6 @@
 from unittest                                                                      import TestCase
 from osbot_utils.type_safe.primitives.domains.cryptography.safe_str.Safe_Str__Hash import safe_str_hash
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                  import Safe_Id
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id    import Safe_Str__Id
 from memory_fs.Memory_FS                                                           import Memory_FS
 from memory_fs.file_types.Memory_FS__File__Type__Binary                            import Memory_FS__File__Type__Binary
 from memory_fs.schemas.Enum__Memory_FS__File__Content_Type                         import Enum__Memory_FS__File__Content_Type
@@ -25,19 +25,19 @@ class test_Memory_FS__binary_workflow(TestCase):                                
 
     def test_file__binary_method(self):                                                # Test file__binary() method creates correct type
         with self.memory_fs as _:
-            file_id = Safe_Id("test-binary-1")
+            file_id = Safe_Str__Id("test-binary-1")
             binary_file = _.file__binary(file_id)
 
             assert binary_file.file_id() == file_id
             assert type(binary_file.file__config.file_type) is Memory_FS__File__Type__Binary
             assert binary_file.file__config.file_type.content_type == Enum__Memory_FS__File__Content_Type.BINARY
             assert binary_file.file__config.file_type.serialization == Enum__Memory_FS__Serialization.BINARY
-            assert binary_file.file__config.file_type.file_extension == Safe_Id('bin')
+            assert binary_file.file__config.file_type.file_extension == Safe_Str__Id('bin')
             assert binary_file.file__config.file_type.encoding is None                # No encoding for binary
 
     def test_binary_file_create_and_read(self):                                       # Test creating and reading binary files
         with self.memory_fs as _:
-            file_id = Safe_Id("test-png")
+            file_id = Safe_Str__Id("test-png")
             binary_file = _.file__binary(file_id)
 
             # Create with PNG header data
@@ -57,7 +57,7 @@ class test_Memory_FS__binary_workflow(TestCase):                                
 
     def test_binary_file_update(self):                                                # Test updating binary file content
         with self.memory_fs as _:
-            file_id = Safe_Id("test-update-binary")
+            file_id = Safe_Str__Id("test-update-binary")
             binary_file = _.file__binary(file_id)
 
             # Create with initial data
@@ -75,7 +75,7 @@ class test_Memory_FS__binary_workflow(TestCase):                                
 
     def test_binary_file_metadata(self):                                              # Test metadata for binary files
         with self.memory_fs as _:
-            file_id = Safe_Id("test-metadata")
+            file_id = Safe_Str__Id("test-metadata")
             binary_file = _.file__binary(file_id)
 
             # Create with known data
@@ -91,13 +91,13 @@ class test_Memory_FS__binary_workflow(TestCase):                                
 
             # Check file info
             info = binary_file.info()
-            assert info[Safe_Id('size')]         == len(self.test_large_binary)
-            assert info[Safe_Id('content_type')] == 'application/octet-stream'        # BINARY content type
-            assert info[Safe_Id('content_hash')] == expected_hash
+            assert info[Safe_Str__Id('size')]         == len(self.test_large_binary)
+            assert info[Safe_Str__Id('content_type')] == 'application/octet-stream'        # BINARY content type
+            assert info[Safe_Str__Id('content_hash')] == expected_hash
 
     def test_binary_file_delete(self):                                                # Test deleting binary files
         with self.memory_fs as _:
-            file_id = Safe_Id("test-delete-binary")
+            file_id = Safe_Str__Id("test-delete-binary")
             binary_file = _.file__binary(file_id)
 
             # Create and verify exists
@@ -116,7 +116,7 @@ class test_Memory_FS__binary_workflow(TestCase):                                
 
     def test_binary_empty_data(self):                                                   # Test handling empty binary data
         with self.memory_fs as _:
-            file_id = Safe_Id("test-empty")
+            file_id = Safe_Str__Id("test-empty")
             binary_file = _.file__binary(file_id)
 
             # Create with empty data
@@ -131,7 +131,7 @@ class test_Memory_FS__binary_workflow(TestCase):                                
 
     def test_binary_type_enforcement(self):                                           # Test that only bytes are accepted
         with self.memory_fs as _:
-            file_id = Safe_Id("test-type-check")
+            file_id = Safe_Str__Id("test-type-check")
             binary_file = _.file__binary(file_id)
 
             # Should accept bytes
@@ -151,7 +151,7 @@ class test_Memory_FS__binary_workflow(TestCase):                                
 
     def test_binary_large_file(self):                                                 # Test handling larger binary files
         with self.memory_fs as _:
-            file_id = Safe_Id("test-large")
+            file_id = Safe_Str__Id("test-large")
             binary_file = _.file__binary(file_id)
 
             # Create a larger binary file (1MB)
@@ -170,7 +170,7 @@ class test_Memory_FS__binary_workflow(TestCase):                                
 
     def test_binary_file_paths(self):                                                 # Test binary file paths have .bin extension
         with self.memory_fs as _:
-            file_id = Safe_Id("test-paths")
+            file_id = Safe_Str__Id("test-paths")
             binary_file = _.file__binary(file_id)
 
             paths = binary_file.paths()
@@ -186,7 +186,7 @@ class test_Memory_FS__binary_workflow(TestCase):                                
 
     def test_binary_vs_other_file_types(self):                                       # Test binary files are distinct from json/text
         with self.memory_fs as _:
-            file_id = Safe_Id("test-compare")
+            file_id = Safe_Str__Id("test-compare")
 
             # Create three different file types with same ID
             json_file   = _.file__json(file_id)
@@ -203,9 +203,9 @@ class test_Memory_FS__binary_workflow(TestCase):                                
             text_file.create("plain text")
             binary_file.create(b'binary data')
 
-            assert json_file.info()[Safe_Id('content_type')]   == 'application/json; charset=utf-8'
-            assert text_file.info()[Safe_Id('content_type')]   == 'text/plain; charset=utf-8'
-            assert binary_file.info()[Safe_Id('content_type')] == 'application/octet-stream'
+            assert json_file.info()[Safe_Str__Id('content_type')]   == 'application/json; charset=utf-8'
+            assert text_file.info()[Safe_Str__Id('content_type')]   == 'text/plain; charset=utf-8'
+            assert binary_file.info()[Safe_Str__Id('content_type')] == 'application/octet-stream'
 
     def test_binary_file_with_multiple_handlers(self):                                # Test binary files with multiple path handlers
         with Memory_FS() as memory_fs:
@@ -213,7 +213,7 @@ class test_Memory_FS__binary_workflow(TestCase):                                
             memory_fs.add_handler__latest()
             memory_fs.add_handler__versioned()
 
-            file_id = Safe_Id("multi-path-binary")
+            file_id = Safe_Str__Id("multi-path-binary")
             binary_file = memory_fs.file__binary(file_id)
 
             # Create binary file
@@ -229,7 +229,7 @@ class test_Memory_FS__binary_workflow(TestCase):                                
 
     def test_binary_roundtrip_integrity(self):                                        # Test binary data integrity through create/read cycle
         with self.memory_fs as _:
-            file_id = Safe_Id("test-integrity")
+            file_id = Safe_Str__Id("test-integrity")
             binary_file = _.file__binary(file_id)
 
             # Test various binary patterns
@@ -244,7 +244,7 @@ class test_Memory_FS__binary_workflow(TestCase):                                
             for test_data, description in test_cases:
                 with self.subTest(description):
                     # Create new file for each test
-                    test_file = _.file__binary(Safe_Id(f"integrity-{description.replace(' ', '-')}"))
+                    test_file = _.file__binary(Safe_Str__Id(f"integrity-{description.replace(' ', '-')}"))
                     test_file.create(test_data)
 
                     # Read back and verify exact match

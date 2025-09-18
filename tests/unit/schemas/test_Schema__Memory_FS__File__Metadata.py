@@ -2,9 +2,9 @@ from unittest                                                                   
 from osbot_utils.type_safe.primitives.domains.files.safe_uint.Safe_UInt__FileSize   import Safe_UInt__FileSize
 from osbot_utils.utils.Objects                                                      import __
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata                            import Schema__Memory_FS__File__Metadata
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                   import Safe_Id
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id     import Safe_Str__Id
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
-from memory_fs.schemas.Safe_Str__Cache_Hash                    import Safe_Str__Cache_Hash
+from memory_fs.schemas.Safe_Str__Cache_Hash                                         import Safe_Str__Cache_Hash
 
 
 class test_Schema__Memory_FS__File__Metadata(TestCase):                                # Test file metadata schema
@@ -25,7 +25,7 @@ class test_Schema__Memory_FS__File__Metadata(TestCase):                         
         content_size  = Safe_UInt__FileSize(1024)
         chain_hash    = Safe_Str__Cache_Hash('def1234567')
         prev_path     = Safe_Str__File__Path('v1/file.json')
-        tags          = {Safe_Id('tag1'), Safe_Id('tag2')}
+        tags          = {Safe_Str__Id('tag1'), Safe_Str__Id('tag2')}
 
         metadata = Schema__Memory_FS__File__Metadata(content__hash         = content_hash ,
                                                      content__size         = content_size ,

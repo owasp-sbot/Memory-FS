@@ -1,18 +1,18 @@
-from unittest                                               import TestCase
-from memory_fs.file_fs.actions.File_FS__Name                import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__CONFIG, FILE_EXTENSION__MEMORY_FS__FILE__METADATA
-from memory_fs.file_fs.actions.File_FS__Paths               import File_FS__Paths
-from memory_fs.file_types.Memory_FS__File__Type__Json       import Memory_FS__File__Type__Json
-from memory_fs.file_types.Memory_FS__File__Type__Text       import Memory_FS__File__Type__Text
-from memory_fs.file_types.Memory_FS__File__Type__Png        import Memory_FS__File__Type__Png
-from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                            import Safe_Id
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
+from unittest                                                                     import TestCase
+from memory_fs.file_fs.actions.File_FS__Name                                      import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__CONFIG, FILE_EXTENSION__MEMORY_FS__FILE__METADATA
+from memory_fs.file_fs.actions.File_FS__Paths                                     import File_FS__Paths
+from memory_fs.file_types.Memory_FS__File__Type__Json                             import Memory_FS__File__Type__Json
+from memory_fs.file_types.Memory_FS__File__Type__Text                             import Memory_FS__File__Type__Text
+from memory_fs.file_types.Memory_FS__File__Type__Png                              import Memory_FS__File__Type__Png
+from memory_fs.schemas.Schema__Memory_FS__File__Config                            import Schema__Memory_FS__File__Config
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id   import Safe_Str__Id
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
 
 
 class test_File_FS__Paths(TestCase):                                                    # Test path generation logic
 
     def setUp(self):                                                                    # Initialize test data for each test
-        self.file_id        = Safe_Id("test-file")
+        self.file_id        = Safe_Str__Id("test-file")
         self.file_type_json = Memory_FS__File__Type__Json()
         self.file_type_text = Memory_FS__File__Type__Text()
         self.file_type_png  = Memory_FS__File__Type__Png()
@@ -143,7 +143,7 @@ class test_File_FS__Paths(TestCase):                                            
     # ===== Edge cases and special scenarios =====
 
     def test_paths_with_special_characters_in_file_id(self):                                   # Test paths with special characters in file_id
-        special_file_id = Safe_Id("my-file_2024_v1")
+        special_file_id = Safe_Str__Id("my-file_2024_v1")
         self.file_config.file_id = special_file_id
         self.file_config.file_paths = [Safe_Str__File__Path("data")]
 
@@ -237,7 +237,7 @@ class test_File_FS__Paths(TestCase):                                            
     # ===== Additional test scenarios based on implementation =====
 
     def test_file_id_with_underscore_and_dash(self):                                          # Test file IDs with various valid characters
-        mixed_id = Safe_Id("file_id-with-mixed_chars-123")
+        mixed_id = Safe_Str__Id("file_id-with-mixed_chars-123")
         self.file_config.file_id = mixed_id
 
         paths = self.paths.paths__content()

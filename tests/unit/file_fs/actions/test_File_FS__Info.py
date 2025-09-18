@@ -4,7 +4,7 @@ from memory_fs.file_fs.File_FS                                                  
 from memory_fs.schemas.Safe_Str__Cache_Hash                                          import Safe_Str__Cache_Hash
 from tests.unit.Base_Test__File_FS                                                   import Base_Test__File_FS
 from memory_fs.file_fs.actions.File_FS__Info                                         import File_FS__Info
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                    import Safe_Id
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id      import Safe_Str__Id
 
 # todo: review performance impact of these tests (and methods used), since they are taking ~10ms to ~15ms to execute (which is a significant % of the current test suite)
 
@@ -35,11 +35,11 @@ class test_File_FS__Info(Base_Test__File_FS):                                   
             info = _.info()
             assert type(info) is dict                                                   # todo: Should be strongly typed
 
-            assert info[Safe_Id("exists")]       is True
-            assert info[Safe_Id("content_type")] == "application/json; charset=utf-8"
-            assert info[Safe_Id("content_hash")] == Safe_Str__Cache_Hash(safe_str_hash(f'"{test_content}"') )         # todo: see the side effects that the hash is of the serialised test_content and not the actually value
-            assert info[Safe_Id("size"        )] == len(test_content) + 2                       # size contains the padded "
-            assert info[Safe_Id("size"        )] == 12  + 2
+            assert info[Safe_Str__Id("exists")]       is True
+            assert info[Safe_Str__Id("content_type")] == "application/json; charset=utf-8"
+            assert info[Safe_Str__Id("content_hash")] == Safe_Str__Cache_Hash(safe_str_hash(f'"{test_content}"') )         # todo: see the side effects that the hash is of the serialised test_content and not the actually value
+            assert info[Safe_Str__Id("size"        )] == len(test_content) + 2                       # size contains the padded "
+            assert info[Safe_Str__Id("size"        )] == 12  + 2
 
     def test_info_different_file_types(self):                                           # Test info with different file types
         # Test with text file
@@ -52,7 +52,7 @@ class test_File_FS__Info(Base_Test__File_FS):                                   
         text_file.create(b'plain text')
 
         info = text_info.info()
-        assert info[Safe_Id("content_type")] == "text/plain; charset=utf-8"
+        assert info[Safe_Str__Id("content_type")] == "text/plain; charset=utf-8"
 
     # Helper method
     #   todo: see if we really need this, or if we should have this in Base_Test__File_FS

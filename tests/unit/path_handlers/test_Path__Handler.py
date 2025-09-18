@@ -1,6 +1,5 @@
 from unittest                                               import TestCase
 from memory_fs.path_handlers.Path__Handler                  import Path__Handler
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                            import Safe_Id
 
 
 class test_Path__Handler(TestCase):                                                     # Test base path handler class

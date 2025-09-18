@@ -2,14 +2,13 @@ import re
 import tempfile
 import pytest
 from json import JSONDecodeError
-from unittest                                                                   import TestCase
-
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id              import Safe_Id
-from osbot_utils.utils.Json                                                     import json_to_bytes
-from osbot_utils.utils.Files                                                    import folder_delete_all, file_exists, file_size
-from osbot_utils.helpers.sqlite.Sqlite__Database                                import Sqlite__Database
-from memory_fs.storage_fs.providers.Storage_FS__Sqlite                          import Storage_FS__Sqlite
+from unittest                                                                       import TestCase
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id     import Safe_Str__Id
+from osbot_utils.utils.Json                                                         import json_to_bytes
+from osbot_utils.utils.Files                                                        import folder_delete_all, file_exists, file_size
+from osbot_utils.helpers.sqlite.Sqlite__Database                                    import Sqlite__Database
+from memory_fs.storage_fs.providers.Storage_FS__Sqlite                              import Storage_FS__Sqlite
 
 
 class test_Storage_FS__Sqlite(TestCase):                                               # Test SQLite storage operations
@@ -34,10 +33,10 @@ class test_Storage_FS__Sqlite(TestCase):                                        
         with self.storage as _:
             assert type(_)            is Storage_FS__Sqlite
             assert type(_.db_path)    is Safe_Str__File__Path
-            assert type(_.table_name) is Safe_Id
+            assert type(_.table_name) is Safe_Str__Id
             assert type(_.database)   is Sqlite__Database
             assert file_exists(str(_.db_path)) is True
-            assert _.table_name       == Safe_Id("memory_fs_files")
+            assert _.table_name       == Safe_Str__Id("memory_fs_files")
 
     def test__init__with_string_path(self):                                            # Test initialization with string path
         string_path = f"{self.temp_dir}/subfolder/test.db"
@@ -308,7 +307,7 @@ class test_Storage_FS__Sqlite(TestCase):                                        
 
     def test_custom_table_name(self):                                                  # Test with custom table name
         custom_storage = Storage_FS__Sqlite(db_path    = self.db_path              ,
-                                            table_name = Safe_Id("custom_table")   ).setup()
+                                            table_name = Safe_Str__Id("custom_table")   ).setup()
 
         with custom_storage as _:
             _.file__save(self.test_path, self.test_content)
