@@ -1,8 +1,8 @@
-from os                                                                         import path
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Name  import Safe_Str__File__Name
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
-from memory_fs.schemas.Schema__Memory_FS__File__Config                          import Schema__Memory_FS__File__Config
-from osbot_utils.type_safe.Type_Safe                                            import Type_Safe
+from os                                                                             import path
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Name   import Safe_Str__File__Name
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
+from memory_fs.schemas.Schema__Memory_FS__File__Config                              import Schema__Memory_FS__File__Config
+from osbot_utils.type_safe.Type_Safe                                                import Type_Safe
 
 FILE_EXTENSION__MEMORY_FS__FILE__CONFIG   = 'config'
 FILE_EXTENSION__MEMORY_FS__FILE__METADATA = 'metadata'
@@ -17,8 +17,8 @@ class File_FS__Name(Type_Safe):
         elements = [self.content(), FILE_EXTENSION__MEMORY_FS__FILE__CONFIG]
         return self.build(elements)
 
-    def config__for_path(self, file_path: Safe_Str__File__Path=None                     # support empty or non paths (which usually indicates that we are in the root folder)
-                          ) -> Safe_Str__File__Path:                                    # return a strongly typed path
+    def config__for_path(self, file_path: Safe_Str__File__Path=None                                 # support empty or non paths (which usually indicates that we are in the root folder)
+                          ) -> Safe_Str__File__Path:                                                # return a strongly typed path
         return self.for_path(file_path=file_path, file_name=self.config())
 
     def for_path(self, file_path: Safe_Str__File__Path,
@@ -32,7 +32,7 @@ class File_FS__Name(Type_Safe):
 
 
     def content(self) -> Safe_Str__File__Path:
-        elements = [self.file__config.file_id]     # BUG: need to handle null values in file_extension
+        elements = [self.file__config.file_id]
         if self.file__config.file_type.file_extension:
             elements.append(str(self.file__config.file_type.file_extension))                        # todo: see if need the str(..) here
         return self.build(elements)
@@ -45,6 +45,6 @@ class File_FS__Name(Type_Safe):
         elements = [self.content(), FILE_EXTENSION__MEMORY_FS__FILE__METADATA]
         return self.build(elements)
 
-    def metadata__for_path(self, file_path: Safe_Str__File__Path=None                     # support empty or non paths (which usually indicates that we are in the root folder)
-                          ) -> Safe_Str__File__Path:                                    # return a strongly typed path
+    def metadata__for_path(self, file_path: Safe_Str__File__Path=None                               # support empty or non paths (which usually indicates that we are in the root folder)
+                          ) -> Safe_Str__File__Path:                                                # return a strongly typed path
         return self.for_path(file_path=file_path, file_name=self.metadata())

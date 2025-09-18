@@ -2,7 +2,7 @@ from typing                                                                     
 from memory_fs.file_types.Memory_FS__File__Type__Binary                            import Memory_FS__File__Type__Binary
 from osbot_utils.type_safe.Type_Safe                                               import Type_Safe
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
-from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id                  import Safe_Str__Id
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id    import Safe_Str__Id
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                     import type_safe
 from memory_fs.file_fs.File_FS                                                     import File_FS
 from memory_fs.storage_fs.Storage_FS                                               import Storage_FS
@@ -101,23 +101,23 @@ class Memory_FS(Type_Safe):
         return File_FS(file__config=file_config, storage_fs=self.storage_fs)
 
     def file__json(self, file_id : Safe_Str__Id                    ,                           # Create JSON file
-                         file_key: Safe_Str__File__Path = None                            # File key (used by some path handlers)
+                         file_key: Safe_Str__File__Path = None                                 # File key (used by some path handlers)
                     ) -> File_FS:
         return self.file(file_id=file_id, file_key=file_key,  file_type=Memory_FS__File__Type__Json)
 
     def file__text(self, file_id : Safe_Str__Id                    ,                            # Create text file
-                         file_key: Safe_Str__File__Path = None                            # File key (used by some path handlers)
+                         file_key: Safe_Str__File__Path = None                                  # File key (used by some path handlers)
                     ) -> File_FS:
         return self.file(file_id=file_id, file_key=file_key, file_type=Memory_FS__File__Type__Text)
 
-    def file__binary(self, file_id : Safe_Str__Id                    ,                         # Create binary file
-                           file_key: Safe_Str__File__Path = None                          # File key (used by some path handlers)
+    def file__binary(self, file_id : Safe_Str__Id                    ,                          # Create binary file
+                           file_key: Safe_Str__File__Path = None                                # File key (used by some path handlers)
                       ) -> File_FS:
         return self.file(file_id=file_id, file_key=file_key, file_type=Memory_FS__File__Type__Binary)
 
 
-    def file__data(self, file_id : Safe_Str__Id                    ,                           # Create data file
-                         file_key: Safe_Str__File__Path = None                            # File key (used by some path handlers)
+    def file__data(self, file_id : Safe_Str__Id                    ,                            # Create data file
+                         file_key: Safe_Str__File__Path = None                                  # File key (used by some path handlers)
                     ) -> File_FS:
         return self.file(file_id=file_id, file_key=file_key, file_type=Memory_FS__File__Type__Data)
 

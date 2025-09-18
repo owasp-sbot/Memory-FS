@@ -1,10 +1,10 @@
-from typing                                                import Type
-from osbot_utils.type_safe.Type_Safe                       import Type_Safe
-from memory_fs.schemas.Enum__Memory_FS__File__Content_Type import Enum__Memory_FS__File__Content_Type
-from memory_fs.schemas.Enum__Memory_FS__File__Encoding     import Enum__Memory_FS__File__Encoding
-from memory_fs.schemas.Enum__Memory_FS__Serialization      import Enum__Memory_FS__Serialization
-from memory_fs.schemas.Schema__Memory_FS__File__Type       import Schema__Memory_FS__File__Type
-from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id                           import Safe_Str__Id
+from typing                                                                     import Type
+from osbot_utils.type_safe.Type_Safe                                            import Type_Safe
+from memory_fs.schemas.Enum__Memory_FS__File__Content_Type                      import Enum__Memory_FS__File__Content_Type
+from memory_fs.schemas.Enum__Memory_FS__File__Encoding                          import Enum__Memory_FS__File__Encoding
+from memory_fs.schemas.Enum__Memory_FS__Serialization                           import Enum__Memory_FS__Serialization
+from memory_fs.schemas.Schema__Memory_FS__File__Type                            import Schema__Memory_FS__File__Type
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id import Safe_Str__Id
 
 
 class Memory_FS__File__Type__Data(Schema__Memory_FS__File__Type):
