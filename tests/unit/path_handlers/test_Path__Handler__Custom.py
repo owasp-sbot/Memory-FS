@@ -1,7 +1,7 @@
-from unittest                                               import TestCase
-from memory_fs.path_handlers.Path__Handler__Custom          import Path__Handler__Custom
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                            import Safe_Id
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
+from unittest                                                                     import TestCase
+from memory_fs.path_handlers.Path__Handler__Custom                                import Path__Handler__Custom
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id   import Safe_Str__Id
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path import (Safe_Str__File__Path)
 
 
 class test_Path__Handler__Custom(TestCase):                                             # Test custom path handler
@@ -13,7 +13,7 @@ class test_Path__Handler__Custom(TestCase):                                     
     def test__init__(self):                                                             # Test initialization
         with self.handler as _:
             assert type(_)        is Path__Handler__Custom
-            assert _.name         == Safe_Id("custom")
+            assert _.name         == Safe_Str__Id("custom")
             assert _.custom_path  == self.custom_path
 
     def test_generate_path(self):                                                       # Test path generation

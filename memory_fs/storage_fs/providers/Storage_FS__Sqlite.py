@@ -1,7 +1,7 @@
 from typing                                                                     import List, Optional
 from osbot_utils.type_safe.Type_Safe                                            import Type_Safe
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id              import Safe_Id
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id              import Safe_Str__Id
 from osbot_utils.type_safe.primitives.domains.files.safe_uint.Safe_UInt__FileSize             import Safe_UInt__FileSize
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                  import type_safe
 from osbot_utils.utils.Files                                                    import folder_create, parent_folder
@@ -29,7 +29,7 @@ class Schema__Storage_FS__Sqlite__Stats(Type_Safe):
 
 class Storage_FS__Sqlite(Storage_FS):
     db_path    : Safe_Str__File__Path                                                   # Path to SQLite database file
-    table_name : Safe_Id = Safe_Id("memory_fs_files")                                   # Table name for storing files
+    table_name : Safe_Str__Id = Safe_Str__Id("memory_fs_files")                                   # Table name for storing files
     database   : Sqlite__Database                                                       # OSBot_Utils database instance
     table      : Sqlite__Table                                                          # OSBot_Utils table instance
     in_memory  : bool           = True                                                  # Defaults to an in-memory sqlite db

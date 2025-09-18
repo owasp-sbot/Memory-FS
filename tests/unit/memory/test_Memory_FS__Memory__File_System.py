@@ -3,7 +3,7 @@ from osbot_utils.type_safe.primitives.domains.files.safe_uint.Safe_UInt__FileSiz
 from memory_fs.schemas.Safe_Str__Cache_Hash                                        import Safe_Str__Cache_Hash
 from tests.unit.Base_Test__File_FS                                                 import Base_Test__File_FS
 from memory_fs.file_fs.actions.File_FS__Name                                       import FILE_EXTENSION__MEMORY_FS__FILE__CONFIG, FILE_EXTENSION__MEMORY_FS__FILE__METADATA
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                  import Safe_Id
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id    import Safe_Str__Id
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 
 
@@ -94,10 +94,10 @@ class test_Memory_FS__Memory__File_System(Base_Test__File_FS):                  
 
         info = self.file.info()
         assert type(info)                    is dict                                    # BUG: should be strongly typed
-        assert info[Safe_Id("exists")]       is True
-        assert info[Safe_Id("size")]         == len(self.test_content_bytes) + 2        # content size includes the serialised string
-        assert info[Safe_Id("content_hash")] == Safe_Str__Cache_Hash(safe_str_hash('"test content"'))
-        assert info[Safe_Id("content_type")] == "application/json; charset=utf-8"
+        assert info[Safe_Str__Id("exists")]       is True
+        assert info[Safe_Str__Id("size")]         == len(self.test_content_bytes) + 2        # content size includes the serialised string
+        assert info[Safe_Str__Id("content_hash")] == Safe_Str__Cache_Hash(safe_str_hash('"test content"'))
+        assert info[Safe_Str__Id("content_type")] == "application/json; charset=utf-8"
 
     def test_clear(self):                                                               # Tests clearing all files
         assert self.file.create(file_data=self.test_content_bytes) == [self.test_content_path ,

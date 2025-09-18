@@ -5,7 +5,7 @@ from memory_fs.file_fs.actions.File_FS__Name                                    
 from memory_fs.file_types.Memory_FS__File__Type__Json                            import Memory_FS__File__Type__Json
 from memory_fs.file_types.Memory_FS__File__Type__Text                            import Memory_FS__File__Type__Text
 from memory_fs.schemas.Schema__Memory_FS__File__Config                           import Schema__Memory_FS__File__Config
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id               import Safe_Id
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id  import Safe_Str__Id
 
 
 class test_File_FS__Name(TestCase):                                                     # Test file naming logic
@@ -45,7 +45,7 @@ class test_File_FS__Name(TestCase):                                             
     def test_content_with_extension(self):                                             # Test content with file extension
         # Setup file config with JSON type
         file_config_json = Schema__Memory_FS__File__Config(
-            file_id   = Safe_Id("test-file"),
+            file_id   = Safe_Str__Id("test-file"),
             file_type = Memory_FS__File__Type__Json()
         )
         file_name_json = File_FS__Name(file__config=file_config_json)
@@ -55,7 +55,7 @@ class test_File_FS__Name(TestCase):                                             
 
         # Test with Text type
         file_config_text = Schema__Memory_FS__File__Config(
-            file_id   = Safe_Id("test-file"),
+            file_id   = Safe_Str__Id("test-file"),
             file_type = Memory_FS__File__Type__Text()
         )
         file_name_text = File_FS__Name(file__config=file_config_text)
@@ -121,7 +121,7 @@ class test_File_FS__Name(TestCase):                                             
 
     def test_content__for_path_with_extension(self):                                   # Test content path with file extension
         file_config = Schema__Memory_FS__File__Config(
-            file_id   = Safe_Id("doc"),
+            file_id   = Safe_Str__Id("doc"),
             file_type = Memory_FS__File__Type__Json()
         )
         file_name = File_FS__Name(file__config=file_config)
@@ -156,7 +156,7 @@ class test_File_FS__Name(TestCase):                                             
 
     def test_special_characters_in_file_id(self):                                      # Test file IDs with special characters
         file_config = Schema__Memory_FS__File__Config(
-            file_id = Safe_Id("file_2024-01-15_v2")
+            file_id = Safe_Str__Id("file_2024-01-15_v2")
         )
         file_name = File_FS__Name(file__config=file_config)
 
@@ -180,7 +180,7 @@ class test_File_FS__Name(TestCase):                                             
 
     def test_regression_none_extension(self):                                          # Test handling of None file extension
         # This addresses the BUG comment in the content() method
-        file_config = Schema__Memory_FS__File__Config(file_id=Safe_Id('test-file'))
+        file_config = Schema__Memory_FS__File__Config(file_id=Safe_Str__Id('test-file'))
         file_name = File_FS__Name(file__config=file_config)
 
         # Should handle None extension gracefully

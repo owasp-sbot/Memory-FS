@@ -1,8 +1,8 @@
-from unittest                                               import TestCase
-from datetime                                               import datetime
-from memory_fs.path_handlers.Path__Handler__Temporal        import Path__Handler__Temporal
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                            import Safe_Id
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
+from unittest                                                                       import TestCase
+from datetime                                                                       import datetime
+from memory_fs.path_handlers.Path__Handler__Temporal                                import Path__Handler__Temporal
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id     import Safe_Str__Id
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
 
 
 class test_Path__Handler__Temporal(TestCase):                                           # Test temporal path handler
@@ -13,7 +13,7 @@ class test_Path__Handler__Temporal(TestCase):                                   
     def test__init__(self):                                                             # Test initialization
         with self.handler as _:
             assert type(_) is Path__Handler__Temporal
-            assert _.name  == Safe_Id("temporal")
+            assert _.name  == Safe_Str__Id("temporal")
             assert _.areas == []
 
     def test_generate_path(self):                                                       # Test path generation
@@ -25,7 +25,7 @@ class test_Path__Handler__Temporal(TestCase):                                   
             assert type(result)   is Safe_Str__File__Path
 
     def test_generate_path_with_areas(self):                                            # Test path generation with areas
-        areas = [Safe_Id("area1"), Safe_Id("area2")]
+        areas = [Safe_Str__Id("area1"), Safe_Str__Id("area2")]
         handler_with_areas = Path__Handler__Temporal(areas=areas)
 
         with handler_with_areas as _:

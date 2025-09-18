@@ -1,9 +1,9 @@
-from unittest                                                   import TestCase
-from osbot_utils.utils.Objects                                  import __
-from memory_fs.schemas.Schema__Memory_FS__File__Config          import Schema__Memory_FS__File__Config
-from memory_fs.schemas.Enum__Memory_FS__File__Exists_Strategy   import Enum__Memory_FS__File__Exists_Strategy
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                                import Safe_Id
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path          import Safe_Str__File__Path
+from unittest                                                                       import TestCase
+from osbot_utils.utils.Objects                                                      import __
+from memory_fs.schemas.Schema__Memory_FS__File__Config                              import Schema__Memory_FS__File__Config
+from memory_fs.schemas.Enum__Memory_FS__File__Exists_Strategy                       import Enum__Memory_FS__File__Exists_Strategy
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id     import Safe_Str__Id
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
 
 
 class test_Schema__Memory_FS__File__Config(TestCase):                                  # Test file config schema
@@ -23,7 +23,7 @@ class test_Schema__Memory_FS__File__Config(TestCase):                           
     def test__with_values(self):                                                        # Test initialization with values
         from memory_fs.file_types.Memory_FS__File__Type__Json import Memory_FS__File__Type__Json
 
-        file_id    = Safe_Id('my-file')
+        file_id    = Safe_Str__Id('my-file')
         file_paths = [Safe_Str__File__Path('path1'), Safe_Str__File__Path('path2')]
         file_type  = Memory_FS__File__Type__Json()
 

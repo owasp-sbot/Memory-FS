@@ -1,7 +1,7 @@
-from unittest                                               import TestCase
-from memory_fs.path_handlers.Path__Handler__Latest          import Path__Handler__Latest
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id                            import Safe_Id
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
+from unittest                                                                     import TestCase
+from memory_fs.path_handlers.Path__Handler__Latest                                import Path__Handler__Latest
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id   import Safe_Str__Id
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
 
 
 class test_Path__Handler__Latest(TestCase):                                             # Test latest path handler
@@ -12,7 +12,7 @@ class test_Path__Handler__Latest(TestCase):                                     
     def test__init__(self):                                                             # Test initialization
         with self.handler as _:
             assert type(_) is Path__Handler__Latest
-            assert _.name  == Safe_Id("latest")
+            assert _.name  == Safe_Str__Id("latest")
 
     def test_generate_path(self):                                                       # Test path generation
         with self.handler as _:

@@ -1,6 +1,6 @@
-from unittest                                                                   import TestCase
-from memory_fs.path_handlers.Path__Handler__Versioned                           import Path__Handler__Versioned
-from osbot_utils.type_safe.primitives.domains.identifiers.Safe_Id              import Safe_Id
+from unittest                                                                      import TestCase
+from memory_fs.path_handlers.Path__Handler__Versioned                              import Path__Handler__Versioned
+from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id    import Safe_Str__Id
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 
 
@@ -12,7 +12,7 @@ class test_Path__Handler__Versioned(TestCase):                                  
     def test__init__(self):                                                             # Test initialization
         with self.handler as _:
             assert type(_)           is Path__Handler__Versioned
-            assert _.name            == Safe_Id("versioned")
+            assert _.name            == Safe_Str__Id("versioned")
             assert _.current_version == 1
             assert _.version_prefix  == "v"
 
