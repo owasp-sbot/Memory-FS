@@ -2,14 +2,14 @@
 
 [[package]]
 name = "osbot-utils"
-version = "3.2.0"
+version = "3.8.0"
 description = "OWASP Security Bot - Utils"
 optional = false
 python-versions = "<4.0,>=3.7"
 groups = ["main"]
 files = [
-    {file = "osbot_utils-3.2.0-py3-none-any.whl", hash = "sha256:c88e948148562d8b912f7fabc4413902bcc6f75c615e370c49538eb2aabf8c05"},
-    {file = "osbot_utils-3.2.0.tar.gz", hash = "sha256:e1dd75fde0cc12077e09ecd1d351bed0f64ea2768c6178aecf43320776d17328"},
+    {file = "osbot_utils-3.8.0-py3-none-any.whl", hash = "sha256:ea6ffd06de85f27b819090385e5ff2ca1b87ba4ef28316ce318b25e157df40ac"},
+    {file = "osbot_utils-3.8.0.tar.gz", hash = "sha256:f9d42fcfd200b2dedcd3a70df2e96157c4081e6f4b419ea9264589e90bc4f366"},
 ]
 
 [metadata]
