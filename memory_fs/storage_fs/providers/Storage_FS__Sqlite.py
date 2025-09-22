@@ -111,6 +111,14 @@ class Storage_FS__Sqlite(Storage_FS):
             paths.append(Safe_Str__File__Path(path_str))
         return paths
 
+    # todo: add the implementation this method
+    def folder__files__all(self, parent_folder: Safe_Str__File__Path) -> List[Safe_Str__File__Path]:         # Get all files under a specific folder
+        raise NotImplementedError()
+
+    def folder__folders   (self, parent_folder   : Safe_Str__File__Path  ,
+                                 return_full_path: bool = False          ) -> List[Safe_Str__File__Path]:
+        raise NotImplementedError()
+    
     def clear(self) -> bool:                                                            # Clear all files in database
         result = self.table.clear()
         if result.get('status') == 'ok':

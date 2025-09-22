@@ -1,4 +1,4 @@
-from typing                                             import Dict
+from typing import Dict, List
 from osbot_utils.utils.Json                             import bytes_to_json
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe         import type_safe
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
@@ -48,3 +48,37 @@ class Storage_FS__Memory(Storage_FS):
 
     def files__paths(self):
         return self.content_data.keys()
+
+    def folder__folders(self, parent_folder   : Safe_Str__File__Path,
+                              return_full_path: bool = True
+                         ) -> List[Safe_Str__File__Path]:
+        subfolders   = set()
+        prefix       = str(parent_folder)
+        if not prefix.endswith('/'):
+            prefix += '/'
+
+        for path in self.content_data.keys():
+            path_str = str(path)
+            if path_str.startswith(prefix):
+                remainder = path_str[len(prefix):]
+                parts     = remainder.split('/')
+                if len(parts) > 1:       # means there is at least one subfolder before the file
+                    if return_full_path:
+                        subfolder = prefix + parts[0]
+                    else:
+                        subfolder = parts[0]
+                    subfolders.add(Safe_Str__File__Path(subfolder))
+        return sorted(subfolders)
+
+    # todo: add unit tests for this method
+    def folder__files__all(self, parent_folder: Safe_Str__File__Path) -> List[Safe_Str__File__Path]:         # Get all files under a specific folder
+        matching_files = []
+        prefix         = str(parent_folder)
+        if not prefix.endswith('/'):
+            prefix += '/'
+
+        for path in self.content_data.keys():
+            if str(path).startswith(prefix):
+                matching_files.append(path)
+
+        return matching_files
