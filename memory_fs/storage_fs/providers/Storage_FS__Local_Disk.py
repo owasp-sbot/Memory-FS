@@ -72,9 +72,16 @@ class Storage_FS__Local_Disk(Storage_FS):
             paths.append(path_str)                                                      # Already Safe_Str__File__Path from Files.files
         return sorted(paths)
 
+    # todo: add the implementation this method
+    def folder__files__all(self, parent_folder: Safe_Str__File__Path) -> List[Safe_Str__File__Path]:         # Get all files under a specific folder
+        raise NotImplementedError()
+
+    def folder__folders   (self, parent_folder   : Safe_Str__File__Path  ,
+                                 return_full_path: bool = False          ) -> List[Safe_Str__File__Path]:
+        raise NotImplementedError()
+
     def clear(self) -> bool:                                                             # Clear all files in storage (use with caution!)
-        # Get all items in root directory
-        root_path_str = str(self.root_path)
+        root_path_str = str(self.root_path)                                              # Get all items in root directory
         all_files     = Files.files(root_path_str, pattern='*', only_files=True)
         all_folders   = Files.folder_sub_folders(root_path_str)
 

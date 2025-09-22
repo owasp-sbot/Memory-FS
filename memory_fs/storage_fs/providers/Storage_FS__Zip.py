@@ -91,6 +91,14 @@ class Storage_FS__Zip(Storage_FS):
             return [Safe_Str__File__Path(file_path) for file_path in sorted(files_list)]
         return []
 
+    # todo: add the implementation this method
+    def folder__files__all(self, parent_folder: Safe_Str__File__Path) -> List[Safe_Str__File__Path]:         # Get all files under a specific folder
+        raise NotImplementedError()
+
+    def folder__folders   (self, parent_folder   : Safe_Str__File__Path  ,
+                                 return_full_path: bool = False          ) -> List[Safe_Str__File__Path]:
+        raise NotImplementedError()
+
     def clear(self) -> bool:                                                                        # Clear all files (reset to empty zip)
         self.zip_bytes = b""
         self.save_if_not_in_memory()

@@ -1,4 +1,4 @@
-from typing                                             import Dict
+from typing import Dict, List
 from osbot_utils.utils.Json                             import bytes_to_json
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe         import type_safe
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
@@ -48,3 +48,53 @@ class Storage_FS__Memory(Storage_FS):
 
     def files__paths(self):
         return self.content_data.keys()
+
+    def folder__folders(self, parent_folder: Safe_Str__File__Path,
+                              return_full_path: bool = True
+                         ) -> List[Safe_Str__File__Path]:
+        subfolders = set()
+        prefix = str(parent_folder)
+
+        # Normalize prefix - empty or '/' means root
+        is_root = not prefix or prefix == '/'
+        if not is_root and not prefix.endswith('/'):
+            prefix += '/'
+
+        for path_str in self.content_data.keys():
+            path_str = str(path_str)
+
+            # Skip if not under this prefix (unless root)
+            if not is_root and not path_str.startswith(prefix):
+                continue
+
+            # Get the relevant path portion
+            if is_root:
+                remainder = path_str
+            else:
+                remainder = path_str[len(prefix):]
+
+            # Extract first folder from remainder
+            parts = remainder.split('/')
+            if parts and parts[0]:  # Has at least one folder component
+                if is_root or len(parts) > 1:  # Root level or has subfolder
+                    folder_name = parts[0]
+                    if return_full_path and not is_root:
+                        folder_path = prefix + folder_name
+                    else:
+                        folder_path = folder_name
+                    subfolders.add(Safe_Str__File__Path(folder_path))
+
+        return sorted(subfolders)
+
+    # todo: add unit tests for this method
+    def folder__files__all(self, parent_folder: Safe_Str__File__Path) -> List[Safe_Str__File__Path]:         # Get all files under a specific folder
+        matching_files = []
+        prefix         = str(parent_folder)
+        if not prefix.endswith('/'):
+            prefix += '/'
+
+        for path in self.content_data.keys():
+            if str(path).startswith(prefix):
+                matching_files.append(path)
+
+        return matching_files
