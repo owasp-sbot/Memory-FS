@@ -118,7 +118,7 @@ class Storage_FS__Sqlite(Storage_FS):
     def folder__folders   (self, parent_folder   : Safe_Str__File__Path  ,
                                  return_full_path: bool = False          ) -> List[Safe_Str__File__Path]:
         raise NotImplementedError()
-    
+
     def clear(self) -> bool:                                                            # Clear all files in database
         result = self.table.clear()
         if result.get('status') == 'ok':
