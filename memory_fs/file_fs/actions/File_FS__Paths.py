@@ -53,14 +53,14 @@ class File_FS__Paths(Type_Safe):
 
         return full_file_paths
 
-    def paths__data_files(self) -> List[Safe_Str__File__Path]:
-        paths__data_files = []
+    def paths__data_folders(self) -> List[Safe_Str__File__Path]:
+        paths__data_folders = []
         for path_content in self.paths__content():
             path_without_extension, extension = splitext(path_content)
             if extension:
-                paths__data_file = url_join_safe(path_without_extension, FILE_EXTENSION__MEMORY_FS__FILE__DATA)
-                paths__data_files.append(paths__data_file)
-        return paths__data_files
+                paths__data_folder = url_join_safe(path_without_extension, FILE_EXTENSION__MEMORY_FS__FILE__DATA)
+                paths__data_folders.append(paths__data_folder)
+        return paths__data_folders
 
     def paths__metadata(self) -> List[Safe_Str__File__Path]:
         full_file_paths = []
