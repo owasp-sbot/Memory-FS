@@ -5,7 +5,7 @@ from memory_fs.schemas.Schema__Memory_FS__File__Config                          
 from osbot_utils.type_safe.Type_Safe                                                import Type_Safe
 
 FILE_EXTENSION__MEMORY_FS__FILE__CONFIG   = 'config'
-FILE_EXTENSION__MEMORY_FS__FILE__DATA     = 'config'
+FILE_EXTENSION__MEMORY_FS__FILE__DATA     = 'data'
 FILE_EXTENSION__MEMORY_FS__FILE__METADATA = 'metadata'
 
 class File_FS__Name(Type_Safe):

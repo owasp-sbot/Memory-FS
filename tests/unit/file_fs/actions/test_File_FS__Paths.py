@@ -177,8 +177,8 @@ class test_File_FS__Paths(TestCase):                                            
             paths = _.paths__config()
             assert paths == [Safe_Str__File__Path(f'test-file.{FILE_EXTENSION__MEMORY_FS__FILE__CONFIG}')]
 
-            content_paths = _.paths__content()
-            assert content_paths == [Safe_Str__File__Path('test-file')]
+            paths__content = _.paths__content()
+            assert paths__content == [Safe_Str__File__Path('test-file')]
 
     # ===== Tests for caching behavior =====
 

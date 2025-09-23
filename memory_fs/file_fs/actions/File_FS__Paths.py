@@ -1,15 +1,18 @@
-from typing                                             import List
-from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
-from memory_fs.file_fs.actions.File_FS__Name import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__DATA
-from osbot_utils.type_safe.type_safe_core.decorators.type_safe         import type_safe
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
-from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
-from osbot_utils.type_safe.Type_Safe                    import Type_Safe
+from os.path                                                                        import splitext
+from typing                                                                         import List
+from osbot_utils.decorators.methods.cache_on_self                                   import cache_on_self
+from osbot_utils.utils.Http                                                         import url_join_safe
+from memory_fs.file_fs.actions.File_FS__Name                                        import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__DATA
+from osbot_utils.type_safe.type_safe_core.decorators.type_safe                      import type_safe
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
+from memory_fs.schemas.Schema__Memory_FS__File__Config                              import Schema__Memory_FS__File__Config
+from osbot_utils.type_safe.Type_Safe                                                import Type_Safe
 
 # note:
-#  content to be saved as {file_id}.{extension}
-#  config to be saved as {file_id}.{extension}.config
-#  metatada to be saved as {file_id}.{extension}.metadata
+#  content    to be saved as {file_id}.{extension}
+#  config     to be saved as {file_id}.{extension}.config
+#  metadada   to be saved as {file_id}.{extension}.metadata
+#  data-files to be saved to folder {file_id}/data
 
 # todo: shared code below can be refactored into separate methods
 
@@ -50,12 +53,14 @@ class File_FS__Paths(Type_Safe):
 
         return full_file_paths
 
-    def paths__data(self) -> List[Safe_Str__File__Path]:
-        paths_data = []
+    def paths__data_files(self) -> List[Safe_Str__File__Path]:
+        paths__data_files = []
         for path_content in self.paths__content():
-            path_data = path_content + FILE_EXTENSION__MEMORY_FS__FILE__DATA                # the data path is basically the file content path + the ".data" extension (just like the config and metadata)
-            paths_data.append(path_data)
-        return paths_data
+            path_without_extension, extension = splitext(path_content)
+            if extension:
+                paths__data_file = url_join_safe(path_without_extension, FILE_EXTENSION__MEMORY_FS__FILE__DATA)
+                paths__data_files.append(paths__data_file)
+        return paths__data_files
 
     def paths__metadata(self) -> List[Safe_Str__File__Path]:
         full_file_paths = []
