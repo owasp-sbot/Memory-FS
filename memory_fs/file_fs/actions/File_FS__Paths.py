@@ -1,6 +1,6 @@
 from typing                                             import List
 from osbot_utils.decorators.methods.cache_on_self       import cache_on_self
-from memory_fs.file_fs.actions.File_FS__Name            import File_FS__Name
+from memory_fs.file_fs.actions.File_FS__Name import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__DATA
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe         import type_safe
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path  import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
@@ -49,6 +49,13 @@ class File_FS__Paths(Type_Safe):
             full_file_paths.append(Safe_Str__File__Path(full_file_name))
 
         return full_file_paths
+
+    def paths__data(self) -> List[Safe_Str__File__Path]:
+        paths_data = []
+        for path_content in self.paths__content():
+            path_data = path_content + FILE_EXTENSION__MEMORY_FS__FILE__DATA                # the data path is basically the file content path + the ".data" extension (just like the config and metadata)
+            paths_data.append(path_data)
+        return paths_data
 
     def paths__metadata(self) -> List[Safe_Str__File__Path]:
         full_file_paths = []

@@ -1,4 +1,4 @@
-from memory_fs.file_fs.file.File_FS__File import File_FS__File
+from memory_fs.file_fs.file.File_FS__File               import File_FS__File
 from osbot_utils.utils.Json                             import json_to_bytes
 from memory_fs.schemas.Schema__Memory_FS__File__Config  import Schema__Memory_FS__File__Config
 
