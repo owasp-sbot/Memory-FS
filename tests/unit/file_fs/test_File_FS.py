@@ -18,6 +18,7 @@ class test_File_FS(Base_Test__File_FS):                                         
 
             expected_obj = __(file__config = __(exists_strategy = 'first'                   ,
                                                 file_id         = _.file__config.file_id    ,
+                                                file_key        =''                         ,
                                                 file_paths      = []                        ,
                                                 file_type       = __(name           = 'json'   ,
                                                                      content_type   = 'application/json; charset=utf-8'    ,

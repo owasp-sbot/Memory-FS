@@ -11,8 +11,9 @@ class test_Schema__Memory_FS__File__Config(TestCase):                           
     def test__init__(self):                                                             # Test initialization with defaults
         with Schema__Memory_FS__File__Config() as _:
             assert type(_) is Schema__Memory_FS__File__Config
-            assert _.obj() == __(exists_strategy = 'first'     ,
+            assert _.obj() == __(exists_strategy = 'first'      ,
                                  file_id         = _.file_id    ,
+                                 file_key        = ''           ,
                                  file_paths      = []           ,
                                  file_type       = __(name           = None ,
                                                       content_type   = None ,

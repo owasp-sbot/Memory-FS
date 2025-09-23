@@ -24,6 +24,7 @@ class test_Schema__Memory_FS__File(TestCase):                                   
             assert type(_.config)   is Schema__Memory_FS__File__Config
             assert type(_.metadata) is Schema__Memory_FS__File__Metadata
             assert _.obj()          == __(config=__( file_id         = _.config.file_id ,
+                                                     file_key        = ''               ,
                                                      exists_strategy = 'first'          ,
                                                      file_paths      = []               ,
                                                      file_type       = __(name           = None,
