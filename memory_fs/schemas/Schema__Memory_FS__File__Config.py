@@ -1,8 +1,8 @@
 from typing                                                                       import List
 from memory_fs.schemas.Enum__Memory_FS__File__Exists_Strategy                     import Enum__Memory_FS__File__Exists_Strategy
 from osbot_utils.utils.Misc                                                       import random_id_short
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
 from memory_fs.schemas.Schema__Memory_FS__File__Type                              import Schema__Memory_FS__File__Type
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
 from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id   import Safe_Str__Id
 from osbot_utils.type_safe.Type_Safe                                              import Type_Safe
 

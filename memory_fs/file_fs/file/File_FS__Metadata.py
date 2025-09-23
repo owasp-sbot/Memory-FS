@@ -30,6 +30,7 @@ class File_FS__Metadata(File_FS__File):
             json_data = self.storage_fs.file__json(path)
             if json_data:
                 return Schema__Memory_FS__File__Metadata.from_json(json_data)
+        return None
 
     def metadata(self) -> Schema__Memory_FS__File__Metadata:
         return self.load()

@@ -1,5 +1,4 @@
 from typing                                                                         import Any, List, Dict
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
 from memory_fs.file_fs.actions.File_FS__Delete                                      import File_FS__Delete
 from memory_fs.file_fs.actions.File_FS__Exists                                      import File_FS__Exists
 from memory_fs.file_fs.actions.File_FS__Info                                        import File_FS__Info
@@ -14,6 +13,7 @@ from memory_fs.schemas.Schema__Memory_FS__File__Config                          
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata                            import Schema__Memory_FS__File__Metadata
 from osbot_utils.decorators.methods.cache_on_self                                   import cache_on_self
 from osbot_utils.type_safe.Type_Safe                                                import Type_Safe
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
 
 
 class File_FS(Type_Safe):
