@@ -8,6 +8,7 @@ from osbot_utils.type_safe.Type_Safe                                            
 
 class Schema__Memory_FS__File__Config(Type_Safe):
     file_id          : Safe_Str__Id
+    file_key         : Safe_Str__File__Path
     file_paths       : List[Safe_Str__File__Path]
     file_type        : Schema__Memory_FS__File__Type
     exists_strategy  : Enum__Memory_FS__File__Exists_Strategy = Enum__Memory_FS__File__Exists_Strategy.FIRST

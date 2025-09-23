@@ -95,6 +95,7 @@ class Memory_FS(Type_Safe):
         file_paths = [handler.generate_path(file_id=file_id, file_key=file_key) for handler in self.path_handlers]
 
         file_config = Schema__Memory_FS__File__Config(file_id    = file_id    ,
+                                                      file_key   = file_key   ,
                                                       file_paths = file_paths ,
                                                       file_type  = (file_type or Memory_FS__File__Type__Json)())
 
