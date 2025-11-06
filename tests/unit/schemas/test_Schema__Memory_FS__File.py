@@ -1,5 +1,5 @@
 from unittest                                               import TestCase
-from osbot_utils.utils.Objects                              import __
+from osbot_utils.testing.__                                 import __
 from memory_fs.schemas.Schema__Memory_FS__File              import Schema__Memory_FS__File
 from memory_fs.schemas.Schema__Memory_FS__File__Config      import Schema__Memory_FS__File__Config
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata    import Schema__Memory_FS__File__Metadata

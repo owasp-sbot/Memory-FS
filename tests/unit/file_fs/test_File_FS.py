@@ -1,11 +1,11 @@
 import pytest
+from osbot_utils.testing.__ import __
 from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id import Safe_Str__Id
 from memory_fs.schemas.Schema__Memory_FS__File__Metadata                        import Schema__Memory_FS__File__Metadata
 from osbot_utils.utils.Env                                                      import not_in_github_action
 from osbot_utils.helpers.duration.decorators.capture_duration                   import capture_duration
 from tests.unit.Base_Test__File_FS                                              import Base_Test__File_FS
 from memory_fs.schemas.Schema__Memory_FS__File__Config                          import Schema__Memory_FS__File__Config
-from osbot_utils.utils.Objects                                                  import __
 from memory_fs.file_fs.File_FS                                                  import File_FS
 
 

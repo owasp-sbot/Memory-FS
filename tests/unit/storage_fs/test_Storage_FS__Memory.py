@@ -1,7 +1,7 @@
 from unittest                                                                       import TestCase
 from osbot_utils.type_safe.type_safe_core.collections.Type_Safe__Dict               import Type_Safe__Dict
 from memory_fs.storage_fs.providers.Storage_FS__Memory                              import Storage_FS__Memory
-from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path      import Safe_Str__File__Path
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
 from osbot_utils.utils.Json                                                         import json_to_bytes
 
 
@@ -79,3 +79,69 @@ class test_Storage_FS__Memory(TestCase):                                        
 
             paths = sorted(list(_.files__paths()))
             assert paths == [path2, path1]                                              # Note: dict ordering
+
+    def test_folder__files(self):                                                       # Test listing files in a folder
+        with self.storage as _:
+            # Create a hierarchical file structure
+            # Root level files
+            _.file__save(Safe_Str__File__Path("root_file1.txt"), b"root1")
+            _.file__save(Safe_Str__File__Path("root_file2.md"), b"root2")
+
+            # docs/ folder files
+            _.file__save(Safe_Str__File__Path("docs/readme.md"), b"readme")
+            _.file__save(Safe_Str__File__Path("docs/guide.txt"), b"guide")
+            _.file__save(Safe_Str__File__Path("docs/notes.json"), b"notes")
+
+            # docs/sub/ folder files (nested)
+            _.file__save(Safe_Str__File__Path("docs/sub/nested.txt"), b"nested")
+            _.file__save(Safe_Str__File__Path("docs/sub/deep.md"), b"deep")
+
+            # other/ folder files
+            _.file__save(Safe_Str__File__Path("other/file.txt"), b"other")
+
+            # Test 1: List files in root folder (return_full_path=False)
+            root_files = _.folder__files(Safe_Str__File__Path(""), return_full_path=False)
+            assert root_files == [Safe_Str__File__Path("root_file1.txt"),
+                                 Safe_Str__File__Path("root_file2.md")]
+
+            # Test 2: List files in root folder (return_full_path=True)
+            root_files_full = _.folder__files(Safe_Str__File__Path(""), return_full_path=True)
+            assert root_files_full == [Safe_Str__File__Path("root_file1.txt"),
+                                       Safe_Str__File__Path("root_file2.md")]
+
+            # Test 3: List files in docs/ folder (return_full_path=False)
+            docs_files = _.folder__files(Safe_Str__File__Path("docs"), return_full_path=False)
+            assert docs_files == [Safe_Str__File__Path("guide.txt"),
+                                 Safe_Str__File__Path("notes.json"),
+                                 Safe_Str__File__Path("readme.md")]
+            # Should NOT include docs/sub/nested.txt or docs/sub/deep.md
+
+            # Test 4: List files in docs/ folder (return_full_path=True)
+            docs_files_full = _.folder__files(Safe_Str__File__Path("docs"), return_full_path=True)
+            assert docs_files_full == [Safe_Str__File__Path("docs/guide.txt"),
+                                       Safe_Str__File__Path("docs/notes.json"),
+                                       Safe_Str__File__Path("docs/readme.md")]
+
+            # Test 5: List files in docs/sub/ folder (return_full_path=False)
+            sub_files = _.folder__files(Safe_Str__File__Path("docs/sub"), return_full_path=False)
+            assert sub_files == [Safe_Str__File__Path("deep.md"),
+                                Safe_Str__File__Path("nested.txt")]
+
+            # Test 6: List files in docs/sub/ folder (return_full_path=True)
+            sub_files_full = _.folder__files(Safe_Str__File__Path("docs/sub"), return_full_path=True)
+            assert sub_files_full == [Safe_Str__File__Path("docs/sub/deep.md"),
+                                     Safe_Str__File__Path("docs/sub/nested.txt")]
+
+            # Test 7: List files in other/ folder
+            other_files = _.folder__files(Safe_Str__File__Path("other"), return_full_path=False)
+            assert other_files == [Safe_Str__File__Path("file.txt")]
+
+            # Test 8: List files in non-existent folder
+            empty_files = _.folder__files(Safe_Str__File__Path("nonexistent"), return_full_path=False)
+            assert empty_files == []
+
+            # Test 9: Test with trailing slash
+            docs_files_slash = _.folder__files(Safe_Str__File__Path("docs/"), return_full_path=False)
+            assert docs_files_slash == [Safe_Str__File__Path("guide.txt"),
+                                        Safe_Str__File__Path("notes.json"),
+                                        Safe_Str__File__Path("readme.md")]

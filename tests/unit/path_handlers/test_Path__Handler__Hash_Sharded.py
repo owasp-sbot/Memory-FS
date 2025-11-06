@@ -1,6 +1,6 @@
 from unittest                                                                       import TestCase
 from osbot_utils.type_safe.Type_Safe                                                import Type_Safe
-from osbot_utils.utils.Objects                                                      import base_classes, __
+from osbot_utils.utils.Objects                                                      import base_classes
 from memory_fs.path_handlers.Path__Handler                                          import Path__Handler
 from memory_fs.path_handlers.Path__Handler__Hash_Sharded                            import Path__Handler__Hash_Sharded
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path

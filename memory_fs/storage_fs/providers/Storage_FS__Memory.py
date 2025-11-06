@@ -98,3 +98,33 @@ class Storage_FS__Memory(Storage_FS):
                 matching_files.append(path)
 
         return matching_files
+
+    def folder__files(self, folder_path     : Safe_Str__File__Path,
+                            return_full_path: bool = False
+                       ) -> List[Safe_Str__File__Path]:                 # List files in a specific folder (not including subfolders)
+        files = []
+        prefix = str(folder_path)
+
+        is_root = not prefix or prefix == '/'                           # Normalize prefix - empty or '/' means root
+        if not is_root and not prefix.endswith('/'):
+            prefix += '/'
+
+        for path_str in self.content_data.keys():
+            path_str = str(path_str)
+
+            if not is_root and not path_str.startswith(prefix):         # Skip if not under this prefix (unless root)
+                continue
+
+            if is_root:                                                 # Get the relevant path portion
+                remainder = path_str
+            else:
+                remainder = path_str[len(prefix):]
+
+
+            if '/' not in remainder and remainder:                      # Only include files directly in this folder (no '/' in remainder)
+                if return_full_path:
+                    files.append(Safe_Str__File__Path(path_str))
+                else:
+                    files.append(Safe_Str__File__Path(remainder))
+
+        return sorted(files)
