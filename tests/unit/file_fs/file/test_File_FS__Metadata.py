@@ -1,5 +1,5 @@
 from osbot_utils.type_safe.primitives.domains.cryptography.safe_str.Safe_Str__Hash          import safe_str_hash
-from osbot_utils.utils.Objects                                                              import __
+from osbot_utils.testing.__                                                                 import __
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path           import Safe_Str__File__Path
 from osbot_utils.type_safe.primitives.domains.cryptography.safe_str.Safe_Str__Cache_Hash    import Safe_Str__Cache_Hash
 from tests.unit.Base_Test__File_FS                                                          import Base_Test__File_FS
