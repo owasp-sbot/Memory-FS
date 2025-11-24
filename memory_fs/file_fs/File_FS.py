@@ -16,9 +16,6 @@ from osbot_utils.decorators.methods.cache_on_self                               
 from osbot_utils.type_safe.Type_Safe                                                import Type_Safe
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
 
-from mgraph_ai_service_cache_client.schemas.cache.enums.Enum__Cache__File_Type import Enum__Cache__File_Type
-
-
 class File_FS(Type_Safe):
     file__config : Schema__Memory_FS__File__Config
     storage_fs  : Storage_FS
