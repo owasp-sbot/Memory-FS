@@ -7,6 +7,7 @@ from memory_fs.file_fs.actions.File_FS__Update                                  
 from memory_fs.file_fs.file.File_FS__Config                                         import File_FS__Config
 from memory_fs.file_fs.file.File_FS__Content                                        import File_FS__Content
 from memory_fs.file_fs.file.File_FS__Metadata                                       import File_FS__Metadata
+from memory_fs.file_types.Memory_FS__File__Type__Json__Single                       import Memory_FS__File__Type__Json__Single
 from memory_fs.storage_fs.Storage_FS                                                import Storage_FS
 from memory_fs.file_fs.actions.File_FS__Create                                      import File_FS__Create
 from memory_fs.schemas.Schema__Memory_FS__File__Config                              import Schema__Memory_FS__File__Config
@@ -14,6 +15,8 @@ from memory_fs.schemas.Schema__Memory_FS__File__Metadata                        
 from osbot_utils.decorators.methods.cache_on_self                                   import cache_on_self
 from osbot_utils.type_safe.Type_Safe                                                import Type_Safe
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
+
+from mgraph_ai_service_cache_client.schemas.cache.enums.Enum__Cache__File_Type import Enum__Cache__File_Type
 
 
 class File_FS(Type_Safe):
@@ -73,8 +76,11 @@ class File_FS(Type_Safe):
     def delete(self):
         return self.file_fs__delete().delete()
 
-    def exists(self):
-        return self.file_fs__exists().config()                                                          # use the .config() existence as the 'file exists' metric
+    def exists(self):                                                                               # todo: refactor this logic to the file_fs__exists(), since this File_FS should not need to worry about the file type
+        if isinstance(self.file__config.file_type, Memory_FS__File__Type__Json__Single):            # for Json_Single
+            return self.file_fs__exists().content()                                                    # use the .content()
+        else:                                                                                       # for the others
+            return self.file_fs__exists().config()                                                      # use the .config() existence as the 'file exists' metric
 
     def info(self):
         return self.file_fs__info().info()

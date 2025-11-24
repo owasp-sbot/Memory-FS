@@ -5,6 +5,7 @@ from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Pat
 from osbot_utils.type_safe.primitives.domains.identifiers.safe_str.Safe_Str__Id    import Safe_Str__Id
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                     import type_safe
 from memory_fs.file_fs.File_FS                                                     import File_FS
+from memory_fs.file_types.Memory_FS__File__Type__Json__Single                      import Memory_FS__File__Type__Json__Single
 from memory_fs.storage_fs.Storage_FS                                               import Storage_FS
 from memory_fs.storage_fs.providers.Storage_FS__Memory                             import Storage_FS__Memory
 from memory_fs.storage_fs.providers.Storage_FS__Local_Disk                         import Storage_FS__Local_Disk
@@ -105,6 +106,11 @@ class Memory_FS(Type_Safe):
                          file_key: Safe_Str__File__Path = None                                 # File key (used by some path handlers)
                     ) -> File_FS:
         return self.file(file_id=file_id, file_key=file_key,  file_type=Memory_FS__File__Type__Json)
+
+    def file__json__single(self, file_id : Safe_Str__Id                    ,                           # Create JSON file (in single mode, ie: not .config() and .metadata() files)
+                                 file_key: Safe_Str__File__Path = None                                 # File key (used by some path handlers)
+                            ) -> File_FS:
+        return self.file(file_id=file_id, file_key=file_key,  file_type=Memory_FS__File__Type__Json__Single)
 
     def file__text(self, file_id : Safe_Str__Id                    ,                            # Create text file
                          file_key: Safe_Str__File__Path = None                                  # File key (used by some path handlers)
