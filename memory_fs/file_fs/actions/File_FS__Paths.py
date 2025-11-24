@@ -5,6 +5,7 @@ from osbot_utils.utils.Http                                                     
 from memory_fs.file_fs.actions.File_FS__Name                                        import File_FS__Name, FILE_EXTENSION__MEMORY_FS__FILE__DATA
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                      import type_safe
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
+from memory_fs.file_types.Memory_FS__File__Type__Json__Single                       import Memory_FS__File__Type__Json__Single
 from memory_fs.schemas.Schema__Memory_FS__File__Config                              import Schema__Memory_FS__File__Config
 from osbot_utils.type_safe.Type_Safe                                                import Type_Safe
 
@@ -25,9 +26,12 @@ class File_FS__Paths(Type_Safe):
 
     @type_safe
     def paths(self) -> List[Safe_Str__File__Path]:
-        return sorted(self.paths__config  () +
-                      self.paths__content () +
-                      self.paths__metadata())
+        if isinstance(self.file__config.file_type, Memory_FS__File__Type__Json__Single):
+            return sorted(self.paths__content ())
+        else:
+            return sorted(self.paths__config  () +
+                          self.paths__content () +
+                          self.paths__metadata())
 
     def paths__config(self) -> List[Safe_Str__File__Path]:
         full_file_paths = []

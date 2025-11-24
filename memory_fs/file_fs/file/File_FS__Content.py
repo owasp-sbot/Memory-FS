@@ -3,6 +3,7 @@ from memory_fs.file_fs.file.File_FS__File                                       
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
 from memory_fs.file_fs.actions.File_FS__Serializer                                  import File_FS__Serializer
 from osbot_utils.decorators.methods.cache_on_self                                   import cache_on_self
+from memory_fs.file_types.Memory_FS__File__Type__Json__Single                       import Memory_FS__File__Type__Json__Single
 
 
 class File_FS__Content(File_FS__File):
@@ -26,6 +27,12 @@ class File_FS__Content(File_FS__File):
 
     def content(self) -> Any:
         return self.file_data()
+
+    def exists(self):
+        if isinstance(self.file__config.file_type, Memory_FS__File__Type__Json__Single):                # if this is a single file
+            return self.file_fs__exists().content()                                                     #     we check if the content file exists (since the .config() and .metadata() don't exist)
+        else:
+            return super().exists()                                                                     #     for all the other file types, we use the File_FS__File, which will use the .config(), since is the most efficient way to check if the file exists
 
     def file_data(self) -> Any:                                                                # todo: see if we should add the .serialise(...) method to this class since we are using the .deserialise here
         file_type     = self.file__config.file_type

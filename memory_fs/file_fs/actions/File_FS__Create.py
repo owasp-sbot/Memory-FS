@@ -3,6 +3,7 @@ from memory_fs.file_fs.file.File_FS__Config                     import File_FS__
 from memory_fs.file_fs.file.File_FS__Content                    import File_FS__Content
 from memory_fs.file_fs.actions.File_FS__Serializer              import File_FS__Serializer
 from memory_fs.file_fs.file.File_FS__Metadata                   import File_FS__Metadata
+from memory_fs.file_types.Memory_FS__File__Type__Json__Single   import Memory_FS__File__Type__Json__Single
 from memory_fs.storage_fs.Storage_FS                            import Storage_FS
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe  import type_safe
 from osbot_utils.decorators.methods.cache_on_self               import cache_on_self
@@ -37,9 +38,13 @@ class File_FS__Create(Type_Safe):
     def create(self, file_data: Any=None) -> List:
         file_type     = self.file__config.file_type
         content_bytes = self.file_fs__serializer().serialize(file_data, file_type)              # we convert the file_data into bytes here so that we only do this once
-        files_created = (self.create__config  () +
-                         self.create__content (data=content_bytes) +                         # todo: see if we shouldn't rename the 'content' parameter name into 'content_bytes' (so that is not confused with the wired use of 'content()' in other places of the code-base
-                         self.create__metadata(data=content_bytes))                          # note: we currently have a side effect here for strings and bytes, since hash will be done of the bytes not on the original content
+
+        if isinstance(file_type, Memory_FS__File__Type__Json__Single):                          # Check if this is a single-file type using isinstance
+            files_created = self.create__content(data=content_bytes)                            # if so we only create the content file (i.e. no config or metadata)
+        else:
+            files_created = (self.create__config  () +                                          # Normal 3-file creation (config + content + metadata)
+                             self.create__content (data=content_bytes) +                        # todo: see if we shouldn't rename the 'content' parameter name into 'content_bytes' (so that is not confused with the wired use of 'content()' in other places of the code-base
+                             self.create__metadata(data=content_bytes))                         # note: we currently have a side effect here for strings and bytes, since hash will be done of the bytes not on the original content
         return sorted(files_created)
 
     def create__config(self):
