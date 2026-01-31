@@ -30,7 +30,7 @@ class Memory_FS(Type_Safe):
     def __init__(self, storage_fs : Storage_FS = None):
         super().__init__()
         if storage_fs:
-            self.storage_fs = storage_fs
+            self.storage_fs = storage_fs                                # todo: review this usage, since with Type_Safe we shouldn't need to do this
 
     # Storage addition methods
     @type_safe
